@@ -384,9 +384,9 @@ Create a new Service Provider and then on register() method, you can put this li
 ```php
 $this->app['wishlist'] = $this->app->share(function($app)
 		{
-			$storage = $app['session'];
-			$events = $app['events'];
-			$instanceName = 'wishlist';
+			$storage = $app['session']; // laravel session storage
+			$events = $app['events']; // laravel event handler
+			$instanceName = 'wishlist'; // your cart instance name
 			$session_key = 'AsASDMCks0ks1'; // your unique session key to hold cart items
 
 			return new Cart(
@@ -423,6 +423,15 @@ The cart has currently 9 events you can listen and hook some actons.
 | cart.removed($id, $cart)         | When an item is removed                 |
 | cart.clearing($cart)             | When a cart is attempted to be cleared  |
 | cart.cleared($cart)              | When a cart is cleared                  |
+
+**NOTE**: For different cart instance, dealing events is simple. For example you have created another cart instance which
+you have given an instance name of "wishlist". The Events will be something like: {$instanceName}.created($cart)
+
+So for you wishlist cart instance, events will look like this:
+
+* wishlist.created($cart)
+* wishlist.adding($items, $cart)
+* wishlist.added($items, $cart) and so on..
 
 ## License
 
