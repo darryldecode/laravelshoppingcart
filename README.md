@@ -24,11 +24,11 @@ Next, run the Composer update command from the Terminal:
 
 ##CONFIGURATION
 
-1. Open app/config/app.php and addd this line to your Service Providers Array
+1. Open config/app.php and addd this line to your Service Providers Array
   
   'Darryldecode\Cart\CartServiceProvider'
   
-2. Open app/config/app.php and addd this line to your Aliases
+2. Open config/app.php and addd this line to your Aliases
 
   'Cart' => 'Darryldecode\Cart\Facades\CartFacade'
   
