@@ -9,9 +9,11 @@ A Shopping Cart Implementation for Laravel Framework
 
 Install the package through [Composer](http://getcomposer.org/). Edit your project's `composer.json` file by adding:
 
+### Laravel 5
+
 ```php
 "require": {
-	"laravel/framework": "4.2.*",
+	"laravel/framework": "5.0.*",
 	"darryldecode/cart": "dev-master"
 }
 ```
