@@ -19,6 +19,7 @@ class CartCondition {
 
     /**
      * @param array $args (name, type, target, value)
+     * @throws InvalidConditionException
      */
     public function __construct(array $args)
     {
@@ -26,10 +27,7 @@ class CartCondition {
 
         if( Helpers::isMultiArray($args) )
         {
-            foreach($args as $arg)
-            {
-                $this->validate($arg);
-            }
+            Throw new InvalidConditionException('Multi dimensional array is not supported.');
         }
         else
         {
@@ -40,118 +38,41 @@ class CartCondition {
     /**
      * the target of where the condition is applied
      *
-     * @param null $conditionName | if no conditionName provided, it will only pull the first item on conditions array
      * @return mixed
      */
-    public function getTarget($conditionName = null)
+    public function getTarget()
     {
-        if( Helpers::isMultiArray($this->args) )
-        {
-            if( $conditionName )
-            {
-                foreach($this->args as $condData)
-                {
-                    if( $condData['name'] == $conditionName )
-                    {
-                        return $condData['target'];
-                    }
-                }
-            }
-            else
-            {
-                return $this->args[0]['target'];
-            }
-        } else {
-            return $this->args['target'];
-        }
+        return $this->args['target'];
     }
 
     /**
      * the name of the condition
      *
-     * @param null $key
      * @return mixed
      */
-    public function getName($key = null)
+    public function getName()
     {
-        if( Helpers::isMultiArray($this->args) )
-        {
-            if( $key )
-            {
-                foreach($this->args as $k => $v)
-                {
-                    if( $k == $key )
-                    {
-                        return $v['name'];
-                    }
-                }
-            }
-            else
-            {
-                return $this->args[0]['name'];
-            }
-        } else {
-            return $this->args['name'];
-        }
+        return $this->args['name'];
     }
 
     /**
-     * the type of the condition, if no condition name provided it will just pull
-     * the first condition argument
+     * the type of the condition
      *
-     * @param null $conditionName
      * @return mixed
      */
-    public function getType($conditionName = null)
+    public function getType()
     {
-        if( Helpers::isMultiArray($this->args) )
-        {
-            if( $conditionName )
-            {
-                foreach($this->args as $condData)
-                {
-                    if( $condData['name'] == $conditionName )
-                    {
-                        return $condData['type'];
-                    }
-                }
-            }
-            else
-            {
-                return $this->args[0]['type'];
-            }
-        } else {
-            return $this->args['type'];
-        }
+        return $this->args['type'];
     }
 
     /**
      * the value of this the condition
      *
-     * @param null $conditionName
      * @return mixed
      */
-    public function getValue($conditionName = null)
+    public function getValue()
     {
-        if( Helpers::isMultiArray($this->args) )
-        {
-            if( $conditionName )
-            {
-                foreach($this->args as $condData)
-                {
-                    if( $condData['name'] == $conditionName )
-                    {
-                        return $condData['value'];
-                    }
-                }
-            }
-            else
-            {
-                return $this->args[0]['value'];
-            }
-        } else {
-            return $this->args['value'];
-        }
+        return $this->args['value'];
     }
 
     /**
@@ -162,29 +83,7 @@ class CartCondition {
      */
     public function applyCondition($totalOrSubTotalOrPrice)
     {
-        if( Helpers::isMultiArray($this->args) )
-        {
-            $originalPrice = $totalOrSubTotalOrPrice;
-
-            $newPrice = 0.00;
-
-            $processed = 0;
-
-            foreach($this->args as $arg)
-            {
-                ( $processed > 0 ) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
-
-                $newPrice = $this->apply($toBeCalculated, $arg['value']);
-
-                $processed++;
-            }
-
-            return $newPrice;
-        }
-        else
-        {
-            return $this->apply($totalOrSubTotalOrPrice, $this->getValue());
-        }
+        return $this->apply($totalOrSubTotalOrPrice, $this->getValue());
     }
 
     /**

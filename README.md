@@ -204,17 +204,24 @@ $subTotal = Cart::getTotal();
 ## Conditions
 
 Laravel Shopping Cart supports cart conditions.
-Condiitons are very useful in terms of (coupons,discounts,sale,per-item sale and discounts etc.)
+Conditions are very useful in terms of (coupons,discounts,sale,per-item sale and discounts etc.)
 See below carefully on how to use conditions.
 
 Conditions can be added on:
-1.) Cart
-2.) Item
+
+1.) Whole Cart Value bases
+
+2.) Per-Item Bases
 
 First let's add a condition on a Cart Bases:
 
-There are also several ways of adding a condtion on a cart:
-NOTE: When adding a condition on a cart bases, the 'target' should have value of 'total'.
+There are also several ways of adding a condition on a cart:
+NOTE: 
+
+When adding a condition on a cart bases, the 'target' should have value of 'total'.
+The order of operation also during calculation will vary on the order you have added the conditions.
+
+Also, when adding conditions, the 'value' field will be the bases of calculation.
 
 ```php
 
@@ -244,28 +251,23 @@ $condition2 = new CartCondition(array(
 Cart::condition($condition1);
 Cart::condition($condition2);
 
-// or add multiple conditions one condition instances
-$condition = new CartCondition(array(
-        array(
-            'name' => 'COUPON LESS 12.5%',
-            'type' => 'tax',
-            'target' => 'total',
-            'value' => '-12.5%',
-        ),
-        array(
-            'name' => 'Express Shipping $15',
-            'type' => 'shipping',
-            'target' => 'total',
-            'value' => '+15',
-        )
-    )
-);
-Cart::condition($condition);
+// or add multiple conditions as array
+Cart::condition([$condition1, $condition2]);
+
+// To get all applied conditions on a cart, use below:
+$carConditions = Cart::getConditions();
+foreach($carConditions as $condition)
+{
+    $condition->getTarget(); // the target of which the condition was applied
+    $condition->getName(); // the name of the condition
+    $condition->getType(); // the type
+    $condition->getValue(); // the value of the condition
+}
 ```
 
 NOTE: All cart based conditions should be applied before calling **Cart::getTotal()**
 
-Then Finaly you can call **Cart::getTotal()** to get the Cart Total with the applied conditions.
+Then Finally you can call **Cart::getTotal()** to get the Cart Total with the applied conditions.
 ```php
 $cartTotal = Cart::getTotal(); // the total will be calculated based on the conditions you ave provided
 ```
@@ -302,47 +304,12 @@ $product = array(
 Cart::add($product);
 
 // you may also add multiple condition on an item
-$itemConditions = new CartCondition(array(
-            array(
-                'name' => 'SALE 5%',
-                'type' => 'sale',
-                'target' => 'subtotal',
-                'value' => '-5%',
-            ),
-            array(
-                'name' => 'Item Gift Pack 25.00',
-                'type' => 'promo',
-                'target' => 'subtotal',
-                'value' => '-25',
-            ),
-            array(
-                'name' => 'MISC',
-                'type' => 'misc',
-                'target' => 'subtotal',
-                'value' => '+10',
-            )
-        ));
-        
-$item = array(
-          'id' => 456,
-          'name' => 'Sample Item 1',
-          'price' => 100,
-          'quantity' => 1,
-          'attributes' => array(),
-          'conditions' => $itemConditions
-      );
-      
-Cart::add($item);
-  
-// This is also valid
 $itemCondition1 = new CartCondition(array(
-          array(
-              'name' => 'SALE 5%',
-              'type' => 'sale',
-              'target' => 'subtotal',
-              'value' => '-5%',
-          )
-      ));
+    'name' => 'SALE 5%',
+    'type' => 'sale',
+    'target' => 'subtotal',
+    'value' => '-5%',
+));
 $itemCondition2 = new CartCondition(array(
     'name' => 'Item Gift Pack 25.00',
     'type' => 'promo',
@@ -370,7 +337,7 @@ Cart::add($item);
 
 NOTE: All cart per-item conditions should be applied before calling **Cart::getSubTotal()**
 
-Then Finaly you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions.
+Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions.
 ```php
 $cartSubTotal = Cart::getSubTotal(); // the subtotal will be calculated based on the conditions you have provided
 ```
