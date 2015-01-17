@@ -58,7 +58,7 @@ class Helpers {
      *
      * @param $var
      * @param bool|mixed $default
-     * @return null
+     * @return bool|mixed
      */
     public static function issetAndHasValueOrAssignDefault(&$var, $default = false)
     {
