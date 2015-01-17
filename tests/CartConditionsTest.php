@@ -21,7 +21,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
 
     public function setUp()
     {
-        $events = m::mock('Illuminate\Events\Dispatcher');
+        $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
         $events->shouldReceive('fire');
 
         $this->cart = new Cart(

@@ -1,6 +1,6 @@
 {
     "name": "darryldecode/cart",
-    "description": "Laravel 4 Shopping cart",
+    "description": "Laravel 5 Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
     "authors": [
@@ -11,18 +11,17 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.*@dev",
-        "illuminate/validation": "4.2.*@dev"
+        "illuminate/support": "5.0.*@dev",
+        "illuminate/validation": "5.0.*@dev"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
         "phpunit/phpunit": "~4.0",
-        "symfony/var-dumper": "2.7.*@dev",
-        "illuminate/events": "4.2.*@dev"
+        "symfony/var-dumper": "2.7.*@dev"
     },
     "autoload": {
-        "psr-0": {
-            "Darryldecode\\Cart": "src/"
+        "psr-4": {
+            "Darryldecode\\": "src/Darryldecode"
         }
     },
     "minimum-stability": "dev"

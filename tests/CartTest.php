@@ -20,7 +20,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
 
     public function setUp()
     {
-        $events = m::mock('Illuminate\Events\Dispatcher');
+        $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
         $events->shouldReceive('fire');
 
         $this->cart = new Cart(
@@ -127,8 +127,10 @@ class CartTest extends PHPUnit_Framework_TestCase  {
 
         $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
         $this->assertCount(2, $this->cart->getContent()->first()['attributes'], 'Item\'s attribute should have two');
-        $this->assertEquals('L', $this->cart->getContent()->first()['attributes']['size'], 'Item should have attribute size of L');
-        $this->assertEquals('blue', $this->cart->getContent()->first()['attributes']['color'], 'Item should have attribute color of blue');
+        $this->assertEquals('L', $this->cart->getContent()->first()->attributes->size, 'Item should have attribute size of L');
+        $this->assertEquals('blue', $this->cart->getContent()->first()->attributes->color, 'Item should have attribute color of blue');
+        $this->assertTrue($this->cart->get(456)->has('attributes'), 'Item should have attributes');
+        $this->assertEquals('L', $this->cart->get(456)->get('attributes')->size);
     }
 
     public function test_cart_update_existing_item()
@@ -213,7 +215,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         $this->cart->remove($removeItemId);
 
         $this->assertCount(2, $this->cart->getContent()->toArray(), 'Cart must have 2 items left');
-        $this->assertFalse($this->cart->getContent()->hasItem($removeItemId), 'Cart must have not contain the remove item anymore');
+        $this->assertFalse($this->cart->getContent()->has($removeItemId), 'Cart must have not contain the remove item anymore');
     }
 
     public function test_cart_sub_total()

@@ -26,7 +26,7 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
 
     public function test_event_cart_created()
     {
-        $events = m::mock('Illuminate\Events\Dispatcher');
+        $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
         $events->shouldReceive('fire')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
 
         $cart = new Cart(

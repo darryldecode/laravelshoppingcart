@@ -1,4 +1,4 @@
-# Laravel Shopping Cart
+# Laravel 5 Shopping Cart
 [![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
 [![Total Downloads](https://poser.pugx.org/darryldecode/cart/downloads.svg)](https://packagist.org/packages/darryldecode/cart)
 [![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
@@ -12,7 +12,7 @@ Install the package through [Composer](http://getcomposer.org/). Edit your proje
 ```php
 "require": {
 	"laravel/framework": "4.2.*",
-	"darryldecode/laravelshoppingcart": "dev-master"
+	"darryldecode/cart": "dev-master"
 }
 ```
 
@@ -36,6 +36,7 @@ Next, run the Composer update command from the Terminal:
 * [Instances](#instances)
 * [Exceptions](#exceptions)
 * [Events](#events)
+* [Examples](#examples)
 * [License](#license)
 
 ## Usage
@@ -399,6 +400,76 @@ So for you wishlist cart instance, events will look like this:
 * wishlist.created($cart)
 * wishlist.adding($items, $cart)
 * wishlist.added($items, $cart) and so on..
+
+## Examples
+
+```php
+
+// add items to cart
+Cart::add(array(
+  array(
+      'id' => 456,
+      'name' => 'Sample Item 1',
+      'price' => 67.99,
+      'quantity' => 4,
+      'attributes' => array()
+  ),
+  array(
+      'id' => 568,
+      'name' => 'Sample Item 2',
+      'price' => 69.25,
+      'quantity' => 4,
+      'attributes' => array(
+        'size' => 'L',
+        'color' => 'blue'
+      )
+  ),
+));
+
+// then you can:
+$items = Cart::getContent();
+
+foreach($items as $item)
+{
+    $item->id; // the Id of the item
+    $item->name; // the name
+    $item->price; // the price
+    $item->quantity; // the quantity
+    $item->attributes; // the attributes
+    
+    // Note that attribute returns ItemAttributeCollection object that extends the native laravel collection
+    // so you can do things like below:
+    
+    if( $item->attributes->has('size') )
+    {
+        // item has attribute size
+    }
+    else
+    {
+        // item has no attribute size
+    }
+}
+
+// or
+$items->each(function($item)
+{
+    $item->id; // the Id of the item
+    $item->name; // the name
+    $item->price; // the price
+    $item->quantity; // the quantity
+    $item->attributes; // the attributes
+
+    if( $item->attributes->has('size') )
+    {
+        // item has attribute size
+    }
+    else
+    {
+        // item has no attribute size
+    }
+});
+
+```
 
 ## License
 

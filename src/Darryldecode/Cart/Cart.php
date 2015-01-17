@@ -83,23 +83,13 @@ class Cart {
      * get an item on a cart by item ID
      *
      * @param $itemId
-     * @return null
+     * @return mixed
      */
     public function get($itemId)
     {
         $contents = $this->getContent();
 
-        $itemToBeReturned = null;
-
-        $contents->each(function($item) use ($itemId, &$itemToBeReturned)
-        {
-            if( $item['id'] == $itemId )
-            {
-                $itemToBeReturned = $item;
-            }
-        });
-
-        return $itemToBeReturned;
+        return $contents->get($itemId);
     }
 
     /**
@@ -151,24 +141,21 @@ class Cart {
             return $this;
         }
 
-        // prepare the item data
-        $item = array(
+        // validate data
+        $item = $this->validate(array(
             'id' => $id,
             'name' => $name,
             'price' => Helpers::normalizePrice($price),
             'quantity' => $quantity,
-            'attributes' => $attributes,
+            'attributes' => new ItemAttributeCollection($attributes),
             'conditions' => $conditions,
-        );
-
-        // validate data
-        $this->validate($item);
+        ));
 
         // get the cart
         $cart = $this->getContent();
 
         // if the item is already in the cart we will just update it
-        if( $cart->hasItem($id) )
+        if( $cart->has($id) )
         {
             $this->events->fire($this->getInstanceName().'.updating', array($item, $this));
 
@@ -180,9 +167,7 @@ class Cart {
         {
             $this->events->fire($this->getInstanceName().'.adding', array($item, $this));
 
-            $cart->push($item);
-
-            $this->save($cart);
+            $this->addRow($id, $item);
 
             $this->events->fire($this->getInstanceName().'.added', array($item, $this));
         }
@@ -194,23 +179,23 @@ class Cart {
      * update a cart
      *
      * @param $id
-     * @param array $data
+     * @param $data
      *
      * the $data will be an associative array, you don't need to pass all the data, only the key value
      * of the item you want to update on it
      */
-    public function update($id, array $data)
+    public function update($id, $data)
     {
         $cart = $this->getContent();
 
-        $item = $cart->pullItem($id);
+        $item = $cart->pull($id);
 
         foreach($data as $key => $value)
         {
             $item[$key] = $value;
         }
 
-        $cart->push($item);
+        $cart->put($id, $item);
 
         $this->save($cart);
     }
@@ -226,7 +211,7 @@ class Cart {
 
         $this->events->fire($this->getInstanceName().'.removing', array($id, $this));
 
-        $cart->removeItem($id);
+        $cart->forget($id);
 
         $this->save($cart);
 
@@ -295,7 +280,7 @@ class Cart {
 
         $sum = $cart->sum(function($item)
         {
-            $originalPrice = $item['price'];
+            $originalPrice = $item->price;
 
             $newPrice = 0.00;
 
@@ -303,9 +288,9 @@ class Cart {
 
             if( $this->itemHasConditions($item) )
             {
-                if( is_array($item['conditions']) )
+                if( is_array($item->conditions) )
                 {
-                    foreach($item['conditions'] as $condition)
+                    foreach($item->conditions as $condition)
                     {
                         if( $condition->getTarget() === 'subtotal' )
                         {
@@ -325,11 +310,11 @@ class Cart {
                     }
                 }
 
-                return $newPrice * $item['quantity'];
+                return $newPrice * $item->quantity;
             }
             else
             {
-                return $originalPrice * $item['quantity'];
+                return $originalPrice * $item->quantity;
             }
         });
 
@@ -373,7 +358,7 @@ class Cart {
      */
     public function getContent()
     {
-        return (new CartCollection($this->session->get($this->sessionKey)))->values();
+        return (new CartCollection($this->session->get($this->sessionKey)));
     }
 
     /**
@@ -392,8 +377,8 @@ class Cart {
      * validate Item data
      *
      * @param $item
+     * @return array $item;
      * @throws InvalidItemException
-     * @throws InvalidItemFieldException
      */
     protected function validate($item)
     {
@@ -410,6 +395,23 @@ class Cart {
         {
             throw new InvalidItemException($validator->messages()->first());
         }
+
+        return $item;
+    }
+
+    /**
+     * add row to cart collection
+     *
+     * @param $id
+     * @param $item
+     */
+    protected function addRow($id, $item)
+    {
+        $cart = $this->getContent();
+
+        $cart->put($id, new ItemCollection($item));
+
+        $this->save($cart);
     }
 
     /**
@@ -419,8 +421,6 @@ class Cart {
      */
     protected function save($cart)
     {
-        $cart = $cart->toArray();
-
         $this->session->put($this->sessionKey, $cart);
     }
 
