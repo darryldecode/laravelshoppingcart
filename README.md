@@ -20,7 +20,11 @@ Install the package through [Composer](http://getcomposer.org/). Edit your proje
 
 Next, run the Composer update command from the Terminal:
 
-    composer update "darryldecode/laravelshoppingcart"
+    composer update
+    
+    or
+    
+    composer update "darryldecode/cart"
 
 ##CONFIGURATION
 
