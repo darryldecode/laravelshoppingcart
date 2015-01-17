@@ -154,7 +154,7 @@ Getting cart's contents and count: **Cart::getContent()**
  * @return CartCollection
  */
 
-$cartCollection = Cart::getContent($itemId);
+$cartCollection = Cart::getContent();
 
 // NOTE: Because cart collection extends Laravel's Collection
 // You can use methods you already know about Laravel's Collection
