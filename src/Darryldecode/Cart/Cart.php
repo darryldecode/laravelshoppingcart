@@ -59,13 +59,6 @@ class Cart {
         $this->instanceName = $instanceName;
         $this->sessionKey = $session_key;
         $this->conditions = new CartConditionCollection();
-
-        // initial cart container
-        $this->session->put(
-            $this->sessionKey,
-            array()
-        );
-
         $this->events->fire($this->getInstanceName().'.created', array($this));
     }
 
