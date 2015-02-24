@@ -329,6 +329,9 @@ class Cart {
 
         $conditions = $this->getConditions();
 
+        // if no conditions were added, just return the sub total
+        if( ! $conditions->count() ) return $subTotal;
+
         $conditions->each(function($cond) use ($subTotal, &$newTotal, &$process)
         {
             if( $cond->getTarget() === 'total' )

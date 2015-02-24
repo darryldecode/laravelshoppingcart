@@ -37,6 +37,19 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         m::close();
     }
 
+    public function test_total_without_condition()
+    {
+        $this->fillCart();
+
+        $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
+
+        // no changes in subtotal as the condition's target added was for total
+        $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
+
+        // total should be the same as subtotal
+        $this->assertEquals(187.49, $this->cart->getTotal(), 'Cart should have a total of 187.49');
+    }
+
     public function test_total_with_condition()
     {
         $this->fillCart();
