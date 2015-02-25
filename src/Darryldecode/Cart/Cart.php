@@ -10,13 +10,6 @@ use Darryldecode\Cart\Validators\CartItemValidator;
 class Cart {
 
     /**
-     * the cart conditions
-     *
-     * @var CartConditionCollection
-     */
-    protected $conditions;
-
-    /**
      * the item storage
      *
      * @var
@@ -66,7 +59,6 @@ class Cart {
         $this->instanceName = $instanceName;
         $this->sessionKeyCartItems = $session_key.'_cart_items';
         $this->sessionKeyCartConditions = $session_key.'_cart_conditions';
-        $this->conditions = new CartConditionCollection();
         $this->events->fire($this->getInstanceName().'.created', array($this));
     }
 
@@ -255,9 +247,11 @@ class Cart {
 
         if( ! $condition instanceof CartCondition ) throw new InvalidConditionException('Argument 1 must be an instance of \'Darryldecode\Cart\CartCondition\'');
 
-        $this->conditions->put($condition->getName(), $condition);
+        $conditions = $this->getConditions();
 
-        $this->saveConditions($this->conditions);
+        $conditions->put($condition->getName(), $condition);
+
+        $this->saveConditions($conditions);
 
         return $this;
     }
