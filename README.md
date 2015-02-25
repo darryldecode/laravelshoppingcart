@@ -263,7 +263,7 @@ Cart::condition($condition2);
 Cart::condition([$condition1, $condition2]);
 
 // To get all applied conditions on a cart, use below:
-$carConditions = Cart::getConditions();
+$cartConditions = Cart::getConditions();
 foreach($carConditions as $condition)
 {
     $condition->getTarget(); // the target of which the condition was applied
@@ -271,6 +271,13 @@ foreach($carConditions as $condition)
     $condition->getType(); // the type
     $condition->getValue(); // the value of the condition
 }
+
+// You can also get a condition that has been applied on the cart by using its name, use below:
+$condition = Cart::getCondition('VAT 12.5%');
+$condition->getTarget(); // the target of which the condition was applied
+$condition->getName(); // the name of the condition
+$condition->getType(); // the type
+$condition->getValue(); // the value of the condition
 ```
 
 NOTE: All cart based conditions should be applied before calling **Cart::getTotal()**

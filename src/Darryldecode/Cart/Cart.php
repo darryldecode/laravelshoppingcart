@@ -38,11 +38,18 @@ class Cart {
     protected $instanceName;
 
     /**
-     * the session key use as storage
+     * the session key use to persist cart items
      *
      * @var
      */
-    protected $sessionKey;
+    protected $sessionKeyCartItems;
+
+    /**
+     * the session key use to persist cart conditions
+     *
+     * @var
+     */
+    protected $sessionKeyCartConditions;
 
     /**
      * our object constructor
@@ -57,7 +64,8 @@ class Cart {
         $this->events = $events;
         $this->session = $session;
         $this->instanceName = $instanceName;
-        $this->sessionKey = $session_key;
+        $this->sessionKeyCartItems = $session_key.'_cart_items';
+        $this->sessionKeyCartConditions = $session_key.'_cart_conditions';
         $this->conditions = new CartConditionCollection();
         $this->events->fire($this->getInstanceName().'.created', array($this));
     }
@@ -219,7 +227,7 @@ class Cart {
         $this->events->fire($this->getInstanceName().'.clearing', array($this));
 
         $this->session->put(
-            $this->sessionKey,
+            $this->sessionKeyCartItems,
             array()
         );
 
@@ -247,7 +255,9 @@ class Cart {
 
         if( ! $condition instanceof CartCondition ) throw new InvalidConditionException('Argument 1 must be an instance of \'Darryldecode\Cart\CartCondition\'');
 
-        $this->conditions->push($condition);
+        $this->conditions->put($condition->getName(), $condition);
+
+        $this->saveConditions($this->conditions);
 
         return $this;
     }
@@ -259,7 +269,18 @@ class Cart {
      */
     public function getConditions()
     {
-        return $this->conditions;
+        return new CartConditionCollection($this->session->get($this->sessionKeyCartConditions));
+    }
+
+    /**
+     * get condition by its name
+     *
+     * @param $conditionName
+     * @return CartCondition
+     */
+    public function getCondition($conditionName)
+    {
+        return $this->getConditions()->get($conditionName);
     }
 
     /**
@@ -354,7 +375,7 @@ class Cart {
      */
     public function getContent()
     {
-        return (new CartCollection($this->session->get($this->sessionKey)));
+        return (new CartCollection($this->session->get($this->sessionKeyCartItems)));
     }
 
     /**
@@ -364,7 +385,7 @@ class Cart {
      */
     public function isEmpty()
     {
-        $cart = new CartCollection($this->session->get($this->sessionKey));
+        $cart = new CartCollection($this->session->get($this->sessionKeyCartItems));
 
         return $cart->isEmpty();
     }
@@ -417,7 +438,17 @@ class Cart {
      */
     protected function save($cart)
     {
-        $this->session->put($this->sessionKey, $cart);
+        $this->session->put($this->sessionKeyCartItems, $cart);
+    }
+
+    /**
+     * save the cart conditions
+     *
+     * @param $conditions
+     */
+    protected function saveConditions($conditions)
+    {
+        $this->session->put($this->sessionKeyCartConditions, $conditions);
     }
 
     /**

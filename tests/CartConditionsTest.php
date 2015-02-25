@@ -327,6 +327,42 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(85.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 70');
     }
 
+    public function test_get_condition_by_condition_name()
+    {
+        $itemCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%',
+        ));
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-25',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$itemCondition1, $itemCondition2]);
+
+        // get a condition applied on cart by condition name
+        $condition = $this->cart->getCondition($itemCondition1->getName());
+
+        $this->assertEquals($condition->getName(), 'SALE 5%');
+        $this->assertEquals($condition->getTarget(), 'subtotal');
+        $this->assertEquals($condition->getType(), 'sale');
+        $this->assertEquals($condition->getValue(), '-5%');
+    }
+
     protected function fillCart()
     {
         $items = array(
