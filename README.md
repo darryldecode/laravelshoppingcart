@@ -234,7 +234,7 @@ Also, when adding conditions, the 'value' field will be the bases of calculation
 ```php
 
 // add condition single condition
-$condition = new CartCondition(array(
+$condition = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
     'target' => 'total',
@@ -244,13 +244,13 @@ $condition = new CartCondition(array(
 Cart::condition($condition);
 
 // or add multiple conditions from different condition instances
-$condition1 = new CartCondition(array(
+$condition1 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
     'target' => 'total',
     'value' => '12.5%',
 ));
-$condition2 = new CartCondition(array(
+$condition2 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'Express Shipping $15',
     'type' => 'shipping',
     'target' => 'total',
@@ -298,7 +298,7 @@ Now let's add condition on an item.
 ```php
 
 // lets create first our condition instance
-$saleCondition = new CartCondition(array(
+$saleCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'SALE 5%',
             'type' => 'tax',
             'target' => 'subtotal',
@@ -319,7 +319,7 @@ $product = array(
 Cart::add($product);
 
 // you may also add multiple condition on an item
-$itemCondition1 = new CartCondition(array(
+$itemCondition1 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'SALE 5%',
     'type' => 'sale',
     'target' => 'subtotal',
@@ -331,7 +331,7 @@ $itemCondition2 = new CartCondition(array(
     'target' => 'subtotal',
     'value' => '-25',
 ));
-$itemCondition3 = new CartCondition(array(
+$itemCondition3 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'MISC',
     'type' => 'misc',
     'target' => 'subtotal',
