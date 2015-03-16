@@ -356,6 +356,47 @@ Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with
 ```php
 $cartSubTotal = Cart::getSubTotal(); // the subtotal will be calculated based on the conditions you have provided
 ```
+
+Clearing Cart Conditions: **Cart::clearCartConditions()**
+```php
+/**
+* clears all conditions on a cart,
+* this does not remove conditions that has been added specifically to an item/product.
+* If you wish to remove a specific condition to a product, you may use the method: removeItemCondition($itemId,$conditionName)
+*
+* @return void
+*/
+Cart::clearCartConditions()
+```
+
+Remove Specific Cart Condition: **Cart::removeCartCondition($conditionName)**
+```php
+/**
+* removes a condition on a cart by condition name,
+* this can only remove conditions that are added on cart bases not conditions that are added on an item/product.
+* If you wish to remove a condition that has been added for a specific item/product, you may
+* use the removeItemCondition(itemId, conditionName) method instead.
+*
+* @param $conditionName
+* @return void
+*/
+$conditionName = 'Summer Sale 5%';
+
+Cart::removeCartCondition($conditionName)
+```
+
+Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionName)**
+```php
+/**
+* remove a condition that has been applied on an item that is already on the cart
+*
+* @param $itemId
+* @param $conditionName
+* @return bool
+*/
+Cart::removeItemCondition($itemId, $conditionName)
+```
+
 ## Instances
 
 You may also want multiple cart instances on the same page without conflicts.
@@ -483,6 +524,12 @@ $items->each(function($item)
 });
 
 ```
+
+## Change Log
+**1.1.0
+- added new method: clearCartConditions()
+- added new method: removeItemCondition($itemId, $conditionName)
+- added new method: removeCartCondition($conditionName)
 
 ## License
 
