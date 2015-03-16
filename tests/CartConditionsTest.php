@@ -327,7 +327,81 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(85.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 70');
     }
 
-    public function test_get_condition_by_condition_name()
+    public function test_get_cart_condition_by_condition_name()
+    {
+        $itemCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'total',
+            'value' => '-5%',
+        ));
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'total',
+            'value' => '-25',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$itemCondition1, $itemCondition2]);
+
+        // get a condition applied on cart by condition name
+        $condition = $this->cart->getCondition($itemCondition1->getName());
+
+        $this->assertEquals($condition->getName(), 'SALE 5%');
+        $this->assertEquals($condition->getTarget(), 'total');
+        $this->assertEquals($condition->getType(), 'sale');
+        $this->assertEquals($condition->getValue(), '-5%');
+    }
+
+    public function test_remove_cart_condition_by_condition_name()
+    {
+        $itemCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'total',
+            'value' => '-5%',
+        ));
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'total',
+            'value' => '-25',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$itemCondition1, $itemCondition2]);
+
+        // let's prove first we have now two conditions in the cart
+        $this->assertEquals(2, $this->cart->getConditions()->count(), 'Cart should have two conditions');
+
+        // now let's remove a specific condition by condition name
+        $this->cart->removeCartCondition('SALE 5%');
+
+        // cart should have now only 1 condition
+        $this->assertEquals(1, $this->cart->getConditions()->count(), 'Cart should have one condition');
+        $this->assertEquals('Item Gift Pack 25.00', $this->cart->getConditions()->first()->getName());
+    }
+
+    public function test_remove_item_condition_by_condition_name()
     {
         $itemCondition1 = new CartCondition(array(
             'name' => 'SALE 5%',
@@ -348,19 +422,60 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
             'price' => 100,
             'quantity' => 1,
             'attributes' => array(),
+            'conditions' => [$itemCondition1, $itemCondition2]
+        );
+
+        $this->cart->add($item);
+
+        // let's very first the item has 2 conditions in it
+        $this->assertCount(2,$this->cart->get(456)['conditions'], 'Item should have two conditions');
+
+        // now let's remove a condition on that item using the condition name
+        $this->cart->removeItemCondition(456, 'SALE 5%');
+
+        // now we should have only 1 condition left on that item
+        $this->assertCount(1,$this->cart->get(456)['conditions'], 'Item should have one condition left');
+    }
+
+    public function test_clear_cart_conditions()
+    {
+        // NOTE:
+        // This only clears all conditions that has been added in a cart bases
+        // this does not remove conditions on per item bases
+
+        $itemCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'total',
+            'value' => '-5%',
+        ));
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'total',
+            'value' => '-25',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
         );
 
         $this->cart->add($item);
 
         $this->cart->condition([$itemCondition1, $itemCondition2]);
 
-        // get a condition applied on cart by condition name
-        $condition = $this->cart->getCondition($itemCondition1->getName());
+        // let's prove first we have now two conditions in the cart
+        $this->assertEquals(2, $this->cart->getConditions()->count(), 'Cart should have two conditions');
 
-        $this->assertEquals($condition->getName(), 'SALE 5%');
-        $this->assertEquals($condition->getTarget(), 'subtotal');
-        $this->assertEquals($condition->getType(), 'sale');
-        $this->assertEquals($condition->getValue(), '-5%');
+        // now let's clear cart conditions
+        $this->cart->clearCartConditions();
+
+        // cart should have now only 1 condition
+        $this->assertEquals(0, $this->cart->getConditions()->count(), 'Cart should have no conditions now');
     }
 
     protected function fillCart()

@@ -356,7 +356,6 @@ Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with
 ```php
 $cartSubTotal = Cart::getSubTotal(); // the subtotal will be calculated based on the conditions you have provided
 ```
-
 ## Instances
 
 You may also want multiple cart instances on the same page without conflicts.

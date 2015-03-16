@@ -1,12 +1,14 @@
 <?php namespace Darryldecode\Cart;
 
-use Darryldecode\Cart\Exceptions\CartInstanceException;
 use Darryldecode\Cart\Exceptions\InvalidConditionException;
 use Darryldecode\Cart\Exceptions\InvalidItemException;
-use Darryldecode\Cart\Exceptions\InvalidItemFieldException;
 use Darryldecode\Cart\Helpers\Helpers;
 use Darryldecode\Cart\Validators\CartItemValidator;
 
+/**
+ * Class Cart
+ * @package Darryldecode\Cart
+ */
 class Cart {
 
     /**
@@ -267,7 +269,7 @@ class Cart {
     }
 
     /**
-     * get condition by its name
+     * get condition applied on the cart by its name
      *
      * @param $conditionName
      * @return CartCondition
@@ -275,6 +277,82 @@ class Cart {
     public function getCondition($conditionName)
     {
         return $this->getConditions()->get($conditionName);
+    }
+
+    /**
+     * removes a condition on a cart by condition name,
+     * this can only remove conditions that are added on cart bases not conditions that are added on an item/product.
+     * If you wish to remove a condition that has been added for a specific item/product, you may
+     * use the removeItemCondition(itemId, conditionName) method instead.
+     *
+     * @param $conditionName
+     * @return void
+     */
+    public function removeCartCondition($conditionName)
+    {
+        $conditions = $this->getConditions();
+
+        $conditions->pull($conditionName);
+
+        $this->saveConditions($conditions);
+    }
+
+    /**
+     * remove a condition that has been applied on an item that is already on the cart
+     *
+     * @param $itemId
+     * @param $conditionName
+     * @return bool
+     */
+    public function removeItemCondition($itemId, $conditionName)
+    {
+        if( ! $item = $this->getContent()->get($itemId) )
+        {
+            return false;
+        }
+
+        if( $this->itemHasConditions($item) )
+        {
+            // NOTE:
+            // we do it this way, we get first conditions and store
+            // it in a temp variable $originalConditions, then we will modify the array there
+            // and after modification we will store it again on $item['conditions']
+            // This is because of ArrayAccess implementation
+            // see link for more info: http://stackoverflow.com/questions/20053269/indirect-modification-of-overloaded-element-of-splfixedarray-has-no-effect
+
+            $tempConditionsHolder = $item['conditions'];
+
+            foreach($tempConditionsHolder as $k => $condition)
+            {
+                if( $condition->getName() == $conditionName )
+                {
+                    unset($tempConditionsHolder[$k]);
+                }
+            }
+
+            $item['conditions'] = $tempConditionsHolder;
+        }
+
+        $this->update($itemId, array(
+            'conditions' => $item['conditions']
+        ));
+
+        return true;
+    }
+
+    /**
+     * clears all conditions on a cart,
+     * this does not remove conditions that has been added specifically to an item/product.
+     * If you wish to remove a specific condition to a product, you may use the method: removeItemCondition($itemId, $conditionName)
+     *
+     * @return void
+     */
+    public function clearCartConditions()
+    {
+        $this->session->put(
+            $this->sessionKeyCartConditions,
+            array()
+        );
     }
 
     /**
