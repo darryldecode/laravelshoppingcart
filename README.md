@@ -528,8 +528,12 @@ $items->each(function($item)
 ```
 
 ## Changelogs
-**2.0.0
+
+**2.0.0 (breaking change)
 - major changes in dealing with conditions (Please see [Conditions](#conditions) section, and read carefully)
+- All conditions added on per item bases should have now target => 'item' instead of 'subtotal'
+- All conditions added on per cart bases should have now target => 'subtotal' instead of 'total'
+
 **1.1.0
 - added new method: clearCartConditions()
 - added new method: removeItemCondition($itemId, $conditionName)
