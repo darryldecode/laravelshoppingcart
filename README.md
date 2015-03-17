@@ -226,18 +226,19 @@ First let's add a condition on a Cart Bases:
 There are also several ways of adding a condition on a cart:
 NOTE: 
 
-When adding a condition on a cart bases, the 'target' should have value of 'total'.
+When adding a condition on a cart bases, the 'target' should have value of 'subtotal'.
+And when adding a condition on an item, the 'target' should be 'item'.
 The order of operation also during calculation will vary on the order you have added the conditions.
 
 Also, when adding conditions, the 'value' field will be the bases of calculation.
 
 ```php
 
-// add condition single condition
+// add single condition on a cart bases
 $condition = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
-    'target' => 'total',
+    'target' => 'subtotal',
     'value' => '12.5%',
 ));
 
@@ -247,13 +248,13 @@ Cart::condition($condition);
 $condition1 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
-    'target' => 'total',
+    'target' => 'subtotal',
     'value' => '12.5%',
 ));
 $condition2 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'Express Shipping $15',
     'type' => 'shipping',
-    'target' => 'total',
+    'target' => 'subtotal',
     'value' => '+15',
 ));
 Cart::condition($condition1);
@@ -301,7 +302,7 @@ Now let's add condition on an item.
 $saleCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'SALE 5%',
             'type' => 'tax',
-            'target' => 'subtotal',
+            'target' => 'item',
             'value' => '-5%',
         ));
 
@@ -322,19 +323,19 @@ Cart::add($product);
 $itemCondition1 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'SALE 5%',
     'type' => 'sale',
-    'target' => 'subtotal',
+    'target' => 'item',
     'value' => '-5%',
 ));
 $itemCondition2 = new CartCondition(array(
     'name' => 'Item Gift Pack 25.00',
     'type' => 'promo',
-    'target' => 'subtotal',
+    'target' => 'item',
     'value' => '-25',
 ));
 $itemCondition3 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'MISC',
     'type' => 'misc',
-    'target' => 'subtotal',
+    'target' => 'item',
     'value' => '+10',
 ));
   

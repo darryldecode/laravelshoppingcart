@@ -378,7 +378,7 @@ class Cart {
                 {
                     foreach($item->conditions as $condition)
                     {
-                        if( $condition->getTarget() === 'subtotal' )
+                        if( $condition->getTarget() === 'item' )
                         {
                             ( $processed > 0 ) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
 
@@ -390,7 +390,7 @@ class Cart {
                 }
                 else
                 {
-                    if( $item['conditions']->getTarget() === 'subtotal' )
+                    if( $item['conditions']->getTarget() === 'item' )
                     {
                         $newPrice = $item['conditions']->applyCondition($originalPrice);
                     }
@@ -427,7 +427,7 @@ class Cart {
 
         $conditions->each(function($cond) use ($subTotal, &$newTotal, &$process)
         {
-            if( $cond->getTarget() === 'total' )
+            if( $cond->getTarget() === 'subtotal' )
             {
                 ( $process > 0 ) ? $toBeCalculated = $newTotal : $toBeCalculated = $subTotal;
 
