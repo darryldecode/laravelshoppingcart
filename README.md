@@ -206,7 +206,7 @@ Get cart total: **Cart::getTotal()**
  *
  * @return float
  */
-$subTotal = Cart::getTotal();
+$total = Cart::getTotal();
 ```
 
 ## Conditions
