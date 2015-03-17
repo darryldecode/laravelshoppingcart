@@ -527,6 +527,8 @@ $items->each(function($item)
 ```
 
 ## Change Log
+**2.0.0
+- major changes in dealing with conditions (Please see [Conditions](#conditions) section, and read carefully)
 **1.1.0
 - added new method: clearCartConditions()
 - added new method: removeItemCondition($itemId, $conditionName)
