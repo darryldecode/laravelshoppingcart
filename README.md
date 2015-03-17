@@ -44,6 +44,7 @@ Next, run the Composer update command from the Terminal:
 * [Exceptions](#exceptions)
 * [Events](#events)
 * [Examples](#examples)
+* [Changelogs](#changelogs)
 * [License](#license)
 
 ## Usage
@@ -526,7 +527,7 @@ $items->each(function($item)
 
 ```
 
-## Change Log
+## Changelogs
 **2.0.0
 - major changes in dealing with conditions (Please see [Conditions](#conditions) section, and read carefully)
 **1.1.0
