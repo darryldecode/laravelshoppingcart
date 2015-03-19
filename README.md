@@ -151,6 +151,9 @@ Getting an item on a cart: **Cart::get()**
 $itemId = 456;
 
 Cart::get($itemId);
+
+// You can also get the sum of the Item multiplied by its quantity, see below:
+$summedPrice = Cart::get($itemId)->getPriceSum();
 ```
 
 Getting cart's contents and count: **Cart::getContent()**
@@ -280,6 +283,11 @@ $condition->getTarget(); // the target of which the condition was applied
 $condition->getName(); // the name of the condition
 $condition->getType(); // the type
 $condition->getValue(); // the value of the condition
+
+// You can get the conditions calculated value by providing the subtotal, see below:
+$subTotal = Cart::getSubTotal();
+$condition = Cart::getCondition('VAT 12.5%');
+$conditionCalculatedValue = $condition->getCalculatedValue($subTotal);
 ```
 
 NOTE: All cart based conditions should be applied before calling **Cart::getTotal()**
@@ -528,6 +536,10 @@ $items->each(function($item)
 ```
 
 ## Changelogs
+
+**2.1.0
+- added new Cart Method: getCalculatedValue($totalOrSubTotalOrPrice)
+- added new Item Method: getPriceSum()
 
 **2.0.0 (breaking change)
 - major changes in dealing with conditions (Please see [Conditions](#conditions) section, and read carefully)
