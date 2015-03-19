@@ -478,6 +478,49 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(0, $this->cart->getConditions()->count(), 'Cart should have no conditions now');
     }
 
+    public function test_get_calculated_value_of_a_condition()
+    {
+        $cartCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%',
+        ));
+        $cartCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-25',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$cartCondition1, $cartCondition2]);
+
+        $subTotal = $this->cart->getSubTotal();
+
+        $this->assertEquals(100, $subTotal, 'Subtotal should be 100');
+
+        // way 1
+        // now we will get the calculated value of the condition 1
+        $cond1 = $this->cart->getCondition('SALE 5%');
+        $this->assertEquals(5,$cond1->getCalculatedValue($subTotal), 'The calculated value must be 5');
+
+        // way 2
+        // get all cart conditions and get their calculated values
+        $conditions = $this->cart->getConditions();
+        $this->assertEquals(5, $conditions['SALE 5%']->getCalculatedValue($subTotal),'First condition calculated value must be 5');
+        $this->assertEquals(25, $conditions['Item Gift Pack 25.00']->getCalculatedValue($subTotal),'First condition calculated value must be 5');
+    }
+
     protected function fillCart()
     {
         $items = array(

@@ -18,6 +18,13 @@ class CartCondition {
     private $args;
 
     /**
+     * the parsed raw value of the condition
+     *
+     * @var
+     */
+    private $parsedRawValue;
+
+    /**
      * @param array $args (name, type, target, value)
      * @throws InvalidConditionException
      */
@@ -87,6 +94,19 @@ class CartCondition {
     }
 
     /**
+     * get the calculated value of this condition supplied by the subtotal|price
+     *
+     * @param $totalOrSubTotalOrPrice
+     * @return mixed
+     */
+    public function getCalculatedValue($totalOrSubTotalOrPrice)
+    {
+        $this->apply($totalOrSubTotalOrPrice, $this->getValue());
+
+        return $this->parsedRawValue;
+    }
+
+    /**
      * apply condition
      *
      * @param $totalOrSubTotalOrPrice
@@ -106,25 +126,25 @@ class CartCondition {
             {
                 $value = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
 
-                $valueToBeSubtracted = $totalOrSubTotalOrPrice * ($value / 100);
+                $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
-                return floatval($totalOrSubTotalOrPrice - $valueToBeSubtracted);
+                $result = floatval($totalOrSubTotalOrPrice - $this->parsedRawValue);
             }
             else if ( $this->valueIsToBeAdded($conditionValue) )
             {
                 $value = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
 
-                $valueToBeSubtracted = $totalOrSubTotalOrPrice * ($value / 100);
+                $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
-                return floatval($totalOrSubTotalOrPrice - $valueToBeSubtracted);
+                $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
             else
             {
                 $value = Helpers::normalizePrice($conditionValue);
 
-                $valueToBeSubtracted = $totalOrSubTotalOrPrice * ($value / 100);
+                $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
-                return floatval($totalOrSubTotalOrPrice + $valueToBeSubtracted);
+                $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
         }
 
@@ -134,23 +154,25 @@ class CartCondition {
         {
             if( $this->valueIsToBeSubtracted($conditionValue) )
             {
-                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
+                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
 
-                return floatval($totalOrSubTotalOrPrice - $value);
+                $result = floatval($totalOrSubTotalOrPrice - $this->parsedRawValue);
             }
             else if ( $this->valueIsToBeAdded($conditionValue) )
             {
-                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
+                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
 
-                return floatval($totalOrSubTotalOrPrice + $value);
+                $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
             else
             {
-                $value = Helpers::normalizePrice($conditionValue);
+                $this->parsedRawValue = Helpers::normalizePrice($conditionValue);
 
-                return floatval($totalOrSubTotalOrPrice + $value);
+                $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
         }
+
+        return $result;
     }
 
     /**

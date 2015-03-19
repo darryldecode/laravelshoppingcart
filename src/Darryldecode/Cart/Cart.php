@@ -82,9 +82,7 @@ class Cart {
      */
     public function get($itemId)
     {
-        $contents = $this->getContent();
-
-        return $contents->get($itemId);
+        return $this->getContent()->get($itemId);
     }
 
     /**
