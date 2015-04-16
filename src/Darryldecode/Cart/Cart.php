@@ -183,14 +183,34 @@ class Cart {
 
         $item = $cart->pull($id);
 
+        $item = $this->updateItemQuantity($data, $item);
+
         foreach($data as $key => $value)
         {
-            $item[$key] = $value;
+            if ($key != 'quantity')
+                $item[$key] = $value;
         }
 
         $cart->put($id, $item);
 
         $this->save($cart);
+    }
+
+    /**
+     * Update quantity if same product is added to cart (by key). Nothing is done if user just
+     * updates a single value of the product.
+     *
+     * @param $data
+     * @param $item
+     * @return mixed
+     */
+    public function updateItemQuantity($data, $item)
+    {
+        if (isset($data['quantity']) && isset($item['quantity'])) {
+            $item['quantity'] += $data['quantity'];
+        }
+
+        return $item;
     }
 
     /**
