@@ -213,6 +213,17 @@ Get cart total: **Cart::getTotal()**
 $total = Cart::getTotal();
 ```
 
+Clearing the Cart: **Cart::clear()**
+
+```php
+/**
+* clear cart
+*
+* @return void
+*/
+Cart::clear();
+```
+
 ## Conditions
 
 Laravel Shopping Cart supports cart conditions.
