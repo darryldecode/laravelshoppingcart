@@ -120,6 +120,16 @@ Cart::update(456, array(
   'name' => 'New Item Name', // new item name
   'price' => 98.67, // new item price, price can also be a string format like so: '98.67'
 ));
+
+// you may also want to update a product's quantity
+Cart::update(456, array(
+  'quantity' => 2, // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
+));
+
+// you may also want to update a product by reducing its quantity, you do this like so:
+Cart::update(456, array(
+  'quantity' => -1, // so if the current product has a quantity of 4, it will subtract 1 and will result to 3
+));
 ```
 
 Removing an item on a cart: **Cart::remove()**
