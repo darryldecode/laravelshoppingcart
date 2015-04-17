@@ -171,7 +171,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         $item = $this->cart->get($itemIdToEvaluate);
         $this->assertEquals('Renamed', $item['name'], 'Item name should be "Renamed"');
         $this->assertEquals(105, $item['price'], 'Item price should be 105');
-        $this->assertEquals(2, $item['quantity'], 'Item quantity should be 2');
+        $this->assertEquals(5, $item['quantity'], 'Item quantity should be 2');
     }
 
     public function test_item_price_should_be_normalized_when_added_to_cart()
@@ -280,7 +280,74 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         // when cart's item quantity is updated, the subtotal should be updated as well
         $this->cart->update(456, array('quantity' => 2));
 
+        $this->assertEquals(409.2, $this->cart->getSubTotal(), 'Cart should have sub total of 409.2');
+    }
+
+    public function test_sub_total_when_item_quantity_is_updated_by_reduced()
+    {
+        $items = array(
+            array(
+                'id' => 456,
+                'name' => 'Sample Item 1',
+                'price' => 67.99,
+                'quantity' => 3,
+                'attributes' => array()
+            ),
+            array(
+                'id' => 568,
+                'name' => 'Sample Item 2',
+                'price' => 69.25,
+                'quantity' => 1,
+                'attributes' => array()
+            ),
+        );
+
+        $this->cart->add($items);
+
+        $this->assertEquals(273.22, $this->cart->getSubTotal(), 'Cart should have sub total of 273.22');
+
+        // when cart's item quantity is updated, the subtotal should be updated as well
+        $this->cart->update(456, array('quantity' => -1));
+
+        // get the item to be evaluated
+        $item = $this->cart->get(456);
+
+        $this->assertEquals(2, $item['quantity'], 'Item quantity of with item ID of 456 should now be reduced to 2');
         $this->assertEquals(205.23, $this->cart->getSubTotal(), 'Cart should have sub total of 205.23');
+    }
+
+    public function test_item_quantity_update_by_reduced_should_not_reduce_if_quantity_will_result_to_zero()
+    {
+        $items = array(
+            array(
+                'id' => 456,
+                'name' => 'Sample Item 1',
+                'price' => 67.99,
+                'quantity' => 3,
+                'attributes' => array()
+            ),
+            array(
+                'id' => 568,
+                'name' => 'Sample Item 2',
+                'price' => 69.25,
+                'quantity' => 1,
+                'attributes' => array()
+            ),
+        );
+
+        $this->cart->add($items);
+
+        // get the item to be evaluated
+        $item = $this->cart->get(456);
+
+        // prove first we have quantity of 3
+        $this->assertEquals(3, $item['quantity'], 'Item quantity of with item ID of 456 should be reduced to 3');
+
+        // when cart's item quantity is updated, and reduced to more than the current quantity
+        // this should not work
+        $this->cart->update(456, array('quantity' => -3));
+
+        $this->assertEquals(3, $item['quantity'], 'Item quantity of with item ID of 456 should now be reduced to 2');
     }
 
     public function test_should_throw_exception_when_provided_invalid_values_scenario_one()
