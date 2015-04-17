@@ -558,6 +558,9 @@ $items->each(function($item)
 
 ## Changelogs
 
+**2.1.1
+- when a new product with the same ID is added on a cart and a quantity is provided, it will increment its current quantity instead of overwriting it. There's a chance that you will also need to update an item's quantity but not incrementing it but reducing it, please just see the documentation (Please see Cart::update() section, and read carefully)
+
 **2.1.0
 - added new Cart Method: getCalculatedValue($totalOrSubTotalOrPrice)
 - added new Item Method: getPriceSum()
