@@ -322,7 +322,7 @@ Next is the Condition on Per-Item Bases.
 
 This is very useful if you have coupons to be applied specifically on an item and not on the whole cart value.
 
-NOTE: When adding a condition on a per-item bases, the 'target' should have value of 'subtotal'.
+NOTE: When adding a condition on a per-item bases, the 'target' should have value of 'item'.
 
 Now let's add condition on an item.
 
