@@ -304,6 +304,30 @@ class Cart {
     {
         return $this->getConditions()->get($conditionName);
     }
+    
+      /**
+     * Get all the condition filtered by Type
+     * @param $type
+     * @return CartConditionCollection
+     */
+    public function getConditionsByType($type){
+        return $this->getConditions()->filter(function(CartCondition $condition) use ($type){
+            return $condition->getType() == $type;
+        });
+    }
+
+
+    /**
+     * Remove all the condition with the $type specified
+     * @param $type
+     * @return $this
+     */
+    public function removeConditionsByType($type){
+        return $this->getConditionsByType($type)->each(function($condition){
+            $this->removeCartCondition($condition->getName());
+        });
+    }
+
 
     /**
      * removes a condition on a cart by condition name,
