@@ -428,6 +428,32 @@ Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionN
 Cart::removeItemCondition($itemId, $conditionName)
 ```
 
+Get conditions by type: **Cart::getConditionsByType($type)**
+```php
+/**
+* Get all the condition filtered by Type
+* Please Note that this will only return condition added on cart bases, not those conditions added
+* specifically on an per item bases
+*
+* @param $type
+* @return CartConditionCollection
+*/
+public function getConditionsByType($type)
+```
+
+Remove conditions by type: **Cart::removeConditionsByType($type)**
+```php
+/**
+* Remove all the condition with the $type specified
+* Please Note that this will only remove condition added on cart bases, not those conditions added
+* specifically on an per item bases
+*
+* @param $type
+* @return $this
+*/
+public function removeConditionsByType($type)
+```
+
 ## Instances
 
 You may also want multiple cart instances on the same page without conflicts.
@@ -557,6 +583,10 @@ $items->each(function($item)
 ```
 
 ## Changelogs
+
+**2.2.0
+- added new Cart Method: getConditionsByType($type)
+- added new Item Method: removeConditionsByType($type)
 
 **2.1.1
 - when a new product with the same ID is added on a cart and a quantity is provided, it will increment its current quantity instead of overwriting it. There's a chance that you will also need to update an item's quantity but not incrementing it but reducing it, please just see the documentation (Please see Cart::update() section, and read carefully)
