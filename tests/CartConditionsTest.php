@@ -521,6 +521,92 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(25, $conditions['Item Gift Pack 25.00']->getCalculatedValue($subTotal),'First condition calculated value must be 5');
     }
 
+    public function test_get_conditions_by_type()
+    {
+        $cartCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%',
+        ));
+        $cartCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-25',
+        ));
+        $cartCondition3 = new CartCondition(array(
+            'name' => 'Item Less 8%',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-8%',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$cartCondition1, $cartCondition2, $cartCondition3]);
+
+        // now lets get all conditions added in the cart with the type "promo"
+        $promoConditions = $this->cart->getConditionsByType('promo');
+
+        $this->assertEquals(2, $promoConditions->count(), "We should have 2 items as promo condition type.");
+    }
+
+    public function test_remove_conditions_by_type()
+    {
+        // NOTE:
+        // when add a new condition, the condition's name will be the key to be use
+        // to access the condition. For some reasons, if the condition name contains
+        // a "dot" on it ("."), for example adding a condition with name "SALE 35.00"
+        // this will cause issues when removing this condition by name, this will not be removed
+        // so when adding a condition, the condition name should not contain any "period" (.)
+        // to avoid any issues removing it using remove method: removeCartCondition($conditionName);
+
+        $cartCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%',
+        ));
+        $cartCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 20',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-25',
+        ));
+        $cartCondition3 = new CartCondition(array(
+            'name' => 'Item Less 8%',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-8%',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$cartCondition1, $cartCondition2, $cartCondition3]);
+
+        // now lets remove all conditions added in the cart with the type "promo"
+        $this->cart->removeConditionsByType('promo');
+
+        $this->assertEquals(1, $this->cart->getConditions()->count(), "We should have 1 condition remaining as promo conditions type has been removed.");
+    }
+
     protected function fillCart()
     {
         $items = array(

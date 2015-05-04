@@ -399,4 +399,5 @@ class CartTest extends PHPUnit_Framework_TestCase  {
 
         $this->assertTrue($this->cart->isEmpty(),'cart should now be empty');
     }
+
 }
