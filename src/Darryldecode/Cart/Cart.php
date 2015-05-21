@@ -382,15 +382,38 @@ class Cart {
 
             $tempConditionsHolder = $item['conditions'];
 
-            foreach($tempConditionsHolder as $k => $condition)
+            // if the item's conditions is in array format
+            // we will iterate through all of it and check if the name matches
+            // to the given name the user wants to remove, if so, remove it
+            if( is_array($tempConditionsHolder) )
             {
-                if( $condition->getName() == $conditionName )
+                foreach($tempConditionsHolder as $k => $condition)
                 {
-                    unset($tempConditionsHolder[$k]);
+                    if( $condition->getName() == $conditionName )
+                    {
+                        unset($tempConditionsHolder[$k]);
+                    }
                 }
+
+                $item['conditions'] = $tempConditionsHolder;
             }
 
-            $item['conditions'] = $tempConditionsHolder;
+            // if the item condition is not an array, we will check if it is
+            // an instance of a Condition, if so, we will check if the name matches
+            // on the given condition name the user wants to remove, if so,
+            // lets just make $item['conditions'] an empty array as there's just 1 condition on it anyway
+            else
+            {
+                $conditionInstance = "Darryldecode\\Cart\\CartCondition";
+
+                if ($item['conditions'] instanceof $conditionInstance)
+                {
+                    if ($tempConditionsHolder->getName() == $conditionName)
+                    {
+                        $item['conditions'] = array();
+                    }
+                }
+            }
         }
 
         $this->update($itemId, array(
@@ -591,6 +614,17 @@ class Cart {
      */
     protected function itemHasConditions($item)
     {
-        return count($item['conditions']) > 0;
+        if( ! isset($item['conditions']) ) return false;
+
+        if( is_array($item['conditions']) )
+        {
+            return count($item['conditions']) > 0;
+        }
+
+        $conditionInstance = "Darryldecode\\Cart\\CartCondition";
+
+        if( $item['conditions'] instanceof $conditionInstance ) return true;
+
+        return false;
     }
 }
