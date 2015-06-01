@@ -400,4 +400,31 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         $this->assertTrue($this->cart->isEmpty(),'cart should now be empty');
     }
 
+    public function test_cart_get_total_quantity()
+    {
+        $items = array(
+            array(
+                'id' => 456,
+                'name' => 'Sample Item 1',
+                'price' => 67.99,
+                'quantity' => 3,
+                'attributes' => array()
+            ),
+            array(
+                'id' => 568,
+                'name' => 'Sample Item 2',
+                'price' => 69.25,
+                'quantity' => 1,
+                'attributes' => array()
+            ),
+        );
+
+        $this->cart->add($items);
+
+        $this->assertFalse($this->cart->isEmpty(),'prove first cart is not empty');
+
+        // now let's count the cart's quantity
+        $this->assertInternalType("int", $this->cart->getTotalQuantity(), 'Return type should be INT');
+        $this->assertEquals(4, $this->cart->getTotalQuantity(),'Cart\'s quantity should be 4.');
+    }
 }

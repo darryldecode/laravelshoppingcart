@@ -327,6 +327,41 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(85.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 70');
     }
 
+    public function test_add_item_condition()
+    {
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'item',
+            'value' => '-25',
+        ));
+        $coupon101 = new CartCondition(array(
+            'name' => 'COUPON 101',
+            'type' => 'coupon',
+            'target' => 'item',
+            'value' => '-5%',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+            'conditions' => [$itemCondition2]
+        );
+
+        $this->cart->add($item);
+
+        // let's prove first we have 1 condition on this item
+        $this->assertCount(1, $this->cart->get($item['id'])['conditions'], "Item should have 1 condition");
+
+        // now let's insert a condition on an existing item on the cart
+        $this->cart->addItemCondition($item['id'], $coupon101);
+
+        $this->assertCount(2, $this->cart->get($item['id'])['conditions'], "Item should have 2 conditions");
+    }
+
     public function test_get_cart_condition_by_condition_name()
     {
         $itemCondition1 = new CartCondition(array(

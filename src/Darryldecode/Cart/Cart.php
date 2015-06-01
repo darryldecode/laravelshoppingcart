@@ -222,6 +222,45 @@ class Cart {
     }
 
     /**
+     * add condition on an existing item on the cart
+     *
+     * @param int|string $productId
+     * @param CartCondition $itemCondition
+     * @return $this
+     */
+    public function addItemCondition($productId, $itemCondition)
+    {
+        if( $product = $this->get($productId) )
+        {
+            $conditionInstance = "\\Darryldecode\\Cart\\CartCondition";
+
+            if( $itemCondition instanceof $conditionInstance )
+            {
+                // we need to copy first to a temporary variable to hold the conditions
+                // to avoid hitting this error "Indirect modification of overloaded element of Darryldecode\Cart\ItemCollection has no effect"
+                // this is due to laravel Collection instance that implements Array Access
+                // // see link for more info: http://stackoverflow.com/questions/20053269/indirect-modification-of-overloaded-element-of-splfixedarray-has-no-effect
+                $itemConditionTempHolder = $product['conditions'];
+
+                if( is_array($itemConditionTempHolder) )
+                {
+                    array_push($itemConditionTempHolder, $itemCondition);
+                }
+                else
+                {
+                    $itemConditionTempHolder = $itemCondition;
+                }
+
+                $this->update($productId, array(
+                    'conditions' => $itemConditionTempHolder // the newly updated conditions
+                ));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * removes an item on cart by item ID
      *
      * @param $id
@@ -521,6 +560,25 @@ class Cart {
         });
 
         return $newTotal;
+    }
+
+    /**
+     * get total quantity of items in the cart
+     *
+     * @return int
+     */
+    public function getTotalQuantity()
+    {
+        $items = $this->getContent();
+
+        if( $items->isEmpty() ) return 0;
+
+        $count = $items->sum(function($item)
+        {
+            return $item['quantity'];
+        });
+
+        return $count;
     }
 
     /**
