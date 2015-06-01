@@ -614,9 +614,16 @@ $items->each(function($item)
 
 ## Changelogs
 
+**2.3.0
+- added new Cart Method: Cart::addItemCondition($productId, $itemCondition)
+- added new Cart Method: Cart::getTotalQuantity()
+
+**2.2.1
+- bug fixes
+
 **2.2.0
-- added new Cart Method: getConditionsByType($type)
-- added new Item Method: removeConditionsByType($type)
+- added new Cart Method: Cart::getConditionsByType($type)
+- added new Item Method: Cart::removeConditionsByType($type)
 
 **2.1.1
 - when a new product with the same ID is added on a cart and a quantity is provided, it will increment its current quantity instead of overwriting it. There's a chance that you will also need to update an item's quantity but not incrementing it but reducing it, please just see the documentation (Please see Cart::update() section, and read carefully)
