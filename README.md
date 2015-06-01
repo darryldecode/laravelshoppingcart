@@ -201,6 +201,17 @@ Check if cart is empty: **Cart::isEmpty()**
 Cart::isEmpty();
 ```
 
+Get cart total quantity: **Cart::getTotalQuantity()**
+
+```php
+/**
+* get total quantity of items in the cart
+*
+* @return int
+*/
+$cartTotalQuantity = Cart::getTotalQuantity();
+```
+
 Get cart subtotal: **Cart::getSubTotal()**
 
 ```php
@@ -386,6 +397,25 @@ NOTE: All cart per-item conditions should be applied before calling **Cart::getS
 Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions.
 ```php
 $cartSubTotal = Cart::getSubTotal(); // the subtotal will be calculated based on the conditions you have provided
+```
+
+Add condition to exisiting Item on the cart: **Cart::addItemCondition($productId, $itemCondition)**
+
+Adding Condition to an existing Item on the cart is simple as well.
+
+This is very useful when adding new conditions on an item during checkout process like coupons and promo codes.
+Let's see the example how to do it:
+
+```php
+$productID = 456;
+$coupon101 = new CartCondition(array(
+            'name' => 'COUPON 101',
+            'type' => 'coupon',
+            'target' => 'item',
+            'value' => '-5%',
+        ));
+        
+Cart::addItemCondition($productID, $coupon101);
 ```
 
 Clearing Cart Conditions: **Cart::clearCartConditions()**
