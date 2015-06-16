@@ -276,6 +276,10 @@ $condition = new \Darryldecode\Cart\CartCondition(array(
     'type' => 'tax',
     'target' => 'subtotal',
     'value' => '12.5%',
+    'attributes' => array( // attributes field is optional
+    	'description' => 'Value added tax',
+    	'more_data' => 'more data here'
+    )
 ));
 
 Cart::condition($condition);
@@ -307,6 +311,7 @@ foreach($carConditions as $condition)
     $condition->getName(); // the name of the condition
     $condition->getType(); // the type
     $condition->getValue(); // the value of the condition
+    $condition->getAttributes(); // the attributes of the condition, returns an empty [] if no attributes added
 }
 
 // You can also get a condition that has been applied on the cart by using its name, use below:
@@ -315,6 +320,7 @@ $condition->getTarget(); // the target of which the condition was applied
 $condition->getName(); // the name of the condition
 $condition->getType(); // the type
 $condition->getValue(); // the value of the condition
+$condition->getAttributes(); // the attributes of the condition, returns an empty [] if no attributes added
 
 // You can get the conditions calculated value by providing the subtotal, see below:
 $subTotal = Cart::getSubTotal();
@@ -613,6 +619,9 @@ $items->each(function($item)
 ```
 
 ## Changelogs
+
+**2.4.0
+- added new method on a condition: $condition->getAttributes(); (Please see [Conditions](#conditions) section)
 
 **2.3.0
 - added new Cart Method: Cart::addItemCondition($productId, $itemCondition)
