@@ -674,6 +674,79 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(1, $this->cart->getConditions()->count(), "We should have 1 condition remaining as promo conditions type has been removed.");
     }
 
+    public function test_add_cart_condition_without_condition_attributes()
+    {
+        $cartCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%'
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$cartCondition1]);
+
+        // prove first we have now the condition on the cart
+        $contition = $this->cart->getCondition("SALE 5%");
+        $this->assertEquals('SALE 5%',$contition->getName());
+
+        // when get attribute is called and there is no attributes added,
+        // it should return an empty array
+        $conditionAttribute = $contition->getAttributes();
+        $this->assertInternalType('array', $conditionAttribute);
+    }
+
+    public function test_add_cart_condition_with_condition_attributes()
+    {
+        $cartCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%',
+            'attributes' => array(
+                'description' => 'october fest promo sale',
+                'sale_start_date' => '2015-01-20',
+                'sale_end_date' => '2015-01-30',
+            )
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+        );
+
+        $this->cart->add($item);
+
+        $this->cart->condition([$cartCondition1]);
+
+        // prove first we have now the condition on the cart
+        $contition = $this->cart->getCondition("SALE 5%");
+        $this->assertEquals('SALE 5%',$contition->getName());
+
+        // when get attribute is called and there is no attributes added,
+        // it should return an empty array
+        $conditionAttributes = $contition->getAttributes();
+        $this->assertInternalType('array', $conditionAttributes);
+        $this->assertArrayHasKey('description',$conditionAttributes);
+        $this->assertArrayHasKey('sale_start_date',$conditionAttributes);
+        $this->assertArrayHasKey('sale_end_date',$conditionAttributes);
+        $this->assertEquals('october fest promo sale',$conditionAttributes['description']);
+        $this->assertEquals('2015-01-20',$conditionAttributes['sale_start_date']);
+        $this->assertEquals('2015-01-30',$conditionAttributes['sale_end_date']);
+    }
+
     protected function fillCart()
     {
         $items = array(

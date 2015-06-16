@@ -73,6 +73,16 @@ class CartCondition {
     }
 
     /**
+     * get the additional attributes of a condition
+     *
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return (isset($this->args['attributes'])) ? $this->args['attributes'] : array();
+    }
+
+    /**
      * the value of this the condition
      *
      * @return mixed
