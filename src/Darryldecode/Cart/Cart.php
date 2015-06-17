@@ -84,6 +84,17 @@ class Cart {
     {
         return $this->getContent()->get($itemId);
     }
+    
+    /**
+     * check if an item exists by item ID
+     *
+     * @param $itemId
+     * @return bool
+     */
+    public function has($itemId)
+    {
+        return $this->getContent()->has($itemId);
+    }
 
     /**
      * add item to the cart, it can be an array or multi dimensional array
