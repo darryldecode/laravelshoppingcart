@@ -37,7 +37,7 @@ Next, run the Composer update command from the Terminal:
 2. Open config/app.php and addd this line to your Aliases
 
 ```php
-  'Cart' => 'Darryldecode\Cart\Facades\CartFacade::class'
+  'Cart' => 'Darryldecode\Cart\Facades\CartFacade'
   ```
   
 ## HOW TO USE
