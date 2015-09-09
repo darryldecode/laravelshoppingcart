@@ -128,7 +128,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         // ItemAttributeCollection
         $item = $this->cart->get(456);
 
-        $this->assertInstanceOf(\Darryldecode\Cart\ItemAttributeCollection::class, $item->attributes);
+        $this->assertInstanceOf('Darryldecode\Cart\ItemAttributeCollection', $item->attributes);
 
         // now lets update the item with its new attributes
         // when we get that item from cart, it should still be an instance of ItemAttributeCollection
@@ -140,7 +140,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         );
         $this->cart->update(456,$updatedItem);
 
-        $this->assertInstanceOf(\Darryldecode\Cart\ItemAttributeCollection::class, $item->attributes);
+        $this->assertInstanceOf('Darryldecode\Cart\ItemAttributeCollection', $item->attributes);
     }
 
     public function test_cart_items_attributes()
