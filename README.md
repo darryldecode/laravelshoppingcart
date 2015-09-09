@@ -102,6 +102,11 @@ Cart::add(array(
       )
   ),
 ));
+
+// NOTE:
+// Please keep in mind that when adding an item on cart, the "id" should be unique as it serves as
+// row identifier as well. If you provide same ID, it will assume the operation will be an update to its quantity
+// to avoid cart item duplicates
 ```
 
 Updating an item on a cart: **Cart::update()**
@@ -133,6 +138,18 @@ Cart::update(456, array(
 Cart::update(456, array(
   'quantity' => -1, // so if the current product has a quantity of 4, it will subtract 1 and will result to 3
 ));
+
+// NOTE: as you can see by default, the quantity update is relative to its current value
+// if you want to just totally replace the quantity instead of incrementing or decrementing its current quantity value
+// you can pass an array in quantity value like so:
+Cart::update(456, array(
+  'quantity' => array(
+      'relative' => false,
+      'value' => 5
+  ),
+));
+// so with that code above as relative is flagged as false, if the item's quantity before is 2 it will now be 5 instead of
+// 5 + 2 which results to 7 if updated relatively..
 ```
 
 Removing an item on a cart: **Cart::remove()**
