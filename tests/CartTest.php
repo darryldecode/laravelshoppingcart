@@ -110,6 +110,39 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
     }
 
+    public function test_cart_update_with_attribute_then_attributes_should_be_still_instance_of_ItemAttributeCollection()
+    {
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 67.99,
+            'quantity' => 4,
+            'attributes' => array(
+                'product_id' => '145',
+                'color' => 'red'
+            )
+        );
+        $this->cart->add($item);
+
+        // lets get the attribute and prove first its an instance of
+        // ItemAttributeCollection
+        $item = $this->cart->get(456);
+
+        $this->assertInstanceOf(\Darryldecode\Cart\ItemAttributeCollection::class, $item->attributes);
+
+        // now lets update the item with its new attributes
+        // when we get that item from cart, it should still be an instance of ItemAttributeCollection
+        $updatedItem = array(
+            'attributes' => array(
+                'product_id' => '145',
+                'color' => 'red'
+            )
+        );
+        $this->cart->update(456,$updatedItem);
+
+        $this->assertInstanceOf(\Darryldecode\Cart\ItemAttributeCollection::class, $item->attributes);
+    }
+
     public function test_cart_items_attributes()
     {
         $item = array(
@@ -172,6 +205,35 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals('Renamed', $item['name'], 'Item name should be "Renamed"');
         $this->assertEquals(105, $item['price'], 'Item price should be 105');
         $this->assertEquals(5, $item['quantity'], 'Item quantity should be 2');
+    }
+
+    public function test_cart_update_existing_item_with_quantity_as_array_and_not_relative()
+    {
+        $items = array(
+            array(
+                'id' => 456,
+                'name' => 'Sample Item 1',
+                'price' => 67.99,
+                'quantity' => 3,
+                'attributes' => array()
+            ),
+        );
+
+        $this->cart->add($items);
+
+        $itemIdToEvaluate = 456;
+        $item = $this->cart->get($itemIdToEvaluate);
+        $this->assertEquals(3, $item['quantity'], 'Item quantity should be 3');
+
+        // now by default when an update takes place and the quantity attribute
+        // is present, it will evaluate for arithmetic operation if the quantity
+        // should be incremented or decremented, we should also allow the quantity
+        // value to be in array format and provide a field if the quantity should not be
+        // treated as relative to Item quantity current value
+        $this->cart->update($itemIdToEvaluate,array('quantity' => array('relative' => false, 'value' => 5)));
+
+        $item = $this->cart->get($itemIdToEvaluate);
+        $this->assertEquals(5, $item['quantity'], 'Item quantity should be 5');
     }
 
     public function test_item_price_should_be_normalized_when_added_to_cart()

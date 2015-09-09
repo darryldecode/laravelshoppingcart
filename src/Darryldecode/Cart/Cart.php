@@ -201,25 +201,33 @@ class Cart {
             // or being reduced.
             if( $key == 'quantity' )
             {
-                if( preg_match('/\-/', $value) == 1 )
+                // we will check if quantity value provided is array,
+                // if it is, we will need to check if a key "relative" is set
+                // and we will evaluate its value if true or false,
+                // this tells us how to treat the quantity value if it should be updated
+                // relatively to its current quantity value or just totally replace the value
+                if( is_array($value) )
                 {
-                    $value = (int) str_replace('-','',$value);
-
-                    // we will not allowed to reduced quantity to 0, so if the given value
-                    // would result to item quantity of 0, we will not do it.
-                    if( ($item[$key] - $value) > 0 )
+                    if( isset($value['relative']) )
                     {
-                        $item[$key] -= $value;
+                        if( (bool) $value['relative'] )
+                        {
+                            $item = $this->updateQuantityRelative($item, $key, $value['value']);
+                        }
+                        else
+                        {
+                            $item = $this->updateQuantityNotRelative($item, $key, $value['value']);
+                        }
                     }
-                }
-                elseif( preg_match('/\+/', $value) == 1 )
-                {
-                    $item[$key] += (int) str_replace('+','',$value);
                 }
                 else
                 {
-                    $item[$key] += (int) $value;
+                    $item = $this->updateQuantityRelative($item, $key, $value);
                 }
+            }
+            elseif( $key == 'attributes' )
+            {
+                $item[$key] = new ItemAttributeCollection($value);
             }
             else
             {
@@ -695,5 +703,53 @@ class Cart {
         if( $item['conditions'] instanceof $conditionInstance ) return true;
 
         return false;
+    }
+
+    /**
+     * update a cart item quantity relative to its current quantity
+     *
+     * @param $item
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
+    protected function updateQuantityRelative($item, $key, $value)
+    {
+        if( preg_match('/\-/', $value) == 1 )
+        {
+            $value = (int) str_replace('-','',$value);
+
+            // we will not allowed to reduced quantity to 0, so if the given value
+            // would result to item quantity of 0, we will not do it.
+            if( ($item[$key] - $value) > 0 )
+            {
+                $item[$key] -= $value;
+            }
+        }
+        elseif( preg_match('/\+/', $value) == 1 )
+        {
+            $item[$key] += (int) str_replace('+','',$value);
+        }
+        else
+        {
+            $item[$key] += (int) $value;
+        }
+
+        return $item;
+    }
+
+    /**
+     * update cart item quantity not relative to its current quantity value
+     *
+     * @param $item
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
+    protected function updateQuantityNotRelative($item, $key, $value)
+    {
+        $item[$key] = (int) $value;
+
+        return $item;
     }
 }
