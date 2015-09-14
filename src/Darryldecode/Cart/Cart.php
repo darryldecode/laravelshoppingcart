@@ -609,6 +609,22 @@ class Cart {
     {
         return (new CartCollection($this->session->get($this->sessionKeyCartItems)));
     }
+    /**
+     * Get the total amount of items 
+     * in the cart
+     * 
+     * @return int
+     **/
+    public function getTotalItems()
+    {
+        $total = 0;
+        foreach($this->getContent() as $item)
+        {
+            $total += $item->quantity;
+        }
+        
+        return $total;
+    }
 
     /**
      * check if cart is empty
