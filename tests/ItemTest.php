@@ -1,21 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: darryl
- * Date: 3/18/2015
- * Time: 6:17 PM
- */
 
-use Darryldecode\Cart\Cart;
+use Ozanmuyes\Cart\Cart;
 use Mockery as m;
 
-require_once __DIR__.'/helpers/SessionMock.php';
+require_once __DIR__ . '/helpers/SessionMock.php';
 
 class ItemTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var Darryldecode\Cart\Cart
+     * @var Ozanmuyes\Cart\Cart
      */
     protected $cart;
 

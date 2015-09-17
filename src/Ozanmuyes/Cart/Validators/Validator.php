@@ -1,22 +1,17 @@
-<?php namespace Darryldecode\Cart\Validators;
+<?php
+
+namespace Ozanmuyes\Cart\Validators;
+
 use Symfony\Component\Translation\Translator;
 use Illuminate\Validation\Factory;
 
-/**
- * Created by PhpStorm.
- * User: darryl
- * Date: 1/16/2015
- * Time: 10:59 AM
- */
-
-abstract class Validator {
-
+abstract class Validator
+{
     protected static $factory;
 
     public static function instance()
     {
-        if ( ! static::$factory)
-        {
+        if (!static::$factory) {
             $translator = new Translator('en');
             static::$factory = new Factory($translator);
         }
@@ -28,8 +23,7 @@ abstract class Validator {
     {
         $instance = static::instance();
 
-        switch (count($args))
-        {
+        switch (count($args)) {
             case 0:
                 return $instance->$method();
 

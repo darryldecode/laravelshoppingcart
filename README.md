@@ -1,8 +1,5 @@
 # Laravel 5 Shopping Cart
-[![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/darryldecode/laravelshoppingcart/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/darryldecode/laravelshoppingcart/)
-[![Total Downloads](https://poser.pugx.org/darryldecode/cart/d/total.svg)](https://packagist.org/packages/darryldecode/cart)
-[![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
+A Shopping Cart Implementation for Laravel Framework (Based on the impressive work of darryldecode [https://github.com/darryldecode/laravelshoppingcart])
 
 A Shopping Cart Implementation for Laravel Framework
 
@@ -15,7 +12,7 @@ Install the package through [Composer](http://getcomposer.org/). Edit your proje
 ```php
 "require": {
 	"laravel/framework": "5.0.*",
-	"darryldecode/cart": "dev-master"
+	"ozanmuyes/cart": "dev-master"
 }
 ```
 
@@ -25,19 +22,19 @@ Next, run the Composer update command from the Terminal:
     
     or
     
-    composer update "darryldecode/cart"
+    composer update "ozanmuyes/cart"
 
 ##CONFIGURATION
 
 1. Open config/app.php and addd this line to your Service Providers Array
   ```php
-  'Darryldecode\Cart\CartServiceProvider'
+  'Ozanmuyes\Cart\CartServiceProvider'
   ```
   
 2. Open config/app.php and addd this line to your Aliases
 
 ```php
-  'Cart' => 'Darryldecode\Cart\Facades\CartFacade'
+  'Cart' => 'Ozanmuyes\Cart\Facades\CartFacade'
   ```
   
 ## HOW TO USE
@@ -291,7 +288,7 @@ Also, when adding conditions, the 'value' field will be the bases of calculation
 ```php
 
 // add single condition on a cart bases
-$condition = new \Darryldecode\Cart\CartCondition(array(
+$condition = new \Ozanmuyes\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
     'target' => 'subtotal',
@@ -305,13 +302,13 @@ $condition = new \Darryldecode\Cart\CartCondition(array(
 Cart::condition($condition);
 
 // or add multiple conditions from different condition instances
-$condition1 = new \Darryldecode\Cart\CartCondition(array(
+$condition1 = new \Ozanmuyes\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
     'target' => 'subtotal',
     'value' => '12.5%',
 ));
-$condition2 = new \Darryldecode\Cart\CartCondition(array(
+$condition2 = new \Ozanmuyes\Cart\CartCondition(array(
     'name' => 'Express Shipping $15',
     'type' => 'shipping',
     'target' => 'subtotal',
@@ -366,7 +363,7 @@ Now let's add condition on an item.
 ```php
 
 // lets create first our condition instance
-$saleCondition = new \Darryldecode\Cart\CartCondition(array(
+$saleCondition = new \Ozanmuyes\Cart\CartCondition(array(
             'name' => 'SALE 5%',
             'type' => 'tax',
             'target' => 'item',
@@ -387,7 +384,7 @@ $product = array(
 Cart::add($product);
 
 // you may also add multiple condition on an item
-$itemCondition1 = new \Darryldecode\Cart\CartCondition(array(
+$itemCondition1 = new \Ozanmuyes\Cart\CartCondition(array(
     'name' => 'SALE 5%',
     'type' => 'sale',
     'target' => 'item',
@@ -399,7 +396,7 @@ $itemCondition2 = new CartCondition(array(
     'target' => 'item',
     'value' => '-25',
 ));
-$itemCondition3 = new \Darryldecode\Cart\CartCondition(array(
+$itemCondition3 = new \Ozanmuyes\Cart\CartCondition(array(
     'name' => 'MISC',
     'type' => 'misc',
     'target' => 'item',

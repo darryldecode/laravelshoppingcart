@@ -1,12 +1,12 @@
 {
-    "name": "darryldecode/cart",
+    "name": "ozanmuyes/laravel5cart",
     "description": "Laravel 5 Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Darryl Fernandez",
-            "email": "engrdarrylfernandez@gmail.com"
+            "name": "Ozan Müyesseroğlu",
+            "email": "ozi5169@gmail.com"
         }
     ],
     "require": {
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Darryldecode\\": "src/Darryldecode"
+            "Ozanmuyes\\": "src/ozanmuyes"
         }
     },
     "minimum-stability": "dev"

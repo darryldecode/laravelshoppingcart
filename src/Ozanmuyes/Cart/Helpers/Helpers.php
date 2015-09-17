@@ -1,14 +1,9 @@
-<?php namespace Darryldecode\Cart\Helpers;
+<?php
 
-/**
- * Created by PhpStorm.
- * User: darryl
- * Date: 1/15/2015
- * Time: 8:09 PM
- */
+namespace Ozanmuyes\Cart\Helpers;
 
-class Helpers {
-
+class Helpers
+{
     /**
      * normalize price
      *
@@ -17,7 +12,9 @@ class Helpers {
      */
     public static function normalizePrice($price)
     {
-        return (is_string($price)) ? floatval($price) : $price;
+        return (is_string($price))
+                ? floatval($price)
+                : $price;
     }
 
     /**
@@ -32,24 +29,18 @@ class Helpers {
      */
     public static function isMultiArray($array, $recursive = false)
     {
-        if( $recursive )
-        {
-            return (count($array) == count($array, COUNT_RECURSIVE)) ? false : true;
-        }
-        else
-        {
-            foreach ($array as $k => $v)
-            {
-                if (is_array($v))
-                {
+        if ($recursive) {
+            return (count($array) == count($array, COUNT_RECURSIVE))
+                    ? false
+                    : true;
+        } else {
+            foreach ($array as $k => $v) {
+                if (is_array($v)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
             }
-
         }
     }
 
@@ -62,7 +53,9 @@ class Helpers {
      */
     public static function issetAndHasValueOrAssignDefault(&$var, $default = false)
     {
-        if( (isset($var)) && ($var!='') ) return $var;
+        if ((isset($var)) && ($var!='')) {
+            return $var;
+        }
 
         return $default;
     }

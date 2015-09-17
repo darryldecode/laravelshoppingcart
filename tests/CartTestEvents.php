@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: darryl
- * Date: 1/16/2015
- * Time: 3:20 PM
- */
 
-use Darryldecode\Cart\Cart;
+use Ozanmuyes\Cart\Cart;
 use Mockery as m;
 
-require_once __DIR__.'/helpers/SessionMock.php';
+require_once __DIR__ . '/helpers/SessionMock.php';
 
 class CartTestEvents extends PHPUnit_Framework_TestCase {
 

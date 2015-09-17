@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: darryl
- * Date: 1/12/2015
- * Time: 9:59 PM
- */
 
-use Darryldecode\Cart\Cart;
+use Ozanmuyes\Cart\Cart;
 use Mockery as m;
 
-require_once __DIR__.'/helpers/SessionMock.php';
+require_once __DIR__ . '/helpers/SessionMock.php';
 
 class CartTest extends PHPUnit_Framework_TestCase  {
 
     /**
-     * @var Darryldecode\Cart\Cart
+     * @var Ozanmuyes\Cart\Cart
      */
     protected $cart;
 
@@ -128,7 +122,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         // ItemAttributeCollection
         $item = $this->cart->get(456);
 
-        $this->assertInstanceOf('Darryldecode\Cart\ItemAttributeCollection', $item->attributes);
+        $this->assertInstanceOf('Ozanmuyes\Cart\ItemAttributeCollection', $item->attributes);
 
         // now lets update the item with its new attributes
         // when we get that item from cart, it should still be an instance of ItemAttributeCollection
@@ -140,7 +134,7 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         );
         $this->cart->update(456,$updatedItem);
 
-        $this->assertInstanceOf('Darryldecode\Cart\ItemAttributeCollection', $item->attributes);
+        $this->assertInstanceOf('Ozanmuyes\Cart\ItemAttributeCollection', $item->attributes);
     }
 
     public function test_cart_items_attributes()
@@ -414,21 +408,21 @@ class CartTest extends PHPUnit_Framework_TestCase  {
 
     public function test_should_throw_exception_when_provided_invalid_values_scenario_one()
     {
-        $this->setExpectedException('Darryldecode\Cart\Exceptions\InvalidItemException');
+        $this->setExpectedException('Ozanmuyes\Cart\Exceptions\InvalidItemException');
 
         $this->cart->add(455, 'Sample Item', 100.99, 0, array());
     }
 
     public function test_should_throw_exception_when_provided_invalid_values_scenario_two()
     {
-        $this->setExpectedException('Darryldecode\Cart\Exceptions\InvalidItemException');
+        $this->setExpectedException('Ozanmuyes\Cart\Exceptions\InvalidItemException');
 
         $this->cart->add('', 'Sample Item', 100.99, 2, array());
     }
 
     public function test_should_throw_exception_when_provided_invalid_values_scenario_three()
     {
-        $this->setExpectedException('Darryldecode\Cart\Exceptions\InvalidItemException');
+        $this->setExpectedException('Ozanmuyes\Cart\Exceptions\InvalidItemException');
 
         $this->cart->add(523, '', 100.99, 2, array());
     }
