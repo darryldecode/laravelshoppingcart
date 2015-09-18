@@ -1,17 +1,12 @@
-# Laravel 5 Shopping Cart
-A Shopping Cart Implementation for Laravel Framework (Based on the impressive work of darryldecode [https://github.com/darryldecode/laravelshoppingcart])
+# Laravel 5 Cart
+A Shopping Cart Implementation for Laravel Framework (Based on the impressive work of [darryldecode](https://github.com/darryldecode/laravelshoppingcart) - [laravelshoppingcart](https://github.com/darryldecode/laravelshoppingcart]))
 
-A Shopping Cart Implementation for Laravel Framework
-
-##INSTALLATION
+##Installation
 
 Install the package through [Composer](http://getcomposer.org/). Edit your project's `composer.json` file by adding:
 
-### Laravel 5
-
 ```php
 "require": {
-	"laravel/framework": "5.0.*",
 	"ozanmuyes/cart": "dev-master"
 }
 ```
@@ -20,24 +15,24 @@ Next, run the Composer update command from the Terminal:
 
     composer update
     
-    or
+or
     
     composer update "ozanmuyes/cart"
 
-##CONFIGURATION
+##Configuration
 
 1. Open config/app.php and addd this line to your Service Providers Array
   ```php
-  'Ozanmuyes\Cart\CartServiceProvider'
+  Ozanmuyes\Cart\CartServiceProvider::class
   ```
   
 2. Open config/app.php and addd this line to your Aliases
 
-```php
-  'Cart' => 'Ozanmuyes\Cart\Facades\CartFacade'
+  ```php
+  "Cart" => Ozanmuyes\Cart\Facades\CartFacade::class
   ```
   
-## HOW TO USE
+##Table of Contents
 * [Usage](#usage)
 * [Conditions](#conditions)
 * [Instances](#instances)
@@ -47,7 +42,7 @@ Next, run the Composer update command from the Terminal:
 * [Changelogs](#changelogs)
 * [License](#license)
 
-## Usage
+##Usage
 
 Adding Item on Cart: **Cart::add()**
 
@@ -556,14 +551,7 @@ The cart has currently 9 events you can listen and hook some actons.
 | cart.clearing($cart)             | When a cart is attempted to be cleared  |
 | cart.cleared($cart)              | When a cart is cleared                  |
 
-**NOTE**: For different cart instance, dealing events is simple. For example you have created another cart instance which
-you have given an instance name of "wishlist". The Events will be something like: {$instanceName}.created($cart)
-
-So for you wishlist cart instance, events will look like this:
-
-* wishlist.created($cart)
-* wishlist.adding($items, $cart)
-* wishlist.added($items, $cart) and so on..
+**NOTE**: If you have changed your application's namespace then correct the default namespace on published listeners.  
 
 ## Examples
 

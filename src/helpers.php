@@ -1,9 +1,6 @@
 <?php
 
-namespace Ozanmuyes\Cart\Helpers;
-
-class Helpers
-{
+if (!function_exists("normalizePrice")) {
     /**
      * normalize price
      *
@@ -16,7 +13,9 @@ class Helpers
                 ? floatval($price)
                 : $price;
     }
+}
 
+if (!function_exists("isMultiArray")) {
     /**
      * check if array is multi dimensional array
      * This will only check the first element of the array if it is still an array
@@ -30,20 +29,16 @@ class Helpers
     public static function isMultiArray($array, $recursive = false)
     {
         if ($recursive) {
-            return (count($array) == count($array, COUNT_RECURSIVE))
-                    ? false
-                    : true;
-        } else {
-            foreach ($array as $k => $v) {
-                if (is_array($v)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+            return (count($array) != count($array, COUNT_RECURSIVE));
+        }
+
+        foreach ($array as $k => $v) {
+            return is_array($v);
         }
     }
+}
 
+if (!function_exists("issetAndHasValueOrAssignDefault")) {
     /**
      * check if variable is set and has value, return a default value
      *

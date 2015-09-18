@@ -12,7 +12,9 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "5.0.x|5.1.x",
-        "illuminate/validation": "5.0.x|5.1.x"
+        "illuminate/validation": "5.0.x|5.1.x",
+        "illuminate/contracts": "5.0.x|5.1.x",
+        "illuminate/queue": "5.0.x|5.1.x"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
@@ -22,6 +24,9 @@
     "autoload": {
         "psr-4": {
             "Ozanmuyes\\Cart\\": "src/"
+        },
+        "files": {
+            "src/helpers.php"
         }
     },
     "minimum-stability": "dev"
