@@ -14,6 +14,18 @@ class CartServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
+     * Perform post-registration booting of services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . "/../config/cart.php" => config_path("cart.php")
+        ], "config");
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -26,7 +38,7 @@ class CartServiceProvider extends ServiceProvider
             $storage = $app["session"];
             $events = $app["events"];
             $instanceName = "cart";
-            $session_key = "4yTlTDKu3oJOfzD";
+            $session_key = config("cart.session_key");
 
             return new Cart(
                 $storage,
@@ -44,6 +56,6 @@ class CartServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array();
+        return [];
     }
 }

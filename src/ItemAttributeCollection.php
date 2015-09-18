@@ -8,10 +8,8 @@ class ItemAttributeCollection extends Collection
 {
     public function __get($name)
     {
-        if ($this->has($name)) {
-            return $this->get($name);
-        }
-
-        return null;
+        return ($this->has($name))
+                ? $this->get($name)
+                : null;
     }
 }

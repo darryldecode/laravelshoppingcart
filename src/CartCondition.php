@@ -28,8 +28,8 @@ class CartCondition
     {
         $this->args = $args;
 
-        if(Helpers::isMultiArray($args)) {
-            Throw new InvalidConditionException('Multi dimensional array is not supported.');
+        if (Helpers::isMultiArray($args)) {
+            Throw new InvalidConditionException("Multi dimensional array is not supported.");
         } else {
             $this->validate($this->args);
         }
@@ -42,7 +42,7 @@ class CartCondition
      */
     public function getTarget()
     {
-        return $this->args['target'];
+        return $this->args["target"];
     }
 
     /**
@@ -52,7 +52,7 @@ class CartCondition
      */
     public function getName()
     {
-        return $this->args['name'];
+        return $this->args["name"];
     }
 
     /**
@@ -62,7 +62,7 @@ class CartCondition
      */
     public function getType()
     {
-        return $this->args['type'];
+        return $this->args["type"];
     }
 
     /**
@@ -72,8 +72,8 @@ class CartCondition
      */
     public function getAttributes()
     {
-        return (isset($this->args['attributes']))
-                ? $this->args['attributes']
+        return (isset($this->args["attributes"]))
+                ? $this->args["attributes"]
                 : array();
     }
 
@@ -84,7 +84,7 @@ class CartCondition
      */
     public function getValue()
     {
-        return $this->args['value'];
+        return $this->args["value"];
     }
 
     /**
@@ -222,10 +222,10 @@ class CartCondition
     protected function validate($args)
     {
         $rules = array(
-            'name' => 'required',
-            'type' => 'required',
-            'target' => 'required',
-            'value' => 'required',
+            "name" => "required",
+            "type" => "required",
+            "target" => "required",
+            "value" => "required",
         );
 
         $validator = CartConditionValidator::make($args, $rules);

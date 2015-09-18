@@ -7,6 +7,6 @@ return [
     /**
      * If it's null, automatically generated
      */
-    "session_key" => null,
+    "session_key" => "4yTlTDKu3oJOfzDN",
 
 ];

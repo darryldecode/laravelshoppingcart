@@ -53,10 +53,8 @@ class Helpers
      */
     public static function issetAndHasValueOrAssignDefault(&$var, $default = false)
     {
-        if ((isset($var)) && ($var!='')) {
-            return $var;
-        }
-
-        return $default;
+        return (isset($var) && $var != "")
+                ? $var
+                : $default;
     }
 }

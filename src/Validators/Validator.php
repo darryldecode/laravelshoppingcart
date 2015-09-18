@@ -12,7 +12,7 @@ abstract class Validator
     public static function instance()
     {
         if (!static::$factory) {
-            $translator = new Translator('en');
+            $translator = new Translator("en");
             static::$factory = new Factory($translator);
         }
 

@@ -13,15 +13,13 @@ class ItemCollection extends Collection
      */
     public function getPriceSum()
     {
-        return $this->price * $this->quantity;
+        return ($this->price * $this->quantity);
     }
 
     public function __get($name)
     {
-        if ($this->has($name)) {
-            return $this->get($name);
-        }
-
-        return null;
+        return ($this->has($name))
+                ? $this->get($name)
+                : null;
     }
 }
