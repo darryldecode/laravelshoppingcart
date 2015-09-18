@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ozanmuyes\\": "src/ozanmuyes"
+            "Ozanmuyes\\Cart\\": "src/"
         }
     },
     "minimum-stability": "dev"

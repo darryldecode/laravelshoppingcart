@@ -20,12 +20,13 @@ class CartServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['cart'] = $this->app->share(function($app)
-        {
-            $storage = $app['session'];
-            $events = $app['events'];
-            $instanceName = 'cart';
-            $session_key = '4yTlTDKu3oJOfzD';
+        $this->mergeConfigFrom(__DIR__ . "/../config/cart.php", "cart");
+
+        $this->app["cart"] = $this->app->share(function($app) {
+            $storage = $app["session"];
+            $events = $app["events"];
+            $instanceName = "cart";
+            $session_key = "4yTlTDKu3oJOfzD";
 
             return new Cart(
                 $storage,
