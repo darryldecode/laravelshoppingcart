@@ -279,14 +279,14 @@ class Cart
      */
     public function clear()
     {
-        Event::fire(new Events\ItemsClearing($this));
+        Event::fire(new Events\CartClearing($this));
 
         $this->session->put(
             $this->sessionKeyCartItems,
             []
         );
 
-        Event::fire(new Events\ItemsCleared($this));
+        Event::fire(new Events\CartCleared($this));
     }
 
     /**
