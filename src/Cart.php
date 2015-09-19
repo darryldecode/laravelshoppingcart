@@ -6,7 +6,6 @@ use Event;
 
 use Ozanmuyes\Cart\Exceptions\InvalidConditionException;
 use Ozanmuyes\Cart\Exceptions\InvalidItemException;
-use Ozanmuyes\Cart\Helpers\Helpers;
 use Ozanmuyes\Cart\Validators\CartItemValidator;
 
 /**
@@ -115,15 +114,15 @@ class Cart
         if (is_array($id)) {
             // the first argument is an array, now we will need to check if it is a multi dimensional
             // array, if so, we will iterate through each item and call add again
-            if (Helpers::isMultiArray($id)) {
+            if (isMultiArray($id)) {
                 foreach($id as $item) {
                     $this->add(
                         $item["id"],
                         $item["name"],
                         $item["price"],
                         $item["quantity"],
-                        Helpers::issetAndHasValueOrAssignDefault($item["attributes"], array()),
-                        Helpers::issetAndHasValueOrAssignDefault($item["conditions"], array())
+                        issetAndHasValueOrAssignDefault($item["attributes"], array()),
+                        issetAndHasValueOrAssignDefault($item["conditions"], array())
                     );
                 }
             } else {
@@ -132,8 +131,8 @@ class Cart
                     $id["name"],
                     $id["price"],
                     $id["quantity"],
-                    Helpers::issetAndHasValueOrAssignDefault($id["attributes"], array()),
-                    Helpers::issetAndHasValueOrAssignDefault($id["conditions"], array())
+                    issetAndHasValueOrAssignDefault($id["attributes"], array()),
+                    issetAndHasValueOrAssignDefault($id["conditions"], array())
                 );
             }
 
@@ -144,7 +143,7 @@ class Cart
         $item = $this->validate(array(
             "id" => $id,
             "name" => $name,
-            "price" => Helpers::normalizePrice($price),
+            "price" => normalizePrice($price),
             "quantity" => $quantity,
             "attributes" => new ItemAttributeCollection($attributes),
             "conditions" => $conditions,

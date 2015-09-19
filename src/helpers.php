@@ -5,9 +5,10 @@ if (!function_exists("normalizePrice")) {
      * normalize price
      *
      * @param $price
+     *
      * @return float
      */
-    public static function normalizePrice($price)
+    function normalizePrice($price)
     {
         return (is_string($price))
                 ? floatval($price)
@@ -24,9 +25,10 @@ if (!function_exists("isMultiArray")) {
      *
      * @param $array
      * @param bool $recursive
+     *
      * @return bool
      */
-    public static function isMultiArray($array, $recursive = false)
+    function isMultiArray($array, $recursive = false)
     {
         if ($recursive) {
             return (count($array) != count($array, COUNT_RECURSIVE));
@@ -44,9 +46,10 @@ if (!function_exists("issetAndHasValueOrAssignDefault")) {
      *
      * @param $var
      * @param bool|mixed $default
+     *
      * @return bool|mixed
      */
-    public static function issetAndHasValueOrAssignDefault(&$var, $default = false)
+    function issetAndHasValueOrAssignDefault(&$var, $default = false)
     {
         return (isset($var) && $var != "")
                 ? $var

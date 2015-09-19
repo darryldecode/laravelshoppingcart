@@ -3,7 +3,6 @@
 namespace Ozanmuyes\Cart;
 
 use Ozanmuyes\Cart\Exceptions\InvalidConditionException;
-use Ozanmuyes\Cart\Helpers\Helpers;
 use Ozanmuyes\Cart\Validators\CartConditionValidator;
 
 class CartCondition
@@ -28,7 +27,7 @@ class CartCondition
     {
         $this->args = $args;
 
-        if (Helpers::isMultiArray($args)) {
+        if (isMultiArray($args)) {
             Throw new InvalidConditionException("Multi dimensional array is not supported.");
         } else {
             $this->validate($this->args);
@@ -127,19 +126,19 @@ class CartCondition
         // if we can't find any plus/minus sign, we will assume it as plus sign
         if ($this->valueIsPercentage($conditionValue)) {
             if ($this->valueIsToBeSubtracted($conditionValue)) {
-                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue));
+                $value = normalizePrice( $this->cleanValue($conditionValue));
 
                 $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
                 $result = floatval($totalOrSubTotalOrPrice - $this->parsedRawValue);
             } else if ($this->valueIsToBeAdded($conditionValue)) {
-                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue));
+                $value = normalizePrice( $this->cleanValue($conditionValue));
 
                 $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
                 $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             } else {
-                $value = Helpers::normalizePrice($conditionValue);
+                $value = normalizePrice($conditionValue);
 
                 $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
@@ -152,15 +151,15 @@ class CartCondition
         else
         {
             if ($this->valueIsToBeSubtracted($conditionValue)) {
-                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue));
+                $this->parsedRawValue = normalizePrice( $this->cleanValue($conditionValue));
 
                 $result = floatval($totalOrSubTotalOrPrice - $this->parsedRawValue);
             } else if ($this->valueIsToBeAdded($conditionValue)) {
-                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue));
+                $this->parsedRawValue = normalizePrice( $this->cleanValue($conditionValue));
 
                 $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             } else {
-                $this->parsedRawValue = Helpers::normalizePrice($conditionValue);
+                $this->parsedRawValue = normalizePrice($conditionValue);
 
                 $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
