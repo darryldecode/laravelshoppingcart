@@ -25,9 +25,9 @@
         "psr-4": {
             "Ozanmuyes\\Cart\\": "src/"
         },
-        "files": {
+        "files": [
             "src/helpers.php"
-        }
+        ]
     },
     "minimum-stability": "dev"
 }
