@@ -29,6 +29,21 @@ class CartServiceProvider extends ServiceProvider
         ], "config");
 
         $this->publishes([
+            __DIR__ . "/../database/migrations/2015_09_19_120000_create_cart_condition_scopes_table.php" => database_path("migrations/2015_09_19_120000_create_cart_condition_scopes_table.php"),
+            __DIR__ . "/../database/migrations/2015_09_19_120005_create_cart_condition_cart_condition_scope_table.php" => database_path("migrations/2015_09_19_120005_create_cart_condition_cart_condition_scope_table.php"),
+            __DIR__ . "/../database/migrations/2015_09_19_120010_create_cart_conditions_table.php" => database_path("migrations/2015_09_19_120010_create_cart_conditions_table.php"),
+            __DIR__ . "/../database/migrations/2015_09_19_120020_create_cart_condition_product_table.php" => database_path("migrations/2015_09_19_120020_create_cart_condition_product_table.php"),
+            //
+            __DIR__ . "/../database/seeds/CartConditionScopesTableSeeder.php" => database_path("seeds/CartConditionScopesTableSeeder.php"),
+            //
+        ], "migrations");
+
+        $this->publishes([
+            __DIR__ . "/Models/CartCondition.php" => app_path("CartCondition.php"),
+            __DIR__ . "/Models/CartConditionScope.php" => app_path("CartConditionScope.php"),
+        ], "models");
+
+        $this->publishes([
             __DIR__ . "/Listeners/CartCreatedListener.php" => app_path("Listeners/CartCreatedListener.php"),
             __DIR__ . "/Listeners/ItemsAddingListener.php" => app_path("Listeners/ItemsAddingListener.php"),
             __DIR__ . "/Listeners/ItemsAddedListener.php" => app_path("Listeners/ItemsAddedListener.php"),
