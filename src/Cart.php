@@ -8,42 +8,38 @@ use Ozanmuyes\Cart\Exceptions\InvalidConditionException;
 use Ozanmuyes\Cart\Exceptions\InvalidItemException;
 use Ozanmuyes\Cart\Validators\CartItemValidator;
 
-/**
- * Class Cart
- * @package Ozanmuyes\Cart
- */
 class Cart
 {
     /**
-     * the item storage
+     * The item storage
      *
      * @var
      */
     protected $session;
 
     /**
-     * the cart session key
+     * The cart session key
      *
      * @var
      */
     protected $instanceName;
 
     /**
-     * the session key use to persist cart items
+     * The session key use to persist cart items
      *
      * @var
      */
     protected $sessionKeyCartItems;
 
     /**
-     * the session key use to persist cart conditions
+     * The session key use to persist cart conditions
      *
      * @var
      */
     protected $sessionKeyCartConditions;
 
     /**
-     * our object constructor
+     * Our object constructor
      *
      * @param $session
      * @param $instanceName
@@ -60,7 +56,7 @@ class Cart
     }
 
     /**
-     * get instance name of the cart
+     * Get instance name of the cart
      *
      * @return string
      */
@@ -70,7 +66,7 @@ class Cart
     }
 
     /**
-     * get an item on a cart by item ID
+     * Get an item on a cart by item ID
      *
      * @param $itemId
      *
@@ -82,7 +78,7 @@ class Cart
     }
 
     /**
-     * check if an item exists by item ID
+     * Check if an item exists by item ID
      *
      * @param $itemId
      *
@@ -94,7 +90,7 @@ class Cart
     }
 
     /**
-     * add item to the cart, it can be an array or multi dimensional array
+     * Add item to the cart, it can be an array or multi dimensional array
      *
      * @param string|array $id
      * @param string $name
@@ -107,12 +103,19 @@ class Cart
      *
      * @throws InvalidItemException
      */
-    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array())
-    {
-        // if the first argument is an array,
-        // we will need to call add again
+    public function add(
+        $id,
+        $name = null,
+        $price = null,
+        $quantity = null,
+        $attributes = [],
+        $conditions = []
+    ) {
+        // TODO Sift id, name, price and quantity and add remainings to the attirbutes array.
+
+        // If the first argument is an array, we will need to call add again
         if (is_array($id)) {
-            // the first argument is an array, now we will need to check if it is a multi dimensional
+            // The first argument is an array, now we will need to check if it is a multi dimensional
             // array, if so, we will iterate through each item and call add again
             if (isMultiArray($id)) {
                 foreach($id as $item) {
@@ -121,8 +124,8 @@ class Cart
                         $item["name"],
                         $item["price"],
                         $item["quantity"],
-                        issetAndHasValueOrAssignDefault($item["attributes"], array()),
-                        issetAndHasValueOrAssignDefault($item["conditions"], array())
+                        issetAndHasValueOrAssignDefault($item["attributes"], []),
+                        issetAndHasValueOrAssignDefault($item["conditions"], [])
                     );
                 }
             } else {
@@ -131,28 +134,28 @@ class Cart
                     $id["name"],
                     $id["price"],
                     $id["quantity"],
-                    issetAndHasValueOrAssignDefault($id["attributes"], array()),
-                    issetAndHasValueOrAssignDefault($id["conditions"], array())
+                    issetAndHasValueOrAssignDefault($id["attributes"], []),
+                    issetAndHasValueOrAssignDefault($id["conditions"], [])
                 );
             }
 
             return $this;
         }
 
-        // validate data
-        $item = $this->validate(array(
+        // Validate data
+        $item = $this->validate([
             "id" => $id,
             "name" => $name,
             "price" => normalizePrice($price),
             "quantity" => $quantity,
             "attributes" => new ItemAttributeCollection($attributes),
             "conditions" => $conditions,
-        ));
+        ]);
 
-        // get the cart
+        // Get the cart
         $cart = $this->getContent();
 
-        // if the item is already in the cart we will just update it
+        // If the item is already in the cart we will just update it
         if ($cart->has($id)) {
             Event::fire(new Events\ItemsUpdating($this, [$item]));
 
@@ -173,26 +176,25 @@ class Cart
     }
 
     /**
-     * update a cart
+     * Update a cart
      *
      * @param $id
      * @param $data
      *
-     * the $data will be an associative array, you don't need to pass all the data, only the key value
+     * The $data will be an associative array, you don't need to pass all the data, only the key value
      * of the item you want to update on it
      */
     public function update($id, $data)
     {
         $cart = $this->getContent();
-
         $item = $cart->pull($id);
 
         foreach($data as $key => $value) {
-            // if the key is currently "quantity" we will need to check if an arithmetic
+            // If the key is currently "quantity" we will need to check if an arithmetic
             // symbol is present so we can decide if the update of quantity is being added
             // or being reduced.
             if ($key == "quantity") {
-                // we will check if quantity value provided is array,
+                // We will check if quantity value provided is array,
                 // if it is, we will need to check if a key "relative" is set
                 // and we will evaluate its value if true or false,
                 // this tells us how to treat the quantity value if it should be updated
@@ -216,12 +218,11 @@ class Cart
         }
 
         $cart->put($id, $item);
-
         $this->save($cart);
     }
 
     /**
-     * add condition on an existing item on the cart
+     * Add condition on an existing item on the cart
      *
      * @param int|string $productId
      * @param CartCondition $itemCondition
@@ -246,9 +247,9 @@ class Cart
                     $itemConditionTempHolder = $itemCondition;
                 }
 
-                $this->update($productId, array(
+                $this->update($productId, [
                     "conditions" => $itemConditionTempHolder // the newly updated conditions
-                ));
+                ]);
             }
         }
 
@@ -256,7 +257,7 @@ class Cart
     }
 
     /**
-     * removes an item on cart by item ID
+     * Removes an item on cart by item ID
      *
      * @param $id
      */
@@ -274,22 +275,19 @@ class Cart
     }
 
     /**
-     * clear cart
+     * Clear cart
      */
     public function clear()
     {
         Event::fire(new Events\CartClearing($this));
 
-        $this->session->put(
-            $this->sessionKeyCartItems,
-            []
-        );
+        $this->session->put($this->sessionKeyCartItems, []);
 
         Event::fire(new Events\CartCleared($this));
     }
 
     /**
-     * add a condition on the cart
+     * Add a condition on the cart
      *
      * @param CartCondition|array $condition
      *
@@ -307,21 +305,19 @@ class Cart
             return $this;
         }
 
-        if (!$condition instanceof CartCondition) {
+        if (!($condition instanceof CartCondition)) {
             throw new InvalidConditionException("Argument 1 must be an instance of 'Ozanmuyes\Cart\CartCondition'");
         }
 
         $conditions = $this->getConditions();
-
         $conditions->put($condition->getName(), $condition);
-
         $this->saveConditions($conditions);
 
         return $this;
     }
 
     /**
-     * get conditions applied on the cart
+     * Get conditions applied on the cart
      *
      * @return CartConditionCollection
      */
@@ -331,7 +327,7 @@ class Cart
     }
 
     /**
-     * get condition applied on the cart by its name
+     * Get condition applied on the cart by its name
      *
      * @param $conditionName
      *
@@ -377,10 +373,10 @@ class Cart
 
 
     /**
-     * removes a condition on a cart by condition name,
+     * Removes a condition on a cart by condition name,
      * this can only remove conditions that are added on cart bases not conditions that are added on an item/product.
      * If you wish to remove a condition that has been added for a specific item/product, you may
-     * use the removeItemCondition(itemId, conditionName) method instead.
+     * Use the removeItemCondition(itemId, conditionName) method instead.
      *
      * @param $conditionName
      *
@@ -389,14 +385,12 @@ class Cart
     public function removeCartCondition($conditionName)
     {
         $conditions = $this->getConditions();
-
         $conditions->pull($conditionName);
-
         $this->saveConditions($conditions);
     }
 
     /**
-     * remove a condition that has been applied on an item that is already on the cart
+     * Remove a condition that has been applied on an item that is already on the cart
      *
      * @param $itemId
      * @param $conditionName
@@ -405,7 +399,7 @@ class Cart
      */
     public function removeItemCondition($itemId, $conditionName)
     {
-        if (!$item = $this->getContent()->get($itemId)) {
+        if ($item != $this->getContent()->get($itemId)) {
             return false;
         }
 
@@ -441,21 +435,21 @@ class Cart
 
                 if ($item["conditions"] instanceof $conditionInstance) {
                     if ($tempConditionsHolder->getName() == $conditionName) {
-                        $item["conditions"] = array();
+                        $item["conditions"] = [];
                     }
                 }
             }
         }
 
-        $this->update($itemId, array(
+        $this->update($itemId, [
             "conditions" => $item["conditions"]
-        ));
+        ]);
 
         return true;
     }
 
     /**
-     * clears all conditions on a cart,
+     * Clears all conditions on a cart,
      * this does not remove conditions that has been added specifically to an item/product.
      * If you wish to remove a specific condition to a product, you may use the method: removeItemCondition($itemId, $conditionName)
      *
@@ -463,14 +457,11 @@ class Cart
      */
     public function clearCartConditions()
     {
-        $this->session->put(
-            $this->sessionKeyCartConditions,
-            []
-        );
+        $this->session->put($this->sessionKeyCartConditions, []);
     }
 
     /**
-     * get cart sub total
+     * Get cart sub total
      *
      * @return float
      */
@@ -480,9 +471,7 @@ class Cart
 
         $sum = $cart->sum(function($item) {
             $originalPrice = $item->price;
-
             $newPrice = 0.00;
-
             $processed = 0;
 
             if ($this->itemHasConditions($item)) {
@@ -542,7 +531,7 @@ class Cart
     }
 
     /**
-     * get total quantity of items in the cart
+     * Get total quantity of items in the cart
      *
      * @return int
      */
@@ -562,7 +551,7 @@ class Cart
     }
 
     /**
-     * get the cart
+     * Get the cart
      *
      * @return CartCollection
      */
@@ -572,7 +561,7 @@ class Cart
     }
 
     /**
-     * check if cart is empty
+     * Check if cart is empty
      *
      * @return bool
      */
@@ -594,12 +583,12 @@ class Cart
      */
     protected function validate($item)
     {
-        $rules = array(
+        $rules = [
             "id" => "required",
             "price" => "required|numeric",
             "quantity" => "required|numeric|min:1",
             "name" => "required",
-        );
+        ];
 
         $validator = CartItemValidator::make($item, $rules);
 
@@ -619,9 +608,7 @@ class Cart
     protected function addRow($id, $item)
     {
         $cart = $this->getContent();
-
         $cart->put($id, new ItemCollection($item));
-
         $this->save($cart);
     }
 
@@ -646,7 +633,7 @@ class Cart
     }
 
     /**
-     * check if an item has condition
+     * Check if an item has condition
      *
      * @param $item
      *
@@ -668,7 +655,7 @@ class Cart
     }
 
     /**
-     * update a cart item quantity relative to its current quantity
+     * Update a cart item quantity relative to its current quantity
      *
      * @param $item
      * @param $key
@@ -696,7 +683,7 @@ class Cart
     }
 
     /**
-     * update cart item quantity not relative to its current quantity value
+     * Update cart item quantity not relative to its current quantity value
      *
      * @param $item
      * @param $key
