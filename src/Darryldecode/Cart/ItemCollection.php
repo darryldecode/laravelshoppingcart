@@ -27,6 +27,11 @@ class ItemCollection extends Collection {
         return null;
     }
 
+    /**
+     * check if item has confitions
+     *
+     * @return bool
+     */
     public function hasConditions()
     {
         if( ! isset($this['conditions']) ) return false;
@@ -40,6 +45,11 @@ class ItemCollection extends Collection {
         return false;
     }
 
+    /**
+     * get the single price in which conditions are already applied
+     *
+     * @return mixed|null
+     */
     public function getPriceWithConditions() 
     {
         $originalPrice = $this->price;
@@ -73,6 +83,11 @@ class ItemCollection extends Collection {
         return $originalPrice;
     }
 
+    /**
+     * get the sum of price in which conditions are already applied
+     *
+     * @return mixed|null
+     */
     public function getPriceSumWithConditions()
     {
         return $this->getPriceWithConditions() * $this->quantity;
