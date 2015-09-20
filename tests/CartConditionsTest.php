@@ -242,6 +242,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
 
         $this->cart->add($item);
 
+        $this->assertEquals(95, $this->cart->get(456)->getPriceSumWithConditions());
         $this->assertEquals(95, $this->cart->getSubTotal());
     }
 
@@ -277,7 +278,8 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
 
         $this->cart->add($item);
 
-        $this->assertEquals(80.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 70');
+        $this->assertEquals(80.00, $this->cart->get(456)->getPriceSumWithConditions(), 'Item subtotal with 1 item should be 80');
+        $this->assertEquals(80.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 80');
     }
 
     public function test_add_item_with_multiple_item_conditions_with_one_condition_wrong_target()
@@ -324,7 +326,8 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
 
         $this->cart->add($item);
 
-        $this->assertEquals(85.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 70');
+        $this->assertEquals(85.00, $this->cart->get(456)->getPriceSumWithConditions(), 'Cart subtotal with 1 item should be 85');
+        $this->assertEquals(85.00, $this->cart->getSubTotal(), 'Cart subtotal with 1 item should be 85');
     }
 
     public function test_add_item_condition()

@@ -507,42 +507,7 @@ class Cart {
 
         $sum = $cart->sum(function($item)
         {
-            $originalPrice = $item->price;
-
-            $newPrice = 0.00;
-
-            $processed = 0;
-
-            if( $this->itemHasConditions($item) )
-            {
-                if( is_array($item->conditions) )
-                {
-                    foreach($item->conditions as $condition)
-                    {
-                        if( $condition->getTarget() === 'item' )
-                        {
-                            ( $processed > 0 ) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
-
-                            $newPrice = $condition->applyCondition($toBeCalculated);
-
-                            $processed++;
-                        }
-                    }
-                }
-                else
-                {
-                    if( $item['conditions']->getTarget() === 'item' )
-                    {
-                        $newPrice = $item['conditions']->applyCondition($originalPrice);
-                    }
-                }
-
-                return $newPrice * $item->quantity;
-            }
-            else
-            {
-                return $originalPrice * $item->quantity;
-            }
+            return $item->getPriceSumWithConditions();
         });
 
         return floatval($sum);
