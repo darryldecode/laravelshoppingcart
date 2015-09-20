@@ -1,5 +1,5 @@
 # Laravel 5 Cart
-A Shopping Cart Implementation for Laravel Framework (Based on the impressive work of [darryldecode](https://github.com/darryldecode/laravelshoppingcart) - [laravelshoppingcart](https://github.com/darryldecode/laravelshoppingcart]))
+A Shopping Cart Implementation for Laravel Framework (Based on the impressive work of [darryldecode](https://github.com/darryldecode/laravelshoppingcart))
 
 ##Installation
 
