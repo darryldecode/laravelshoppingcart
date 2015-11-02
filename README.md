@@ -22,9 +22,9 @@ Install the package through [Composer](http://getcomposer.org/). Edit your proje
 Next, run the Composer update command from the Terminal:
 
     composer update
-    
+
     or
-    
+
     composer update "darryldecode/cart"
 
 ##CONFIGURATION
@@ -33,13 +33,13 @@ Next, run the Composer update command from the Terminal:
   ```php
   'Darryldecode\Cart\CartServiceProvider'
   ```
-  
+
 2. Open config/app.php and addd this line to your Aliases
 
 ```php
   'Cart' => 'Darryldecode\Cart\Facades\CartFacade'
   ```
-  
+
 ## HOW TO USE
 * [Usage](#usage)
 * [Conditions](#conditions)
@@ -162,7 +162,7 @@ Removing an item on a cart is very easy:
  *
  * @param $id
  */
-   
+
 Cart::remove(456);
 ```
 
@@ -280,7 +280,7 @@ Conditions can be added on:
 First let's add a condition on a Cart Bases:
 
 There are also several ways of adding a condition on a cart:
-NOTE: 
+NOTE:
 
 When adding a condition on a cart bases, the 'target' should have value of 'subtotal'.
 And when adding a condition on an item, the 'target' should be 'item'.
@@ -382,7 +382,7 @@ $product = array(
             'attributes' => array(),
             'conditions' => $saleCondition
         );
-        
+
 // finally add the product on the cart
 Cart::add($product);
 
@@ -405,7 +405,7 @@ $itemCondition3 = new \Darryldecode\Cart\CartCondition(array(
     'target' => 'item',
     'value' => '+10',
 ));
-  
+
 $item = array(
           'id' => 456,
           'name' => 'Sample Item 1',
@@ -414,7 +414,7 @@ $item = array(
           'attributes' => array(),
           'conditions' => [$itemCondition1, $itemCondition2, $itemCondition3]
       );
-        
+
 Cart::add($item);
 ```
 
@@ -440,7 +440,7 @@ $coupon101 = new CartCondition(array(
             'target' => 'item',
             'value' => '-5%',
         ));
-        
+
 Cart::addItemCondition($productID, $coupon101);
 ```
 
@@ -482,6 +482,17 @@ Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionN
 * @return bool
 */
 Cart::removeItemCondition($itemId, $conditionName)
+```
+
+Clear all Item Conditions: **Cart::clearItemConditions($itemId)**
+```php
+/**
+* remove all conditions that has been applied on an item that is already on the cart
+*
+* @param $itemId
+* @return bool
+*/
+Cart::clearItemConditions($itemId)
 ```
 
 Get conditions by type: **Cart::getConditionsByType($type)**
@@ -603,10 +614,10 @@ foreach($items as $item)
     $item->price; // the price
     $item->quantity; // the quantity
     $item->attributes; // the attributes
-    
+
     // Note that attribute returns ItemAttributeCollection object that extends the native laravel collection
     // so you can do things like below:
-    
+
     if( $item->attributes->has('size') )
     {
         // item has attribute size
