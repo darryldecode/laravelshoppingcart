@@ -487,7 +487,7 @@ class Cart {
      * @param $itemId
      * @return bool
      */
-    public function clearItemCondition($itemId)
+    public function clearItemConditions($itemId)
     {
         if( ! $item = $this->getContent()->get($itemId) )
         {

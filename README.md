@@ -484,7 +484,7 @@ Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionN
 Cart::removeItemCondition($itemId, $conditionName)
 ```
 
-Clear all Item Conditions: **Cart::clearItemCondition($itemId)**
+Clear all Item Conditions: **Cart::clearItemConditions($itemId)**
 ```php
 /**
 * remove all conditions that has been applied on an item that is already on the cart
@@ -492,7 +492,7 @@ Clear all Item Conditions: **Cart::clearItemCondition($itemId)**
 * @param $itemId
 * @return bool
 */
-Cart::clearItemCondition($itemId)
+Cart::clearItemConditions($itemId)
 ```
 
 Get conditions by type: **Cart::getConditionsByType($type)**
