@@ -84,7 +84,7 @@ class Cart {
     {
         return $this->getContent()->get($itemId);
     }
-    
+
     /**
      * check if an item exists by item ID
      *
@@ -362,7 +362,7 @@ class Cart {
     {
         return $this->getConditions()->get($conditionName);
     }
-    
+
     /**
     * Get all the condition filtered by Type
     * Please Note that this will only return condition added on cart bases, not those conditions added
@@ -476,6 +476,26 @@ class Cart {
 
         $this->update($itemId, array(
             'conditions' => $item['conditions']
+        ));
+
+        return true;
+    }
+
+    /**
+     * remove all conditions that has been applied on an item that is already on the cart
+     *
+     * @param $itemId
+     * @return bool
+     */
+    public function clearItemCondition($itemId)
+    {
+        if( ! $item = $this->getContent()->get($itemId) )
+        {
+            return false;
+        }
+
+        $this->update($itemId, array(
+            'conditions' => array()
         ));
 
         return true;
