@@ -504,6 +504,42 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEmpty($this->cart->get(456)['conditions'], 'Item should have no condition now');
     }
 
+    public function test_clear_item_conditions()
+    {
+        $itemCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'item',
+            'value' => '-5%',
+        ));
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'item',
+            'value' => '-25',
+        ));
+
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item 1',
+            'price' => 100,
+            'quantity' => 1,
+            'attributes' => array(),
+            'conditions' => [$itemCondition1, $itemCondition2]
+        );
+
+        $this->cart->add($item);
+
+        // let's very first the item has 2 conditions in it
+        $this->assertCount(2, $this->cart->get(456)['conditions'], 'Item should have two conditions');
+
+        // now let's remove all condition on that item
+        $this->cart->clearItemConditions(456);
+
+        // now we should have only 0 condition left on that item
+        $this->assertCount(0, $this->cart->get(456)['conditions'], 'Item should have no conditions now');
+    }
+
     public function test_clear_cart_conditions()
     {
         // NOTE:
