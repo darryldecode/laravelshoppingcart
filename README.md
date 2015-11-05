@@ -525,11 +525,17 @@ public function removeConditionsByType($type)
 ## Items
 
 The method **Cart::getContent()** returns a collection of items. 
+
 To get the id of an item, use the property **$item->id**.
+
 To get the name of an item, use the property **$item->name**.
+
 To get the quantity of an item, use the property **$item->quantity**.
+
 To get the attributes of an item, use the property **$item->attributes**.
+
 To get the price of a single item without the conditions applied, use the property **$item->price**.
+
 To get the subtotal of an item without the conditions applied, use the method **$item->getPriceSum()**. 
 ```php
 /**
@@ -541,7 +547,9 @@ public function getPriceSum()
 
 ```
 
-To get the price of a single item without the conditions applied, use the method **$item->getPriceWithConditions()**.
+To get the price of a single item without the conditions applied, use the method 
+
+**$item->getPriceWithConditions()**.
 ```php
 /**
 * get the single price in which conditions are already applied
@@ -552,7 +560,9 @@ public function getPriceWithConditions()
 
 ```
 
-To get the subtotal of an item with the conditions applied, use the method **$item->getPriceSumWithConditions
+To get the subtotal of an item with the conditions applied, use the method 
+
+**$item->getPriceSumWithConditions()**
 ```php
 /**
 * get the sum of price in which conditions are already applied
@@ -563,8 +573,8 @@ public function getPriceSumWithConditions()
 
 ```
 
-Note: When you get price with conditions applied, only the conditions assigned to the current item will be calculated. 
-Cart condition won't be applied to price.
+**NOTE**: When you get price with conditions applied, only the conditions assigned to the current item will be calculated. 
+Cart conditions won't be applied to price.
 
 ## Instances
 
@@ -656,9 +666,9 @@ foreach($items as $item)
 {
     $item->id; // the Id of the item
     $item->name; // the name
-    $item->price; // the single price without condition applied
+    $item->price; // the single price without conditions applied
     $item->getPriceSum(); // the subtotal without conditions applied
-    $item->getPriceWithConditions(); // the single price with condition applied
+    $item->getPriceWithConditions(); // the single price with conditions applied
     $item->getPriceSumWithConditions(); // the subtotal with conditions applied
     $item->quantity; // the quantity
     $item->attributes; // the attributes
@@ -681,9 +691,9 @@ $items->each(function($item)
 {
     $item->id; // the Id of the item
     $item->name; // the name
-    $item->price; // the single price without condition applied
+    $item->price; // the single price without conditions applied
     $item->getPriceSum(); // the subtotal without conditions applied
-    $item->getPriceWithConditions(); // the single price with condition applied
+    $item->getPriceWithConditions(); // the single price with conditions applied
     $item->getPriceSumWithConditions(); // the subtotal with conditions applied
     $item->price; // the single price
     $item->price; // the single price
