@@ -28,7 +28,7 @@ class ItemCollection extends Collection {
     }
 
     /**
-     * check if item has confitions
+     * check if item has conditions
      *
      * @return bool
      */
