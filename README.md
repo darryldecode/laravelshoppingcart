@@ -695,8 +695,6 @@ $items->each(function($item)
     $item->getPriceSum(); // the subtotal without conditions applied
     $item->getPriceWithConditions(); // the single price with conditions applied
     $item->getPriceSumWithConditions(); // the subtotal with conditions applied
-    $item->price; // the single price
-    $item->price; // the single price
     $item->quantity; // the quantity
     $item->attributes; // the attributes
 
