@@ -161,19 +161,14 @@ class Cart {
         // if the item is already in the cart we will just update it
         if( $cart->has($id) )
         {
-            $this->events->fire($this->getInstanceName().'.updating', array($item, $this));
 
             $this->update($id, $item);
-
-            $this->events->fire($this->getInstanceName().'.updated', array($item, $this));
         }
         else
         {
-            $this->events->fire($this->getInstanceName().'.adding', array($item, $this));
 
             $this->addRow($id, $item);
 
-            $this->events->fire($this->getInstanceName().'.added', array($item, $this));
         }
 
         return $this;
@@ -190,6 +185,8 @@ class Cart {
      */
     public function update($id, $data)
     {
+        $this->events->fire($this->getInstanceName().'.updating', array($data, $this));
+
         $cart = $this->getContent();
 
         $item = $cart->pull($id);
@@ -238,6 +235,8 @@ class Cart {
         $cart->put($id, $item);
 
         $this->save($cart);
+
+        $this->events->fire($this->getInstanceName().'.updated', array($item, $this));
     }
 
     /**
@@ -270,7 +269,7 @@ class Cart {
                     $itemConditionTempHolder = $itemCondition;
                 }
 
-                $this->update($productId, array(
+                $this->update($productductId, array(
                     'conditions' => $itemConditionTempHolder // the newly updated conditions
                 ));
             }
@@ -641,11 +640,15 @@ class Cart {
      */
     protected function addRow($id, $item)
     {
+        $this->events->fire($this->getInstanceName().'.adding', array($item, $this));
+
         $cart = $this->getContent();
 
         $cart->put($id, new ItemCollection($item));
 
         $this->save($cart);
+
+        $this->events->fire($this->getInstanceName().'.added', array($item, $this));
     }
 
     /**
