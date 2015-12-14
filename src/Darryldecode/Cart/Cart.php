@@ -269,7 +269,7 @@ class Cart {
                     $itemConditionTempHolder = $itemCondition;
                 }
 
-                $this->update($productductId, array(
+                $this->update($productId, array(
                     'conditions' => $itemConditionTempHolder // the newly updated conditions
                 ));
             }
