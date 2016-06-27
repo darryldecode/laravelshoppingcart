@@ -182,7 +182,8 @@ class CartCondition {
             }
         }
 
-        return $result;
+        // Do not allow items with negative prices.
+        return $result < 0 ? 0.00 : $result;
     }
 
     /**
