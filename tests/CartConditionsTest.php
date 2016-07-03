@@ -365,6 +365,33 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertCount(2, $this->cart->get($item['id'])['conditions'], "Item should have 2 conditions");
     }
 
+    public function test_add_item_condition_restrict_negative_price()
+    {
+        $condition = new CartCondition([
+            'name' => 'Substract amount but prevent negative value',
+            'type' => 'promo',
+            'target' => 'item',
+            'value' => '-25',
+        ]);
+
+        $item = [
+            'id' => 789,
+            'name' => 'Sample Item 1',
+            'price' => 20,
+            'quantity' => 1,
+            'attributes' => [],
+            'conditions' => [
+                $condition,
+            ]
+        ];
+
+        $this->cart->add($item);
+
+        // Since the product price is 20 and the condition reduces it by 25,
+        // check that the item's price has been prevented from dropping below zero.
+        $this->assertEquals(0.00, $this->cart->get($item['id'])->getPriceSumWithConditions(), "The item's price should be prevented from going below zero.");
+    }
+
     public function test_get_cart_condition_by_condition_name()
     {
         $itemCondition1 = new CartCondition(array(
