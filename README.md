@@ -310,15 +310,20 @@ $condition1 = new \Darryldecode\Cart\CartCondition(array(
     'type' => 'tax',
     'target' => 'subtotal',
     'value' => '12.5%',
+    'order' => 2
 ));
 $condition2 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'Express Shipping $15',
     'type' => 'shipping',
     'target' => 'subtotal',
     'value' => '+15',
+    'order' => 1
 ));
 Cart::condition($condition1);
 Cart::condition($condition2);
+
+// The property 'Order' lets you add different conditions through for example a shopping process with multiple
+// pages and still be able to set an order to apply the conditions. If no order is defined defaults to 0 
 
 // or add multiple conditions as array
 Cart::condition([$condition1, $condition2]);
@@ -331,6 +336,7 @@ foreach($carConditions as $condition)
     $condition->getName(); // the name of the condition
     $condition->getType(); // the type
     $condition->getValue(); // the value of the condition
+    $condition->getOrder(); // the order of the condition
     $condition->getAttributes(); // the attributes of the condition, returns an empty [] if no attributes added
 }
 

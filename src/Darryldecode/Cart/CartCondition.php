@@ -93,6 +93,16 @@ class CartCondition {
     }
 
     /**
+     * the order to apply this condition. If no argument order is applied defaults to 0
+     *
+     * @return Integer
+     */
+    public function getOrder()
+    {
+        return isset($this->args['order']) && is_numeric($this->args['order']) ? (int)$this->args['order'] : 0;
+    }
+
+    /**
      * apply condition to total or subtotal
      *
      * @param $totalOrSubTotalOrPrice

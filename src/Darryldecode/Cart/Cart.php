@@ -336,6 +336,10 @@ class Cart {
 
         $conditions->put($condition->getName(), $condition);
 
+        $conditions = $conditions->sortBy(function ($condition, $key) {
+            return $condition->getOrder();
+        });
+
         $this->saveConditions($conditions);
 
         return $this;
