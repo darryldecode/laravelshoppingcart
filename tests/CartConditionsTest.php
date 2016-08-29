@@ -847,9 +847,9 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
 
         $conditions = $this->cart->getConditions();
 
-        $this->assertEquals('tax', $conditions->shift()->getType());
         $this->assertEquals('sale', $conditions->shift()->getType());
         $this->assertEquals('promo', $conditions->shift()->getType());
+        $this->assertEquals('tax', $conditions->shift()->getType());
 
     }
 

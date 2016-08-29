@@ -334,6 +334,12 @@ class Cart {
 
         $conditions = $this->getConditions();
 
+        // Check if order has been applied
+        if($condition->getOrder() == 0) {
+            $last = $conditions->last();
+            $condition->setOrder(!is_null($last) ? $last->getOrder() + 1 : 1);
+        }
+
         $conditions->put($condition->getName(), $condition);
 
         $conditions = $conditions->sortBy(function ($condition, $key) {
