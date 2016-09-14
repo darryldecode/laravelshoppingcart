@@ -813,6 +813,46 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals('2015-01-30',$conditionAttributes['sale_end_date']);
     }
 
+    public function test_get_order_from_condition()
+    {
+        $cartCondition1 = new CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'subtotal',
+            'value' => '-5%',
+            'order' => 2
+        ));
+        $cartCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 20',
+            'type' => 'promo',
+            'target' => 'subtotal',
+            'value' => '-25',
+            'order' => '3'
+        ));
+        $cartCondition3 = new CartCondition(array(
+            'name' => 'Item Less 8%',
+            'type' => 'tax',
+            'target' => 'subtotal',
+            'value' => '-8%',
+            'order' => 'first'
+        ));
+
+        $this->assertEquals(2, $cartCondition1->getOrder());
+        $this->assertEquals(3, $cartCondition2->getOrder()); // numeric string is converted to integer
+        $this->assertEquals(0, $cartCondition3->getOrder()); // no numeric string is converted to 0
+
+        $this->cart->condition($cartCondition1);
+        $this->cart->condition($cartCondition2);
+        $this->cart->condition($cartCondition3);
+
+        $conditions = $this->cart->getConditions();
+
+        $this->assertEquals('sale', $conditions->shift()->getType());
+        $this->assertEquals('promo', $conditions->shift()->getType());
+        $this->assertEquals('tax', $conditions->shift()->getType());
+
+    }
+
     protected function fillCart()
     {
         $items = array(

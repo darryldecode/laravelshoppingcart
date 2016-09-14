@@ -93,6 +93,28 @@ class CartCondition {
     }
 
     /**
+     * Set the order to apply this condition. If no argument order is applied we return 0 as
+     * indicator that no assignment has been made
+     * @param int $order
+     * @return Integer
+     */
+    public function setOrder($order = 1)
+    {
+        $this->args['order'] = $order;
+    }
+
+    /**
+     * the order to apply this condition. If no argument order is applied we return 0 as
+     * indicator that no assignment has been made
+     *
+     * @return Integer
+     */
+    public function getOrder()
+    {
+        return isset($this->args['order']) && is_numeric($this->args['order']) ? (int)$this->args['order'] : 0;
+    }
+
+    /**
      * apply condition to total or subtotal
      *
      * @param $totalOrSubTotalOrPrice
