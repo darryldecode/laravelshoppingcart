@@ -28,7 +28,8 @@ class ItemTest extends PHPUnit_Framework_TestCase
             new SessionMock(),
             $events,
             'shopping',
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
     }
 

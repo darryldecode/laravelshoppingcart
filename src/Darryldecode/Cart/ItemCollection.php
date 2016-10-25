@@ -12,6 +12,41 @@ use Illuminate\Support\Collection;
 class ItemCollection extends Collection {
 
     /**
+     * Sets the number of decimal points.
+     *
+     * @var
+     */
+    protected $decimals;
+
+    /**
+     * Definces the decimal point delimiter type
+     *
+     * @var
+     */
+    protected $dec_point;
+
+    /**
+     * Defines the thousands point delimiter type
+     *
+     * @var
+     */
+    protected $thousands_sep;
+
+    /**
+     * ItemCollection constructor.
+     * @param array|mixed $items
+     * @param $config
+     */
+    public function __construct($items, $config)
+    {
+        parent::__construct($items);
+
+        $this->decimals = $config['decimals'];
+        $this->dec_point = $config['dec_point'];
+        $this->thousands_sep = $config['thousands_sep'];
+    }
+
+    /**
      * get the sum of price
      *
      * @return mixed|null
@@ -78,9 +113,9 @@ class ItemCollection extends Collection {
                 }
             }
 
-            return $newPrice;
+            return number_format($newPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
         }
-        return $originalPrice;
+        return number_format($originalPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
     }
 
     /**
@@ -90,6 +125,6 @@ class ItemCollection extends Collection {
      */
     public function getPriceSumWithConditions()
     {
-        return $this->getPriceWithConditions() * $this->quantity;
+        return number_format($this->getPriceWithConditions() * $this->quantity, $this->decimals, $this->dec_point, $this->thousands_sep);
     }
 }

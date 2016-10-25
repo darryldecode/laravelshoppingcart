@@ -32,14 +32,16 @@ class CartTestMultipleInstances extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             'shopping',
-            'uniquesessionkey123'
+            'uniquesessionkey123',
+            require(__DIR__.'/helpers/configMock.php')
         );
 
         $this->cart2 = new Cart(
             new SessionMock(),
             $events,
             'wishlist',
-            'uniquesessionkey456'
+            'uniquesessionkey456',
+            require(__DIR__.'/helpers/configMock.php')
         );
     }
 
