@@ -12,7 +12,8 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*",
-        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.4"
+        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*",
+        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",

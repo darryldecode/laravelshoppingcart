@@ -1,5 +1,7 @@
 <?php namespace Darryldecode\Cart\Validators;
-use Symfony\Component\Translation\Translator;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Translation\FileLoader;
+use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory;
 
 /**
@@ -17,7 +19,11 @@ abstract class Validator {
     {
         if ( ! static::$factory)
         {
-            $translator = new Translator('en');
+            $loader = new FileLoader(
+                new Filesystem(),'/Translations'
+            );
+
+            $translator = new Translator($loader, 'en');
             static::$factory = new Factory($translator);
         }
 
