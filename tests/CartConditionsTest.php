@@ -28,7 +28,8 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
             new SessionMock(),
             $events,
             'shopping',
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+             require(__DIR__.'/helpers/configMock.php')
         );
     }
 
@@ -70,6 +71,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
 
         // total should be changed
+        $this->cart->setDecimals(5);
         $this->assertEquals(210.92625, $this->cart->getTotal(), 'Cart should have a total of 210.92625');
     }
 
@@ -100,6 +102,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
 
         // total should be changed
+        $this->cart->setDecimals(5);
         $this->assertEquals(225.92625, $this->cart->getTotal(), 'Cart should have a total of 225.92625');
     }
 
@@ -130,6 +133,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
 
         // total should be changed
+        $this->cart->setDecimals(5);
         $this->assertEquals(195.92625, $this->cart->getTotal(), 'Cart should have a total of 195.92625');
     }
 
@@ -160,6 +164,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
 
         // total should be changed
+        $this->cart->setDecimals(5);
         $this->assertEquals(149.05375, $this->cart->getTotal(), 'Cart should have a total of 149.05375');
     }
 
@@ -189,6 +194,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
 
         // total should be changed
+        $this->cart->setDecimals(5);
         $this->assertEquals(149.05375, $this->cart->getTotal(), 'Cart should have a total of 149.05375');
     }
 
@@ -219,6 +225,7 @@ class CartConditionTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(187.49, $this->cart->getSubTotal(), 'Cart should have sub total of 187.49');
 
         // total should be changed
+        $this->cart->setDecimals(5);
         $this->assertEquals(179.05375, $this->cart->getTotal(), 'Cart should have a total of 179.05375');
     }
 

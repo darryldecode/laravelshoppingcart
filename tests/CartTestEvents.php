@@ -33,7 +33,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             self::CART_INSTANCE_NAME,
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
     }
 
@@ -48,7 +49,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             self::CART_INSTANCE_NAME,
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
 
         $cart->add(455, 'Sample Item', 100.99, 2, array());
@@ -65,7 +67,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             self::CART_INSTANCE_NAME,
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
 
         $cart->add(455, 'Sample Item 1', 100.99, 2, array());
@@ -107,7 +110,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             self::CART_INSTANCE_NAME,
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
 
         $cart->add($items);
@@ -150,7 +154,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             self::CART_INSTANCE_NAME,
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
 
         $cart->add($items);
@@ -195,7 +200,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             new SessionMock(),
             $events,
             self::CART_INSTANCE_NAME,
-            'SAMPLESESSIONKEY'
+            'SAMPLESESSIONKEY',
+            require(__DIR__.'/helpers/configMock.php')
         );
 
         $cart->add($items);

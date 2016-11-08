@@ -47,14 +47,43 @@ class Cart {
     protected $sessionKeyCartConditions;
 
     /**
+     * Sets the number of decimal points.
+     *
+     * @var
+     */
+    protected $decimals;
+
+    /**
+     * Definces the decimal point delimiter type
+     *
+     * @var
+     */
+    protected $dec_point;
+
+    /**
+     * Defines the thousands point delimiter type
+     *
+     * @var
+     */
+    protected $thousands_sep;
+
+    /**
+     * Configuration to pass to ItemCollection
+     *
+     * @var
+     */
+    protected $config;
+
+    /**
      * our object constructor
      *
      * @param $session
      * @param $events
      * @param $instanceName
      * @param $session_key
+     * @param $config
      */
-    public function __construct($session, $events, $instanceName, $session_key)
+    public function __construct($session, $events, $instanceName, $session_key, $config)
     {
         $this->events = $events;
         $this->session = $session;
@@ -62,6 +91,10 @@ class Cart {
         $this->sessionKeyCartItems = $session_key.'_cart_items';
         $this->sessionKeyCartConditions = $session_key.'_cart_conditions';
         $this->events->fire($this->getInstanceName().'.created', array($this));
+        $this->config = $config;
+        $this->decimals = $config['decimals'];
+        $this->dec_point = $config['dec_point'];
+        $this->thousands_sep = $config['thousands_sep'];
     }
 
     /**
@@ -539,7 +572,7 @@ class Cart {
             return $item->getPriceSumWithConditions();
         });
 
-        return floatval($sum);
+        return number_format(floatval($sum), $this->decimals, $this->dec_point, $this->thousands_sep);
     }
 
     /**
@@ -572,7 +605,7 @@ class Cart {
             }
         });
 
-        return $newTotal;
+        return number_format($newTotal, $this->decimals, $this->dec_point, $this->thousands_sep);
     }
 
     /**
@@ -654,7 +687,7 @@ class Cart {
 
         $cart = $this->getContent();
 
-        $cart->put($id, new ItemCollection($item));
+        $cart->put($id, new ItemCollection($item, $this->config));
 
         $this->save($cart);
 
@@ -749,5 +782,28 @@ class Cart {
         $item[$key] = (int) $value;
 
         return $item;
+    }
+
+    /**
+     * Setter for decimals. Change value on demand.
+     * @param $decimals
+     */
+    public function setDecimals($decimals)
+    {
+        $this->decimals = $decimals;
+    }
+
+    /**
+     * Setter for decimals point. Change value on demand.
+     * @param $dec_point
+     */
+    public function setDecPoint($dec_point)
+    {
+        $this->dec_point = $dec_point;
+    }
+
+    public function setThousandsSep($thousands_sep)
+    {
+        $this->thousands_sep = $thousands_sep;
     }
 }
