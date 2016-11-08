@@ -44,7 +44,7 @@ class CartServiceProvider extends ServiceProvider {
 				$events,
 				$instanceName,
 				$session_key,
-				config('geoip')
+				config('shopping_cart')
 			);
 		});
 	}
