@@ -66,4 +66,13 @@ class Helpers {
 
         return $default;
     }
+
+    public static function formatValue($value, $format_numbers, $config)
+    {
+        if($format_numbers && $config['format_numbers']) {
+            return number_format($value, $config['decimals'], $config['dec_point'], $config['thousands_sep']);
+        } else {
+            return $value;
+        }
+    }
 }

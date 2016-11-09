@@ -47,27 +47,6 @@ class Cart {
     protected $sessionKeyCartConditions;
 
     /**
-     * Sets the number of decimal points.
-     *
-     * @var
-     */
-    protected $decimals;
-
-    /**
-     * Definces the decimal point delimiter type
-     *
-     * @var
-     */
-    protected $dec_point;
-
-    /**
-     * Defines the thousands point delimiter type
-     *
-     * @var
-     */
-    protected $thousands_sep;
-
-    /**
      * Configuration to pass to ItemCollection
      *
      * @var
@@ -92,9 +71,6 @@ class Cart {
         $this->sessionKeyCartConditions = $session_key.'_cart_conditions';
         $this->events->fire($this->getInstanceName().'.created', array($this));
         $this->config = $config;
-        $this->decimals = $config['decimals'];
-        $this->dec_point = $config['dec_point'];
-        $this->thousands_sep = $config['thousands_sep'];
     }
 
     /**
@@ -563,20 +539,16 @@ class Cart {
      *
      * @return float
      */
-    public function getSubTotal($formatted = true)
+    public function getSubTotal($formated = true)
     {
         $cart = $this->getContent();
 
         $sum = $cart->sum(function($item)
         {
-            return $item->getPriceSumWithConditions();
+            return $item->getPriceSumWithConditions(false);
         });
 
-        if($formatted) {
-            return number_format(floatval($sum), $this->decimals, $this->dec_point, $this->thousands_sep);
-        } else {
-            return floatval($sum);
-        }
+        return Helpers::formatValue(floatval($sum), $formated, $this->config);
     }
 
     /**
@@ -609,7 +581,7 @@ class Cart {
             }
         });
 
-        return number_format($newTotal, $this->decimals, $this->dec_point, $this->thousands_sep);
+        return Helpers::formatValue($newTotal, $this->config['format_numbers'], $this->config);
     }
 
     /**
