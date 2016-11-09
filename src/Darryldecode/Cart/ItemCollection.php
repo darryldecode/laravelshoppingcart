@@ -85,7 +85,7 @@ class ItemCollection extends Collection {
      *
      * @return mixed|null
      */
-    public function getPriceWithConditions() 
+    public function getPriceWithConditions($formated = true)
     {
         $originalPrice = $this->price;
         $newPrice = 0.00;
@@ -115,7 +115,11 @@ class ItemCollection extends Collection {
 
             return number_format($newPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
         }
-        return number_format($originalPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
+        if($formated) {
+            return number_format($originalPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
+        } else {
+            return $originalPrice;
+        }
     }
 
     /**
@@ -125,6 +129,6 @@ class ItemCollection extends Collection {
      */
     public function getPriceSumWithConditions()
     {
-        return number_format($this->getPriceWithConditions() * $this->quantity, $this->decimals, $this->dec_point, $this->thousands_sep);
+        return number_format($this->getPriceWithConditions(false) * $this->quantity, $this->decimals, $this->dec_point, $this->thousands_sep);
     }
 }
