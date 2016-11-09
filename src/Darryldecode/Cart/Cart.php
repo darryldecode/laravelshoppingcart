@@ -536,10 +536,10 @@ class Cart {
 
     /**
      * get cart sub total
-     *
+     * @param bool $formatted
      * @return float
      */
-    public function getSubTotal($formated = true)
+    public function getSubTotal($formatted = true)
     {
         $cart = $this->getContent();
 
@@ -548,7 +548,7 @@ class Cart {
             return $item->getPriceSumWithConditions(false);
         });
 
-        return Helpers::formatValue(floatval($sum), $formated, $this->config);
+        return Helpers::formatValue(floatval($sum), $formatted, $this->config);
     }
 
     /**

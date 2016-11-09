@@ -68,10 +68,10 @@ class ItemCollection extends Collection {
 
     /**
      * get the single price in which conditions are already applied
-     *
+     * @param bool $formatted
      * @return mixed|null
      */
-    public function getPriceWithConditions($formated = true)
+    public function getPriceWithConditions($formatted = true)
     {
         $originalPrice = $this->price;
         $newPrice = 0.00;
@@ -99,18 +99,18 @@ class ItemCollection extends Collection {
                 }
             }
 
-            return Helpers::formatValue($newPrice, $formated, $this->config);
+            return Helpers::formatValue($newPrice, $formatted, $this->config);
         }
-        return Helpers::formatValue($originalPrice, $formated, $this->config);
+        return Helpers::formatValue($originalPrice, $formatted, $this->config);
     }
 
     /**
      * get the sum of price in which conditions are already applied
-     *
+     * @param bool $formatted
      * @return mixed|null
      */
-    public function getPriceSumWithConditions($formated = true)
+    public function getPriceSumWithConditions($formatted = true)
     {
-        return Helpers::formatValue($this->getPriceWithConditions(false) * $this->quantity, $formated, $this->config);
+        return Helpers::formatValue($this->getPriceWithConditions(false) * $this->quantity, $formatted, $this->config);
     }
 }
