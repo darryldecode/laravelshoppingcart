@@ -563,7 +563,7 @@ class Cart {
      *
      * @return float
      */
-    public function getSubTotal()
+    public function getSubTotal($formatted = true)
     {
         $cart = $this->getContent();
 
@@ -572,7 +572,11 @@ class Cart {
             return $item->getPriceSumWithConditions();
         });
 
-        return number_format(floatval($sum), $this->decimals, $this->dec_point, $this->thousands_sep);
+        if($formatted) {
+            return number_format(floatval($sum), $this->decimals, $this->dec_point, $this->thousands_sep);
+        } else {
+            return floatval($sum);
+        }
     }
 
     /**
@@ -582,7 +586,7 @@ class Cart {
      */
     public function getTotal()
     {
-        $subTotal = $this->getSubTotal();
+        $subTotal = $this->getSubTotal(false);
 
         $newTotal = 0.00;
 
