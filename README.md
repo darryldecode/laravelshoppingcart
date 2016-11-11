@@ -46,6 +46,7 @@ Next, run the Composer update command from the Terminal:
 * [Instances](#instances)
 * [Exceptions](#exceptions)
 * [Events](#events)
+* [Format Response](#format)
 * [Examples](#examples)
 * [Changelogs](#changelogs)
 * [License](#license)
@@ -639,6 +640,16 @@ So for you wishlist cart instance, events will look like this:
 * wishlist.adding($items, $cart)
 * wishlist.added($items, $cart) and so on..
 
+## Format Response
+
+Now you can format all the responses. You can publish the config file from the package or use env vars to set the configuration.
+The options you have are:
+
+* format_numbers or env('SHOPPING_FORMAT_VALUES', false) => Activate or deactivate this feature. Default to false,
+* decimals or env('SHOPPING_DECIMALS', 0) => Number of decimals you want to show. Defaults to 0.
+* dec_point or env('SHOPPING_DEC_POINT', '.') => Decimal point type. Defaults to a '.'.
+* thousands_sep or env('SHOPPING_THOUSANDS_SEP', ',') => Thousands separator for value. Defaults to ','.
+ 
 ## Examples
 
 ```php

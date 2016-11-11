@@ -7,30 +7,17 @@
  * Time: 11:03 AM
  */
 
+use Darryldecode\Cart\Helpers\Helpers;
 use Illuminate\Support\Collection;
 
 class ItemCollection extends Collection {
 
     /**
-     * Sets the number of decimal points.
+     * Sets the config parameters.
      *
      * @var
      */
-    protected $decimals;
-
-    /**
-     * Definces the decimal point delimiter type
-     *
-     * @var
-     */
-    protected $dec_point;
-
-    /**
-     * Defines the thousands point delimiter type
-     *
-     * @var
-     */
-    protected $thousands_sep;
+    protected $config;
 
     /**
      * ItemCollection constructor.
@@ -41,9 +28,7 @@ class ItemCollection extends Collection {
     {
         parent::__construct($items);
 
-        $this->decimals = $config['decimals'];
-        $this->dec_point = $config['dec_point'];
-        $this->thousands_sep = $config['thousands_sep'];
+        $this->config = $config;
     }
 
     /**
@@ -53,7 +38,8 @@ class ItemCollection extends Collection {
      */
     public function getPriceSum()
     {
-        return $this->price * $this->quantity;
+        return Helpers::formatValue($this->price * $this->quantity, $this->config['format_numbers'], $this->config);
+
     }
 
     public function __get($name)
@@ -82,10 +68,10 @@ class ItemCollection extends Collection {
 
     /**
      * get the single price in which conditions are already applied
-     *
+     * @param bool $formatted
      * @return mixed|null
      */
-    public function getPriceWithConditions() 
+    public function getPriceWithConditions($formatted = true)
     {
         $originalPrice = $this->price;
         $newPrice = 0.00;
@@ -113,18 +99,18 @@ class ItemCollection extends Collection {
                 }
             }
 
-            return number_format($newPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
+            return Helpers::formatValue($newPrice, $formatted, $this->config);
         }
-        return number_format($originalPrice, $this->decimals, $this->dec_point, $this->thousands_sep);
+        return Helpers::formatValue($originalPrice, $formatted, $this->config);
     }
 
     /**
      * get the sum of price in which conditions are already applied
-     *
+     * @param bool $formatted
      * @return mixed|null
      */
-    public function getPriceSumWithConditions()
+    public function getPriceSumWithConditions($formatted = true)
     {
-        return number_format($this->getPriceWithConditions() * $this->quantity, $this->decimals, $this->dec_point, $this->thousands_sep);
+        return Helpers::formatValue($this->getPriceWithConditions(false) * $this->quantity, $formatted, $this->config);
     }
 }
