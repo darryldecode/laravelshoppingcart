@@ -567,7 +567,9 @@ class Cart {
         $conditions = $this->getConditions();
 
         // if no conditions were added, just return the sub total
-        if( ! $conditions->count() ) return $subTotal;
+        if( ! $conditions->count() ) {
+            return Helpers::formatValue($subTotal, $this->config['format_numbers'], $this->config);
+        }
 
         $conditions->each(function($cond) use ($subTotal, &$newTotal, &$process)
         {
