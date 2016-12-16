@@ -537,22 +537,26 @@ class Cart
 
         $process = 0;
 
-        $conditions = $this->getConditions();
+        $conditions = $this
+            ->getConditions()
+            ->filter(function ($cond) {
+                return $cond->getTarget() === 'subtotal';
+            });
 
         // if no conditions were added, just return the sub total
         if (!$conditions->count()) {
             return Helpers::formatValue($subTotal, $this->config['format_numbers'], $this->config);
         }
 
-        $conditions->each(function ($cond) use ($subTotal, &$newTotal, &$process) {
-            if ($cond->getTarget() === 'subtotal') {
-                ($process > 0) ? $toBeCalculated = $newTotal : $toBeCalculated = $subTotal;
+        $conditions
+            ->each(function ($cond) use ($subTotal, &$newTotal, &$process) {
+                $toBeCalculated = ($process > 0) ? $newTotal : $subTotal;
 
                 $newTotal = $cond->applyCondition($toBeCalculated);
 
                 $process++;
-            }
-        });
+
+            });
 
         return Helpers::formatValue($newTotal, $this->config['format_numbers'], $this->config);
     }
