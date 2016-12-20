@@ -7,36 +7,21 @@ A Shopping Cart Implementation for Laravel Framework
 
 ##INSTALLATION
 
-Install the package through [Composer](http://getcomposer.org/). Edit your project's `composer.json` file by adding:
+Install the package through [Composer](http://getcomposer.org/). 
 
-### Laravel 5
-
-```php
-"require": {
-	"laravel/framework": "5.0.*",
-	"darryldecode/cart": "dev-master"
-}
-```
-
-Next, run the Composer update command from the Terminal:
-
-    composer update
-
-    or
-
-    composer update "darryldecode/cart"
+    composer require "darryldecode/cart"
 
 ##CONFIGURATION
 
-1. Open config/app.php and addd this line to your Service Providers Array
+1. Open config/app.php and add this line to your Service Providers Array
   ```php
-  'Darryldecode\Cart\CartServiceProvider'
+  Darryldecode\Cart\CartServiceProvider::class
   ```
 
-2. Open config/app.php and addd this line to your Aliases
+2. Open config/app.php and add this line to your Aliases
 
 ```php
-  'Cart' => 'Darryldecode\Cart\Facades\CartFacade'
+  'Cart' => Darryldecode\Cart\Facades\CartFacade::class
   ```
 
 ## HOW TO USE
