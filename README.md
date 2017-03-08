@@ -9,7 +9,11 @@ A Shopping Cart Implementation for Laravel Framework
 
 Install the package through [Composer](http://getcomposer.org/). 
 
-    composer require "darryldecode/cart"
+For Laravel 5.1~:
+```composer require "darryldecode/cart:~2.0"```
+    
+For Laravel 5.4~:
+```composer require "darryldecode/cart:~3.0"```
 
 ##CONFIGURATION
 
