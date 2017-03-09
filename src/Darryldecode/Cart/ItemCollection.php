@@ -67,6 +67,17 @@ class ItemCollection extends Collection {
     }
 
     /**
+     * check if item has conditions
+     *
+     * @return mixed|null
+     */
+    public function getConditions()
+    {
+        if(! $this->hasConditions() ) return [];
+        return $this['conditions'];
+    }
+
+    /**
      * get the single price in which conditions are already applied
      * @param bool $formatted
      * @return mixed|null

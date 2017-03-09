@@ -8,6 +8,7 @@
 
 use Darryldecode\Cart\Cart;
 use Mockery as m;
+use Darryldecode\Cart\CartCondition;
 
 require_once __DIR__.'/helpers/SessionMock.php';
 
@@ -54,5 +55,37 @@ class ItemTest extends PHPUnit_Framework_TestCase
         $item = $this->cart->get(455);
 
         $this->assertEquals(201.98, $item->getPriceSum(), 'Item summed price should be 201.98');
+    }
+
+    public function test_item_get_conditions_empty()
+    {
+        $this->cart->add(455, 'Sample Item', 100.99, 2, array());
+
+        $item = $this->cart->get(455);
+
+        $this->assertEmpty($item->getConditions(), 'Item should have no conditions');
+    }
+
+    public function test_item_get_conditions_with_conditions()
+    {
+        $itemCondition1 = new \Darryldecode\Cart\CartCondition(array(
+            'name' => 'SALE 5%',
+            'type' => 'sale',
+            'target' => 'item',
+            'value' => '-5%',
+        ));
+        
+        $itemCondition2 = new CartCondition(array(
+            'name' => 'Item Gift Pack 25.00',
+            'type' => 'promo',
+            'target' => 'item',
+            'value' => '-25',
+        ));
+
+        $this->cart->add(455, 'Sample Item', 100.99, 2, array(),[$itemCondition1,$itemCondition2]);
+
+        $item = $this->cart->get(455);
+
+        $this->assertCount(2,$item->getConditions(), 'Item should have two conditions');
     }
 }
