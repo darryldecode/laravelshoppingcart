@@ -5,7 +5,7 @@
 
 A Shopping Cart Implementation for Laravel Framework
 
-##INSTALLATION
+## INSTALLATION
 
 Install the package through [Composer](http://getcomposer.org/). 
 
@@ -15,7 +15,7 @@ For Laravel 5.1~:
 For Laravel 5.4~:
 ```composer require "darryldecode/cart:~3.0"```
 
-##CONFIGURATION
+## CONFIGURATION
 
 1. Open config/app.php and add this line to your Service Providers Array
   ```php
