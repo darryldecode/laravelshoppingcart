@@ -594,6 +594,26 @@ class Cart
 
         return $count;
     }
+    
+    
+    /**
+     * get count of items
+     *
+     * @return integer
+     */
+    public function getCount()
+    {
+        $count = 0;
+        
+        $items = $this->getContent();
+
+        foreach ($items as $item) {
+            $count += $item->quantity;
+        }
+        
+        return $count;
+    }
+    
 
     /**
      * get the cart
