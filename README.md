@@ -43,6 +43,7 @@ For Laravel 5.4~:
 * [Events](#events)
 * [Format Response](#format)
 * [Examples](#examples)
+* [Using Different Storage](#storage)
 * [Changelogs](#changelogs)
 * [License](#license)
 
@@ -720,6 +721,81 @@ $items->each(function($item)
 });
 
 ```
+
+## Using Different Storage
+
+Using different storage for the carts items is pretty straight forward. The storage 
+class that is injected to the Cart's instance will only need methods.
+
+Example we will need a wishlist, and we want to store its key value pair in database instead
+of the default session. We do this using below:
+
+Create a new class for your storage:
+
+Eg.
+```
+class WishListDBStorage {
+
+    public function has($key)
+    {
+        // your logic here to check if storage has the given key
+    }
+    
+    public function get($key)
+    {
+        // your logic here to get an item using its key
+    }
+    
+    public function put($key, $value)
+    {
+        // your logic here to put an item with key value pair
+    }
+}
+```
+
+Then in your service provider for your wishlist cart, you replace the storage
+to use your custom storage.
+
+```
+use Darryldecode\Cart\Cart;
+use Illuminate\Support\ServiceProvider;
+
+class WishListProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap the application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
+    /**
+     * Register the application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton('wishlist', function($app)
+        {
+            $storage = new WishListDBStorage(); <-- Your new custom storage
+            $events = $app['events'];
+            $instanceName = 'cart_2';
+            $session_key = '88uuiioo99888';
+            return new Cart(
+                $storage,
+                $events,
+                $instanceName,
+                $session_key,
+                config('shopping_cart')
+            );
+        });
+    }
+}
+```
+
 
 ## Changelogs
 
