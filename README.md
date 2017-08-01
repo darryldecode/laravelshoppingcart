@@ -722,7 +722,7 @@ $items->each(function($item)
 
 ```
 
-## Using Different Storage
+## Storage
 
 Using different storage for the carts items is pretty straight forward. The storage 
 class that is injected to the Cart's instance will only need methods.
