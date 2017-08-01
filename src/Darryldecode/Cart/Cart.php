@@ -194,41 +194,46 @@ class Cart
 
         $cart = $this->getContent();
 
-        $item = $cart->pull($id);
+        $cart->transform(function($item, $key) use ($id, $data) {
 
-        foreach ($data as $key => $value) {
-            // if the key is currently "quantity" we will need to check if an arithmetic
-            // symbol is present so we can decide if the update of quantity is being added
-            // or being reduced.
-            if ($key == 'quantity') {
-                // we will check if quantity value provided is array,
-                // if it is, we will need to check if a key "relative" is set
-                // and we will evaluate its value if true or false,
-                // this tells us how to treat the quantity value if it should be updated
-                // relatively to its current quantity value or just totally replace the value
-                if (is_array($value)) {
-                    if (isset($value['relative'])) {
-                        if ((bool)$value['relative']) {
-                            $item = $this->updateQuantityRelative($item, $key, $value['value']);
+            if($key === $id){
+
+                foreach ($data as $key => $value) {
+                    // if the key is currently "quantity" we will need to check if an arithmetic
+                    // symbol is present so we can decide if the update of quantity is being added
+                    // or being reduced.
+                    if ($key == 'quantity') {
+                        // we will check if quantity value provided is array,
+                        // if it is, we will need to check if a key "relative" is set
+                        // and we will evaluate its value if true or false,
+                        // this tells us how to treat the quantity value if it should be updated
+                        // relatively to its current quantity value or just totally replace the value
+                        if (is_array($value)) {
+                            if (isset($value['relative'])) {
+                                if ((bool)$value['relative']) {
+                                    $item = $this->updateQuantityRelative($item, $key, $value['value']);
+                                } else {
+                                    $item = $this->updateQuantityNotRelative($item, $key, $value['value']);
+                                }
+                            }
                         } else {
-                            $item = $this->updateQuantityNotRelative($item, $key, $value['value']);
+                            $item = $this->updateQuantityRelative($item, $key, $value);
                         }
+                    } elseif ($key == 'attributes') {
+                        $item[$key] = new ItemAttributeCollection($value);
+                    } else {
+                        $item[$key] = $value;
                     }
-                } else {
-                    $item = $this->updateQuantityRelative($item, $key, $value);
                 }
-            } elseif ($key == 'attributes') {
-                $item[$key] = new ItemAttributeCollection($value);
-            } else {
-                $item[$key] = $value;
             }
-        }
 
-        $cart->put($id, $item);
+            return $item;
+
+        });
 
         $this->save($cart);
 
-        $this->fireEvent('updated', $item);
+        $this->fireEvent('updated', $cart->get($id));
         return true;
     }
 
