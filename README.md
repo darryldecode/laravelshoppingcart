@@ -599,7 +599,49 @@ $this->app['wishlist'] = $this->app->share(function($app)
 				$session_key
 			);
 		});
+		
+// for 5.4 or newer
+use Darryldecode\Cart\Cart;
+use Illuminate\Support\ServiceProvider;
+
+class WishListProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap the application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
+    /**
+     * Register the application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton('wishlist', function($app)
+        {
+            $storage = $app['session'];
+            $events = $app['events'];
+            $instanceName = 'cart_2';
+            $session_key = '88uuiioo99888';
+            return new Cart(
+                $storage,
+                $events,
+                $instanceName,
+                $session_key,
+                config('shopping_cart')
+            );
+        });
+    }
+}
 ```
+
+IF you are having problem with multiple cart instance, please see the codes on
+this demo repo here: [DEMO](https://github.com/darryldecode/laravelshoppingcart-demo)
 
 ## Exceptions
 
