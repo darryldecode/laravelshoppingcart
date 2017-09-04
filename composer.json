@@ -29,5 +29,15 @@
             "Darryldecode\\": "src/Darryldecode"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Darryldecode\\Cart\\CartServiceProvider"
+            ],
+            "aliases": {
+                 "Cart" => "Darryldecode\\Cart\\Facades\\CartFacade"
+            }
+    }
+},
     "minimum-stability": "dev"
 }
