@@ -5,21 +5,12 @@
 
 A Shopping Cart Implementation for Laravel Framework
 
-## QUICK PARTIAL DEMO
-
-Demo: http://phpstack-86254-257005.cloudwaysapps.com/cart
-
-Git repo of the demo: https://github.com/darryldecode/laravelshoppingcart-demo
-
 ## INSTALLATION
 
 Install the package through [Composer](http://getcomposer.org/). 
 
-For Laravel 5.1~:
-```composer require "darryldecode/cart:~2.0"```
-    
-For Laravel 5.4~:
-```composer require "darryldecode/cart:~3.0"```
+For Laravel >=5.4:
+```composer require "publiux/laravelshoppingcart:~4.0"```
 
 ## CONFIGURATION
 

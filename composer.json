@@ -1,5 +1,5 @@
 {
-    "name": "darryldecode/cart",
+    "name": "publiux/laravelshoppingcart",
     "description": "Laravel 5 Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
@@ -7,13 +7,17 @@
         {
             "name": "Darryl Fernandez",
             "email": "engrdarrylfernandez@gmail.com"
+        },
+        {
+            "name": "Raul Ruiz",
+            "email": "publiux@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*",
-        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*",
-        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*"
+        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
+        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
+        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*"
     },
     "require-dev": {
         "mockery/mockery": "~0.9",
@@ -25,5 +29,15 @@
             "Darryldecode\\": "src/Darryldecode"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Darryldecode\\Cart\\CartServiceProvider"
+            ],
+            "aliases": {
+                 "Cart": "Darryldecode\\Cart\\Facades\\CartFacade"
+            }
+    }
+},
     "minimum-stability": "dev"
 }
