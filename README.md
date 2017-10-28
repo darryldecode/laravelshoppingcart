@@ -7,7 +7,7 @@ A Shopping Cart Implementation for Laravel Framework
 
 ## QUICK PARTIAL DEMO
 
-Demo: http://phpstack-86254-257005.cloudwaysapps.com/cart
+Demo: https://shoppingcart-demo.darrylfernandez.com/cart
 
 Git repo of the demo: https://github.com/darryldecode/laravelshoppingcart-demo
 
