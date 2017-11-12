@@ -18,12 +18,13 @@ Install the package through [Composer](http://getcomposer.org/).
 For Laravel 5.1~:
 ```composer require "darryldecode/cart:~2.0"```
     
-For Laravel 5.4~:
+For Laravel 5.5~:
 ```composer require "darryldecode/cart:~3.0"```
 
 ## CONFIGURATION
 
-1. Open config/app.php and add this line to your Service Providers Array
+1. Open config/app.php and add this line to your Service Providers Array. 
+NOTE: If you are using laravel 5.5, this will be automatically added by its auto discovery.
   ```php
   Darryldecode\Cart\CartServiceProvider::class
   ```
