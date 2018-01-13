@@ -58,7 +58,7 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 By default, the cart has a default sessionKey that holds the cart data. This
 also servers as a cart unique identifier which you can use to bind a cart to a specific user.
 To override this default session Key, you will just simply call the ```session($sessionKey)``` method
-before any other methods.
+BEFORE ANY OTHER METHODS!!.
 
 Example:
 
@@ -68,6 +68,10 @@ $userId // the current login user id
 \Cart::session($userId)->add();
 \Cart::session($userId)->update();
 \Cart::session($userId)->remove();
+\Cart::session($userId)->condition($condition1);
+\Cart::session($userId)->getTotal();
+\Cart::session($userId)->getSubTotal();
+Cart::session($userId)->addItemCondition($productID, $coupon101);
 // and so on..
 ```
 
