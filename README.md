@@ -35,6 +35,11 @@ NOTE: If you are using laravel 5.5, this will be automatically added by its auto
   'Cart' => Darryldecode\Cart\Facades\CartFacade::class
   ```
 
+3. Optional configuration file (useful if you plan to have full control)
+```php
+php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"
+```
+
 ## HOW TO USE
 * [Usage](#usage)
 * [Conditions](#conditions)
@@ -45,10 +50,28 @@ NOTE: If you are using laravel 5.5, this will be automatically added by its auto
 * [Format Response](#format)
 * [Examples](#examples)
 * [Using Different Storage](#storage)
-* [Changelogs](#changelogs)
 * [License](#license)
 
 ## Usage
+
+### IMPORTANT NOTE!
+By default, the cart has a default sessionKey that holds the cart data. This
+also servers as a cart unique identifier which you can use to bind a cart to a specific user.
+To override this default session Key, you will just simply call the ```session($sessionKey)``` method
+before any other methods.
+
+Example:
+
+```php
+$userId // the current login user id
+
+\Cart::session($userId)->add();
+\Cart::session($userId)->update();
+\Cart::session($userId)->remove();
+// and so on..
+```
+
+See More Examples below:
 
 Adding Item on Cart: **Cart::add()**
 
@@ -101,6 +124,10 @@ Cart::add(array(
   ),
 ));
 
+// add cart items to a specific user
+$userId = auth()->user()->id; // or any string represents user identifier
+Cart::session($userId)->add(455, 'Sample Item', 100.99, 2, array());
+
 // NOTE:
 // Please keep in mind that when adding an item on cart, the "id" should be unique as it serves as
 // row identifier as well. If you provide same ID, it will assume the operation will be an update to its quantity
@@ -148,6 +175,13 @@ Cart::update(456, array(
 ));
 // so with that code above as relative is flagged as false, if the item's quantity before is 2 it will now be 5 instead of
 // 5 + 2 which results to 7 if updated relatively..
+
+// updating a cart for a specific user
+$userId = auth()->user()->id; // or any string represents user identifier
+Cart::session($userId)->update(456, array(
+  'name' => 'New Item Name', // new item name
+  'price' => 98.67, // new item price, price can also be a string format like so: '98.67'
+));
 ```
 
 Removing an item on a cart: **Cart::remove()**
@@ -162,6 +196,10 @@ Removing an item on a cart is very easy:
  */
 
 Cart::remove(456);
+
+// removing cart item for a specific user's cart
+$userId = auth()->user()->id; // or any string represents user identifier
+Cart::session($userId)->remove(456);
 ```
 
 Getting an item on a cart: **Cart::get()**
@@ -182,6 +220,10 @@ Cart::get($itemId);
 
 // You can also get the sum of the Item multiplied by its quantity, see below:
 $summedPrice = Cart::get($itemId)->getPriceSum();
+
+// get an item on a cart by item ID for a specific user's cart
+$userId = auth()->user()->id; // or any string represents user identifier
+Cart::session($userId)->get($itemId);
 ```
 
 Getting cart's contents and count: **Cart::getContent()**
@@ -206,6 +248,10 @@ $cartCollection->count();
 // transformations
 $cartCollection->toArray();
 $cartCollection->toJson();
+
+// Getting cart's contents for a specific user
+$userId = auth()->user()->id; // or any string represents user identifier
+Cart::session($userId)->getContent($itemId);
 ```
 
 Check if cart is empty: **Cart::isEmpty()**
@@ -217,6 +263,10 @@ Check if cart is empty: **Cart::isEmpty()**
 * @return bool
 */
 Cart::isEmpty();
+
+// Check if cart's contents is empty for a specific user
+$userId = auth()->user()->id; // or any string represents user identifier
+Cart::session($userId)->isEmpty();
 ```
 
 Get cart total quantity: **Cart::getTotalQuantity()**
@@ -228,6 +278,9 @@ Get cart total quantity: **Cart::getTotalQuantity()**
 * @return int
 */
 $cartTotalQuantity = Cart::getTotalQuantity();
+
+// for a specific user
+$cartTotalQuantity = Cart::session($userId)->getTotalQuantity();
 ```
 
 Get cart subtotal: **Cart::getSubTotal()**
@@ -239,6 +292,9 @@ Get cart subtotal: **Cart::getSubTotal()**
 * @return float
 */
 $subTotal = Cart::getSubTotal();
+
+// for a specific user
+$subTotal = Cart::session($userId)->getSubTotal();
 ```
 
 Get cart total: **Cart::getTotal()**
@@ -250,6 +306,9 @@ Get cart total: **Cart::getTotal()**
  * @return float
  */
 $total = Cart::getTotal();
+
+// for a specific user
+$total = Cart::session($userId)->getTotal();
 ```
 
 Clearing the Cart: **Cart::clear()**
@@ -261,6 +320,7 @@ Clearing the Cart: **Cart::clear()**
 * @return void
 */
 Cart::clear();
+Cart::session($userId)->clear();
 ```
 
 ## Conditions
@@ -301,6 +361,7 @@ $condition = new \Darryldecode\Cart\CartCondition(array(
 ));
 
 Cart::condition($condition);
+Cart::session($userId)->condition($condition); // for a speicifc user's cart
 
 // or add multiple conditions from different condition instances
 $condition1 = new \Darryldecode\Cart\CartCondition(array(
@@ -357,6 +418,7 @@ NOTE: All cart based conditions should be applied before calling **Cart::getTota
 Then Finally you can call **Cart::getTotal()** to get the Cart Total with the applied conditions.
 ```php
 $cartTotal = Cart::getTotal(); // the total will be calculated based on the conditions you ave provided
+$cartTotal = Cart::session($userId)->getTotal(); // for a specific user's cart
 ```
 
 Next is the Condition on Per-Item Bases.
@@ -771,33 +833,138 @@ Using different storage for the carts items is pretty straight forward. The stor
 class that is injected to the Cart's instance will only need methods.
 
 Example we will need a wishlist, and we want to store its key value pair in database instead
-of the default session. We do this using below:
+of the default session.
 
-Create a new class for your storage:
+To do this, we will need first a database table that will hold our cart data.
+Let's create it by issuing ```php artisan make:migration create_cart_storage_table```
 
-Eg.
-```
-class WishListDBStorage {
+Example Code:
 
-    public function has($key)
+```php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateCartStorageTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
     {
-        // your logic here to check if storage has the given key
+        Schema::create('cart_storage', function (Blueprint $table) {
+            $table->string('id')->index();
+            $table->longText('cart_data');
+            $table->timestamps();
+
+            $table->primary('id');
+        });
     }
-    
-    public function get($key)
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
     {
-        // your logic here to get an item using its key
-    }
-    
-    public function put($key, $value)
-    {
-        // your logic here to put an item with key value pair
+        Schema::dropIfExists('cart_storage');
     }
 }
 ```
 
-Then in your service provider for your wishlist cart, you replace the storage
-to use your custom storage.
+Next, lets create an eloquent Model on this table so we can easily deal with the data. It is up to you where you want
+to store this model. For this example, lets just assume to store it in our App namespace.
+
+Code:
+```php
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+
+class DatabaseStorageModel extends Model
+{
+    protected $table = 'cart_storage';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'cart_data',
+    ];
+
+    public function setCartDataAttribute($value)
+    {
+        $this->attributes['cart_data'] = serialize($value);
+    }
+
+    public function getCartDataAttribute($value)
+    {
+        return unserialize($value);
+    }
+}
+```
+
+Next, Create a new class for your storage to be injected to our cart instance:
+
+Eg.
+```
+class DBStorage {
+
+    public function has($key)
+    {
+        return DatabaseStorageModel::find($key);
+    }
+    
+    public function get($key)
+    {
+        if($this->has($key))
+        {
+            return new CartCollection(DatabaseStorageModel::find($key)->cart_data);
+        }
+        else
+        {
+            return [];
+        }
+    }
+    
+    public function put($key, $value)
+    {
+        if($row = DatabaseStorageModel::find($key))
+        {
+            // update
+            $row->cart_data = $value;
+            $row->save();
+        }
+        else
+        {
+            DatabaseStorageModel::create([
+                'id' => $key,
+                'cart_data' => $value
+            ]);
+        }
+    }
+}
+```
+
+To make this the cart's default storage, let's update the cart's configuration file.
+First, let us publish first the cart config file for us to enable to override it.
+```php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"```
+
+after running that command, there should be a new file on your config folder name ```shopping_cart.php```
+
+Open this file and let's update the storage use. Find the key which says ```'storage' => null,```
+And update it to your newly created DBStorage Class, which on our example,
+```'storage' => \App\DBStorage::class,```
+
+OR If you have multiple cart instance (example WishList), you can inject the custom database storage
+to your cart instance by injecting it to the service provider of your wishlist cart, you replace the storage
+to use your custom storage. See below:
 
 ```
 use Darryldecode\Cart\Cart;
@@ -823,7 +990,7 @@ class WishListProvider extends ServiceProvider
     {
         $this->app->singleton('wishlist', function($app)
         {
-            $storage = new WishListDBStorage(); <-- Your new custom storage
+            $storage = new DBStorage(); <-- Your new custom storage
             $events = $app['events'];
             $instanceName = 'cart_2';
             $session_key = '88uuiioo99888';
@@ -839,39 +1006,6 @@ class WishListProvider extends ServiceProvider
 }
 ```
 
-
-## Changelogs
-
-**2.4.0
-- added new method on a condition: $condition->getAttributes(); (Please see [Conditions](#conditions) section)
-
-**2.3.0
-- added new Cart Method: Cart::addItemCondition($productId, $itemCondition)
-- added new Cart Method: Cart::getTotalQuantity()
-
-**2.2.1
-- bug fixes
-
-**2.2.0
-- added new Cart Method: Cart::getConditionsByType($type)
-- added new Item Method: Cart::removeConditionsByType($type)
-
-**2.1.1
-- when a new product with the same ID is added on a cart and a quantity is provided, it will increment its current quantity instead of overwriting it. There's a chance that you will also need to update an item's quantity but not incrementing it but reducing it, please just see the documentation (Please see Cart::update() section, and read carefully)
-
-**2.1.0
-- added new Cart Method: getCalculatedValue($totalOrSubTotalOrPrice)
-- added new Item Method: getPriceSum()
-
-**2.0.0 (breaking change)
-- major changes in dealing with conditions (Please see [Conditions](#conditions) section, and read carefully)
-- All conditions added on per item bases should have now target => 'item' instead of 'subtotal'
-- All conditions added on per cart bases should have now target => 'subtotal' instead of 'total'
-
-**1.1.0
-- added new method: clearCartConditions()
-- added new method: removeItemCondition($itemId, $conditionName)
-- added new method: removeCartCondition($conditionName)
 
 ## License
 

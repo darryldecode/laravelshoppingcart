@@ -34,6 +34,13 @@ class Cart
     protected $instanceName;
 
     /**
+     * the session key use for the cart
+     *
+     * @var
+     */
+    protected $sessionKey;
+
+    /**
      * the session key use to persist cart items
      *
      * @var
@@ -68,10 +75,29 @@ class Cart
         $this->events = $events;
         $this->session = $session;
         $this->instanceName = $instanceName;
-        $this->sessionKeyCartItems = $session_key . '_cart_items';
-        $this->sessionKeyCartConditions = $session_key . '_cart_conditions';
-        $this->fireEvent('created');
+        $this->sessionKey = $session_key;
+        $this->sessionKeyCartItems = $this->sessionKey . '_cart_items';
+        $this->sessionKeyCartConditions = $this->sessionKey . '_cart_conditions';
         $this->config = $config;
+        $this->fireEvent('created');
+    }
+
+    /**
+     * sets the session key
+     *
+     * @param string $sessionKey the session key or identifier
+     * @return $this|bool
+     * @throws \Exception
+     */
+    public function session($sessionKey)
+    {
+        if(!$sessionKey) throw new \Exception("Session key is required.");
+
+        $this->sessionKey = $sessionKey;
+        $this->sessionKeyCartItems = $this->sessionKey . '_cart_items';
+        $this->sessionKeyCartConditions = $this->sessionKey . '_cart_conditions';
+
+        return $this;
     }
 
     /**
