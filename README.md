@@ -1010,6 +1010,16 @@ class WishListProvider extends ServiceProvider
 }
 ```
 
+Still feeling confuse on how to do custom database storage? Or maybe doing multiple cart instances?
+See the demo repo to see the codes and how you can possibly do it and expand base on your needs or make it
+as a guide & reference. See links below:
+
+[See Demo App Here](https://shoppingcart-demo.darrylfernandez.com/cart)
+
+OR
+
+[See Demo App Repo Here](https://github.com/darryldecode/laravelshoppingcart-demo)
+
 
 ## License
 
