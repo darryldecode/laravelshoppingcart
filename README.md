@@ -56,7 +56,7 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 
 ### IMPORTANT NOTE!
 By default, the cart has a default sessionKey that holds the cart data. This
-also servers as a cart unique identifier which you can use to bind a cart to a specific user.
+also serves as a cart unique identifier which you can use to bind a cart to a specific user.
 To override this default session Key, you will just simply call the ```session($sessionKey)``` method
 BEFORE ANY OTHER METHODS!!.
 
