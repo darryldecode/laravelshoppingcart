@@ -18,7 +18,7 @@ Install the package through [Composer](http://getcomposer.org/).
 For Laravel 5.1~:
 ```composer require "darryldecode/cart:~2.0"```
     
-For Laravel 5.5~:
+For Laravel 5.5 or 5.6~:
 ```composer require "darryldecode/cart:~3.0"```
 
 ## CONFIGURATION
