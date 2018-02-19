@@ -24,7 +24,7 @@ For Laravel 5.5 or 5.6~:
 ## CONFIGURATION
 
 1. Open config/app.php and add this line to your Service Providers Array. 
-NOTE: If you are using laravel 5.5, this will be automatically added by its auto discovery.
+NOTE: If you are using laravel 5.5 or above, this will be automatically added by its auto discovery.
   ```php
   Darryldecode\Cart\CartServiceProvider::class
   ```
