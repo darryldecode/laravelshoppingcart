@@ -74,7 +74,18 @@ class ItemCollection extends Collection {
     public function getConditions()
     {
         if(! $this->hasConditions() ) return [];
-        return $this['conditions'];
+        return new ItemConditionCollection($this['conditions']);
+    }
+
+    /**
+     * get condition applied on the item by its name
+     *
+     * @param $conditionName
+     * @return CartCondition
+     */
+    public function getCondition($conditionName)
+    {
+        return $this->getConditions()->first(function($c) use ($conditionName) {return $c->getName() == $conditionName;});
     }
 
     /**
