@@ -24,6 +24,8 @@ class CartCondition {
      */
     private $parsedRawValue;
 
+    private $config;
+
     /**
      * @param array $args (name, type, target, value)
      * @throws InvalidConditionException
@@ -40,6 +42,8 @@ class CartCondition {
         {
             $this->validate($this->args);
         }
+
+        $this->config = config('shopping_cart');
     }
 
     /**
@@ -139,6 +143,18 @@ class CartCondition {
     }
 
     /**
+     * get the calculated value of this condition supplied by the subtotal|price
+     *
+     * @param $totalOrSubTotalOrPrice
+     * @return mixed
+     */
+    public function getCalculatedValueFormatted($totalOrSubTotalOrPrice)
+    {
+        $value = $this->getCalculatedValue($totalOrSubTotalOrPrice);
+        return Helpers::formatValue($value, $this->config['format_numbers'], $this->config);
+    }
+
+    /**
      * apply condition
      *
      * @param $totalOrSubTotalOrPrice
@@ -147,6 +163,7 @@ class CartCondition {
      */
     protected function apply($totalOrSubTotalOrPrice, $conditionValue)
     {
+        $totalOrSubTotalOrPrice = Helpers::normalizePrice( $totalOrSubTotalOrPrice, $this->getConfig() );
         // if value has a percentage sign on it, we will get first
         // its percentage then we will evaluate again if the value
         // has a minus or plus sign so we can decide what to do with the
@@ -156,7 +173,7 @@ class CartCondition {
         {
             if( $this->valueIsToBeSubtracted($conditionValue) )
             {
-                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
+                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue), $this->getConfig() );
 
                 $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
@@ -164,7 +181,7 @@ class CartCondition {
             }
             else if ( $this->valueIsToBeAdded($conditionValue) )
             {
-                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
+                $value = Helpers::normalizePrice( $this->cleanValue($conditionValue), $this->getConfig() );
 
                 $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
@@ -172,8 +189,8 @@ class CartCondition {
             }
             else
             {
-                $value = Helpers::normalizePrice($conditionValue);
-
+                $value = Helpers::normalizePrice($conditionValue, $this->getConfig());
+                
                 $this->parsedRawValue = $totalOrSubTotalOrPrice * ($value / 100);
 
                 $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
@@ -186,19 +203,19 @@ class CartCondition {
         {
             if( $this->valueIsToBeSubtracted($conditionValue) )
             {
-                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
+                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue), $this->getConfig() );
 
                 $result = floatval($totalOrSubTotalOrPrice - $this->parsedRawValue);
             }
             else if ( $this->valueIsToBeAdded($conditionValue) )
             {
-                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue) );
+                $this->parsedRawValue = Helpers::normalizePrice( $this->cleanValue($conditionValue), $this->getConfig() );
 
                 $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
             else
             {
-                $this->parsedRawValue = Helpers::normalizePrice($conditionValue);
+                $this->parsedRawValue = Helpers::normalizePrice($conditionValue, $this->getConfig());
 
                 $result = floatval($totalOrSubTotalOrPrice + $this->parsedRawValue);
             }
@@ -215,7 +232,7 @@ class CartCondition {
      * @return bool
      */
     protected function valueIsPercentage($value)
-    {
+    { 
         return (preg_match('/%/', $value) == 1);
     }
 
@@ -273,5 +290,14 @@ class CartCondition {
         {
             throw new InvalidConditionException($validator->messages()->first());
         }
+    }
+
+    protected function getConfig()
+    {
+        if ($this->config == null) {
+            $this->config = config('shopping_cart');
+        }
+
+        return $this->config;
     }
 }
