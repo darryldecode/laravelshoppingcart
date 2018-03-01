@@ -15,9 +15,21 @@ class Helpers {
      * @param $price
      * @return float
      */
-    public static function normalizePrice($price)
+    public static function normalizePrice($price, $config = null)
     {
-        return (is_string($price)) ? floatval($price) : $price;
+        if (!is_string($price)) {
+             return $price;
+        }
+
+        if ($config != null && $config['format_numbers']) {
+            $normalized = str_replace($config['dec_point'], '[dec_point]', 
+                str_replace($config['thousands_sep'], '[thousands_sep]', $price));
+
+            $price = str_replace('[dec_point]', '.',
+                str_replace('[thousands_sep]', '', $normalized));
+        }
+        
+        return floatval($price);
     }
 
     /**
