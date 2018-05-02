@@ -393,7 +393,7 @@ Cart::condition([$condition1, $condition2]);
 
 // To get all applied conditions on a cart, use below:
 $cartConditions = Cart::getConditions();
-foreach($carConditions as $condition)
+foreach($cartConditions as $condition)
 {
     $condition->getTarget(); // the target of which the condition was applied
     $condition->getName(); // the name of the condition
