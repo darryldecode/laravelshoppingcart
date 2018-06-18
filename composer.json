@@ -17,7 +17,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^5.0",
         "symfony/var-dumper": "2.7.*@dev"
     },
     "autoload": {
