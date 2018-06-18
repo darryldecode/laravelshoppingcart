@@ -180,7 +180,7 @@ class Cart
         $item = $this->validate(array(
             'id' => $id,
             'name' => $name,
-            'price' => Helpers::normalizePrice($price),
+            'price' => Helpers::normalizePrice($price, $this->config),
             'quantity' => $quantity,
             'attributes' => new ItemAttributeCollection($attributes),
             'conditions' => $conditions,
