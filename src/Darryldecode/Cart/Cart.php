@@ -559,11 +559,37 @@ class Cart
     {
         $cart = $this->getContent();
 
-        $sum = $cart->sum(function ($item) {
+        $sum = $cart->sum(function (ItemCollection $item) {
             return $item->getPriceSumWithConditions(false);
         });
 
-        return Helpers::formatValue(floatval($sum), $formatted, $this->config);
+        // get the conditions that are meant to be applied
+        // on the subtotal and apply it here before returning the subtotal
+        $conditions = $this
+            ->getConditions()
+            ->filter(function (CartCondition $cond) {
+                return $cond->getTarget() === 'subtotal';
+            });
+
+        // if there is no conditions, lets just return the sum
+        if(!$conditions->count()) return Helpers::formatValue(floatval($sum), $formatted, $this->config);
+
+        // there are conditions, lets apply it
+        $newTotal = 0.00;
+        $process = 0;
+
+        $conditions->each(function (CartCondition $cond) use ($sum, &$newTotal, &$process) {
+
+            // if this is the first iteration, the toBeCalculated
+            // should be the sum as initial point of value.
+            $toBeCalculated = ($process > 0) ? $newTotal : $sum;
+
+            $newTotal = $cond->applyCondition($toBeCalculated);
+
+            $process++;
+        });
+
+        return Helpers::formatValue(floatval($newTotal), $formatted, $this->config);
     }
 
     /**
@@ -581,8 +607,8 @@ class Cart
 
         $conditions = $this
             ->getConditions()
-            ->filter(function ($cond) {
-                return $cond->getTarget() === 'subtotal';
+            ->filter(function (CartCondition $cond) {
+                return $cond->getTarget() === 'total';
             });
 
         // if no conditions were added, just return the sub total
@@ -591,7 +617,7 @@ class Cart
         }
 
         $conditions
-            ->each(function ($cond) use ($subTotal, &$newTotal, &$process) {
+            ->each(function (CartCondition $cond) use ($subTotal, &$newTotal, &$process) {
                 $toBeCalculated = ($process > 0) ? $newTotal : $subTotal;
 
                 $newTotal = $cond->applyCondition($toBeCalculated);

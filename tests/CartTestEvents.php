@@ -11,7 +11,7 @@ use Mockery as m;
 
 require_once __DIR__.'/helpers/SessionMock.php';
 
-class CartTestEvents extends PHPUnit_Framework_TestCase {
+class CartTestEvents extends PHPUnit\Framework\TestCase {
 
     const CART_INSTANCE_NAME = 'shopping';
 
@@ -36,6 +36,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
             'SAMPLESESSIONKEY',
             require(__DIR__.'/helpers/configMock.php')
         );
+
+        $this->assertTrue(true);
     }
 
     public function test_event_cart_adding()
@@ -54,6 +56,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
         );
 
         $cart->add(455, 'Sample Item', 100.99, 2, array());
+
+        $this->assertTrue(true);
     }
 
     public function test_event_cart_adding_multiple_times()
@@ -73,6 +77,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
 
         $cart->add(455, 'Sample Item 1', 100.99, 2, array());
         $cart->add(562, 'Sample Item 2', 100.99, 2, array());
+
+        $this->assertTrue(true);
     }
 
     public function test_event_cart_adding_multiple_times_scenario_two()
@@ -115,6 +121,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
         );
 
         $cart->add($items);
+
+        $this->assertTrue(true);
     }
 
     public function test_event_cart_remove_item()
@@ -161,6 +169,8 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
         $cart->add($items);
 
         $cart->remove(456);
+
+        $this->assertTrue(true);
     }
 
     public function test_event_cart_clear()
@@ -207,5 +217,7 @@ class CartTestEvents extends PHPUnit_Framework_TestCase {
         $cart->add($items);
 
         $cart->clear();
+
+        $this->assertTrue(true);
     }
 }

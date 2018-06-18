@@ -11,7 +11,7 @@ use Mockery as m;
 
 require_once __DIR__.'/helpers/SessionMock.php';
 
-class CartTest extends PHPUnit_Framework_TestCase  {
+class CartTest extends PHPUnit\Framework\TestCase  {
 
     /**
      * @var Darryldecode\Cart\Cart
@@ -413,24 +413,27 @@ class CartTest extends PHPUnit_Framework_TestCase  {
         $this->assertEquals(3, $item['quantity'], 'Item quantity of with item ID of 456 should now be reduced to 2');
     }
 
+    /**
+     * @expectedException Darryldecode\Cart\Exceptions\InvalidItemException
+     */
     public function test_should_throw_exception_when_provided_invalid_values_scenario_one()
     {
-        $this->setExpectedException('Darryldecode\Cart\Exceptions\InvalidItemException');
-
         $this->cart->add(455, 'Sample Item', 100.99, 0, array());
     }
 
+    /**
+     * @expectedException Darryldecode\Cart\Exceptions\InvalidItemException
+     */
     public function test_should_throw_exception_when_provided_invalid_values_scenario_two()
     {
-        $this->setExpectedException('Darryldecode\Cart\Exceptions\InvalidItemException');
-
         $this->cart->add('', 'Sample Item', 100.99, 2, array());
     }
 
+    /**
+     * @expectedException Darryldecode\Cart\Exceptions\InvalidItemException
+     */
     public function test_should_throw_exception_when_provided_invalid_values_scenario_three()
     {
-        $this->setExpectedException('Darryldecode\Cart\Exceptions\InvalidItemException');
-
         $this->cart->add(523, '', 100.99, 2, array());
     }
 
