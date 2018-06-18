@@ -19,7 +19,7 @@ For Laravel 5.1~:
 ```composer require "darryldecode/cart:~2.0"```
     
 For Laravel 5.5 or 5.6~:
-```composer require "darryldecode/cart:~3.0"```
+```composer require "darryldecode/cart:~4.0"```
 
 ## CONFIGURATION
 
@@ -349,7 +349,8 @@ If the target is "subtotal" then this condition will be applied to subtotal.
 If the target is "total" then this condition will be applied to total.
 The order of operation also during calculation will vary on the order you have added the conditions.
 
-Also, when adding conditions, the 'value' field will be the bases of calculation.
+Also, when adding conditions, the 'value' field will be the bases of calculation. You can change this order
+by adding 'order' parameter in CartCondition.
 
 ```php
 
@@ -395,13 +396,14 @@ $condition = new \Darryldecode\Cart\CartCondition(array(
     'type' => 'shipping',
     'target' => 'total', // this condition will be applied to cart's total when getTotal() is called.
     'value' => '+15',
-    'order' => 1
+    'order' => 1 // the order of calculation of cart base conditions. The bigger the later to be applied.
 ));
 Cart::condition($condition);
 
-
-// The property 'order' lets you add different conditions through for example a shopping process with multiple
+// The property 'order' lets you control the sequence of conditions when calculated. Also it lets you add different conditions through for example a shopping process with multiple
 // pages and still be able to set an order to apply the conditions. If no order is defined defaults to 0 
+
+// NOTE!! On current version, 'order' parameter is only applicable for conditions for cart bases. It does not support on per item conditions.
 
 // or add multiple conditions as array
 Cart::condition([$condition1, $condition2]);
@@ -503,7 +505,7 @@ $item = array(
 Cart::add($item);
 ```
 
-> NOTE: All cart per-item conditions should be applied before calling **Cart::getSubTotal()**
+> NOTE: All cart per-item conditions should be added before calling **Cart::getSubTotal()**
 
 Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions on each of the items.
 ```php
