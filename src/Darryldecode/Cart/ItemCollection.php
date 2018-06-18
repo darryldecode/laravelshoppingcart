@@ -94,20 +94,14 @@ class ItemCollection extends Collection {
             {
                 foreach($this->conditions as $condition)
                 {
-                    if( $condition->getTarget() === 'item' )
-                    {
-                        ( $processed > 0 ) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
-                        $newPrice = $condition->applyCondition($toBeCalculated);
-                        $processed++;
-                    }
+                    ( $processed > 0 ) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
+                    $newPrice = $condition->applyCondition($toBeCalculated);
+                    $processed++;
                 }
             }
             else
             {
-                if( $this['conditions']->getTarget() === 'item' )
-                {
-                    $newPrice = $this['conditions']->applyCondition($originalPrice);
-                }
+                $newPrice = $this['conditions']->applyCondition($originalPrice);
             }
 
             return Helpers::formatValue($newPrice, $formatted, $this->config);

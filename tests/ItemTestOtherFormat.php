@@ -11,7 +11,7 @@ use Mockery as m;
 
 require_once __DIR__.'/helpers/SessionMock.php';
 
-class ItemTestOtherFormat extends PHPUnit_Framework_TestCase
+class ItemTestOtherFormat extends PHPUnit\Framework\TestCase
 {
 
     /**

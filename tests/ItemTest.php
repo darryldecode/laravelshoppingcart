@@ -12,7 +12,7 @@ use Darryldecode\Cart\CartCondition;
 
 require_once __DIR__.'/helpers/SessionMock.php';
 
-class ItemTest extends PHPUnit_Framework_TestCase
+class ItemTest extends PHPUnit\Framework\TestCase
 {
 
     /**

@@ -19,7 +19,7 @@ For Laravel 5.1~:
 ```composer require "darryldecode/cart:~2.0"```
     
 For Laravel 5.5 or 5.6~:
-```composer require "darryldecode/cart:~3.0"```
+```composer require "darryldecode/cart:~4.0"```
 
 ## CONFIGURATION
 
@@ -344,11 +344,13 @@ First let's add a condition on a Cart Bases:
 There are also several ways of adding a condition on a cart:
 NOTE:
 
-When adding a condition on a cart bases, the 'target' should have value of 'subtotal'.
-And when adding a condition on an item, the 'target' should be 'item'.
+When adding a condition on a cart bases, the 'target' should have value of 'subtotal' or 'total'.
+If the target is "subtotal" then this condition will be applied to subtotal.
+If the target is "total" then this condition will be applied to total.
 The order of operation also during calculation will vary on the order you have added the conditions.
 
-Also, when adding conditions, the 'value' field will be the bases of calculation.
+Also, when adding conditions, the 'value' field will be the bases of calculation. You can change this order
+by adding 'order' parameter in CartCondition.
 
 ```php
 
@@ -356,7 +358,7 @@ Also, when adding conditions, the 'value' field will be the bases of calculation
 $condition = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
-    'target' => 'subtotal',
+    'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
     'value' => '12.5%',
     'attributes' => array( // attributes field is optional
     	'description' => 'Value added tax',
@@ -371,22 +373,37 @@ Cart::session($userId)->condition($condition); // for a speicifc user's cart
 $condition1 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'VAT 12.5%',
     'type' => 'tax',
-    'target' => 'subtotal',
+    'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
     'value' => '12.5%',
     'order' => 2
 ));
 $condition2 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'Express Shipping $15',
     'type' => 'shipping',
-    'target' => 'subtotal',
+    'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
     'value' => '+15',
     'order' => 1
 ));
 Cart::condition($condition1);
 Cart::condition($condition2);
 
-// The property 'Order' lets you add different conditions through for example a shopping process with multiple
+// Note that after adding conditions that are targeted to be applied on subtotal, the result on getTotal()
+// will also be affected as getTotal() depends in getSubTotal() which is the subtotal.
+
+// add condition to only apply on totals, not in subtotal
+$condition = new \Darryldecode\Cart\CartCondition(array(
+    'name' => 'Express Shipping $15',
+    'type' => 'shipping',
+    'target' => 'total', // this condition will be applied to cart's total when getTotal() is called.
+    'value' => '+15',
+    'order' => 1 // the order of calculation of cart base conditions. The bigger the later to be applied.
+));
+Cart::condition($condition);
+
+// The property 'order' lets you control the sequence of conditions when calculated. Also it lets you add different conditions through for example a shopping process with multiple
 // pages and still be able to set an order to apply the conditions. If no order is defined defaults to 0 
+
+// NOTE!! On current version, 'order' parameter is only applicable for conditions for cart bases. It does not support on per item conditions.
 
 // or add multiple conditions as array
 Cart::condition([$condition1, $condition2]);
@@ -417,11 +434,14 @@ $condition = Cart::getCondition('VAT 12.5%');
 $conditionCalculatedValue = $condition->getCalculatedValue($subTotal);
 ```
 
-NOTE: All cart based conditions should be applied before calling **Cart::getTotal()**
+> NOTE: All cart based conditions should be added to cart's conditions before calling **Cart::getTotal()**
+and if there are also conditions that are targeted to be applied to subtotal, it should be added to cart's conditions
+before calling **Cart::getSubTotal()**
 
-Then Finally you can call **Cart::getTotal()** to get the Cart Total with the applied conditions.
 ```php
-$cartTotal = Cart::getTotal(); // the total will be calculated based on the conditions you ave provided
+$cartTotal = Cart::getSubTotal(); // the subtotal with the conditions targeted to "subtotal" applied
+$cartTotal = Cart::getTotal(); // the total with the conditions targeted to "total" applied
+$cartTotal = Cart::session($userId)->getSubTotal(); // for a specific user's cart
 $cartTotal = Cart::session($userId)->getTotal(); // for a specific user's cart
 ```
 
@@ -429,7 +449,8 @@ Next is the Condition on Per-Item Bases.
 
 This is very useful if you have coupons to be applied specifically on an item and not on the whole cart value.
 
-NOTE: When adding a condition on a per-item bases, the 'target' should have value of 'item'.
+> NOTE: When adding a condition on a per-item bases, the 'target' parameter is not needed or can be omitted.
+unlike when adding conditions or per cart bases.
 
 Now let's add condition on an item.
 
@@ -439,7 +460,6 @@ Now let's add condition on an item.
 $saleCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'SALE 5%',
             'type' => 'tax',
-            'target' => 'item',
             'value' => '-5%',
         ));
 
@@ -460,19 +480,16 @@ Cart::add($product);
 $itemCondition1 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'SALE 5%',
     'type' => 'sale',
-    'target' => 'item',
     'value' => '-5%',
 ));
 $itemCondition2 = new CartCondition(array(
     'name' => 'Item Gift Pack 25.00',
     'type' => 'promo',
-    'target' => 'item',
     'value' => '-25',
 ));
 $itemCondition3 = new \Darryldecode\Cart\CartCondition(array(
     'name' => 'MISC',
     'type' => 'misc',
-    'target' => 'item',
     'value' => '+10',
 ));
 
@@ -488,14 +505,16 @@ $item = array(
 Cart::add($item);
 ```
 
-NOTE: All cart per-item conditions should be applied before calling **Cart::getSubTotal()**
+> NOTE: All cart per-item conditions should be added before calling **Cart::getSubTotal()**
 
-Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions.
+Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions on each of the items.
 ```php
-$cartSubTotal = Cart::getSubTotal(); // the subtotal will be calculated based on the conditions you have provided
+// the subtotal will be calculated based on the conditions added that has target => "subtotal"
+// and also conditions that are added on per item
+$cartSubTotal = Cart::getSubTotal();
 ```
 
-Add condition to exisiting Item on the cart: **Cart::addItemCondition($productId, $itemCondition)**
+Add condition to existing Item on the cart: **Cart::addItemCondition($productId, $itemCondition)**
 
 Adding Condition to an existing Item on the cart is simple as well.
 
@@ -507,7 +526,6 @@ $productID = 456;
 $coupon101 = new CartCondition(array(
             'name' => 'COUPON 101',
             'type' => 'coupon',
-            'target' => 'item',
             'value' => '-5%',
         ));
 

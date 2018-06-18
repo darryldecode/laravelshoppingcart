@@ -43,13 +43,14 @@ class CartCondition {
     }
 
     /**
-     * the target of where the condition is applied
+     * the target of where the condition is applied.
+     * NOTE: On conditions added to per item bases, target is not needed.
      *
      * @return mixed
      */
     public function getTarget()
     {
-        return $this->args['target'];
+        return (isset($this->args['target'])) ? $this->args['target'] : '';
     }
 
     /**
@@ -263,7 +264,6 @@ class CartCondition {
         $rules = array(
             'name' => 'required',
             'type' => 'required',
-            'target' => 'required',
             'value' => 'required',
         );
 
