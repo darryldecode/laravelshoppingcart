@@ -57,7 +57,7 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 ### IMPORTANT NOTE!
 By default, the cart has a default sessionKey that holds the cart data. This
 also serves as a cart unique identifier which you can use to bind a cart to a specific user.
-To override this default session Key, you will just simply call the ```session($sessionKey)``` method
+To override this default session Key, you will just simply call the ```\Cart::session($sessionKey)``` method
 BEFORE ANY OTHER METHODS!!.
 
 Example:
@@ -65,13 +65,20 @@ Example:
 ```php
 $userId // the current login user id
 
-\Cart::session($userId)->add();
-\Cart::session($userId)->update();
-\Cart::session($userId)->remove();
-\Cart::session($userId)->condition($condition1);
-\Cart::session($userId)->getTotal();
-\Cart::session($userId)->getSubTotal();
-Cart::session($userId)->addItemCondition($productID, $coupon101);
+// This tells the cart that we only need or manipulate
+// the cart data of a specific user. It doesn't need to be $userId,
+// you can use any unique key that represents a unique to a user or customer.
+// basically this binds the cart to a specific user.
+\Cart::session($userId);
+
+// then followed by the normal cart usage
+\Cart::add();
+\Cart::update();
+\Cart::remove();
+\Cart::condition($condition1);
+\Cart::getTotal();
+\Cart::getSubTotal();
+\Cart::addItemCondition($productID, $coupon101);
 // and so on..
 ```
 
@@ -94,6 +101,10 @@ There are several ways you can add items on your cart, see below:
  * @return $this
  * @throws InvalidItemException
  */
+ 
+ # ALWAYS REMEMBER TO BIND THE CART TO A USER BEFORE CALLING ANY CART FUNCTION
+ # SO CART WILL KNOW WHO'S CART DATA YOU WANT TO MANIPULATE. SEE IMPORTANT NOTICE ABOVE.
+ # EXAMPLE: \Cart::session($userId); then followed by cart normal usage.
 
 // Simplest form to add item on your cart
 Cart::add(455, 'Sample Item', 100.99, 2, array());
