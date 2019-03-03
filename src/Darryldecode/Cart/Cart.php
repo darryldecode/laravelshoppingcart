@@ -831,6 +831,6 @@ class Cart
      */
     protected function fireEvent($name, $value = [])
     {
-        return $this->events->fire($this->getInstanceName() . '.' . $name, array_values([$value, $this]));
+        return $this->events->dispatch($this->getInstanceName() . '.' . $name, array_values([$value, $this]));
     }
 }
