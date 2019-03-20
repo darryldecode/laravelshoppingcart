@@ -938,7 +938,16 @@ class DatabaseStorageModel extends Model
 
     public function getCartDataAttribute($value)
     {
-        return unserialize($value);
+        return unserialize(
+            $value,
+            [
+                'allowed_classes' => [
+                    CartCollection::class,
+                    ItemCollection::class,
+                    ItemAttributeCollection::class,
+                ],
+            ]
+        );
     }
 }
 ```
