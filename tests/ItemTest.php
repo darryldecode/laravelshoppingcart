@@ -9,8 +9,9 @@
 use Darryldecode\Cart\Cart;
 use Mockery as m;
 use Darryldecode\Cart\CartCondition;
+use Darryldecode\Tests\helpers\MockProduct;
 
-require_once __DIR__.'/helpers/SessionMock.php';
+require_once __DIR__ . '/helpers/SessionMock.php';
 
 class ItemTest extends PHPUnit\Framework\TestCase
 {
@@ -30,7 +31,7 @@ class ItemTest extends PHPUnit\Framework\TestCase
             $events,
             'shopping',
             'SAMPLESESSIONKEY',
-            require(__DIR__.'/helpers/configMock.php')
+            require(__DIR__ . '/helpers/configMock.php')
         );
     }
 
@@ -74,7 +75,7 @@ class ItemTest extends PHPUnit\Framework\TestCase
             'target' => 'item',
             'value' => '-5%',
         ));
-        
+
         $itemCondition2 = new CartCondition(array(
             'name' => 'Item Gift Pack 25.00',
             'type' => 'promo',
@@ -82,10 +83,47 @@ class ItemTest extends PHPUnit\Framework\TestCase
             'value' => '-25',
         ));
 
-        $this->cart->add(455, 'Sample Item', 100.99, 2, array(),[$itemCondition1,$itemCondition2]);
+        $this->cart->add(455, 'Sample Item', 100.99, 2, array(), [$itemCondition1, $itemCondition2]);
 
         $item = $this->cart->get(455);
 
-        $this->assertCount(2,$item->getConditions(), 'Item should have two conditions');
+        $this->assertCount(2, $item->getConditions(), 'Item should have two conditions');
+    }
+
+    public function test_item_associate_model()
+    {
+        $this->cart->add(455, 'Sample Item', 100.99, 2, array())->associate(MockProduct::class);
+
+        $item = $this->cart->get(455);
+
+        $this->assertEquals(MockProduct::class, $item->associatedModel, 'Item assocaited model should be ' . MockProduct::class);
+    }
+
+    public function test_it_will_throw_an_exception_when_a_non_existing_model_is_being_associated()
+    {
+        $this->expectException(\Darryldecode\Cart\Exceptions\UnknownModelException::class);
+        $this->expectExceptionMessage('The supplied model SomeModel does not exist.');
+
+        $this->cart->add(1, 'Test item', 1, 10.00)->associate('SomeModel');
+    }
+
+    public function test_item_get_model()
+    {
+        $this->cart->add(455, 'Sample Item', 100.99, 2, array())->associate(MockProduct::class);
+
+        $item = $this->cart->get(455);
+
+        $this->assertInstanceOf(MockProduct::class, $item->model);
+        $this->assertEquals('Sample Item', $item->model->name);
+        $this->assertEquals(455, $item->model->id);
+    }
+
+    public function test_item_get_model_will_return_null_if_it_has_no_model()
+    {
+        $this->cart->add(455, 'Sample Item', 100.99, 2, array());
+
+        $item = $this->cart->get(455);
+
+        $this->assertEquals(null, $item->model);
     }
 }

@@ -1,4 +1,5 @@
 # Laravel 5 Shopping Cart
+
 [![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
 [![Total Downloads](https://poser.pugx.org/darryldecode/cart/d/total.svg)](https://packagist.org/packages/darryldecode/cart)
 [![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
@@ -13,51 +14,55 @@ Git repo of the demo: https://github.com/darryldecode/laravelshoppingcart-demo
 
 ## INSTALLATION
 
-Install the package through [Composer](http://getcomposer.org/). 
+Install the package through [Composer](http://getcomposer.org/).
 
 For Laravel 5.1~:
-```composer require "darryldecode/cart:~2.0"```
-    
+`composer require "darryldecode/cart:~2.0"`
+
 For Laravel 5.5, 5.6 or 5.7~:
-```composer require "darryldecode/cart:~4.0"```
+`composer require "darryldecode/cart:~4.0"`
 
 ## CONFIGURATION
 
-1. Open config/app.php and add this line to your Service Providers Array. 
-NOTE: If you are using laravel 5.5 or above, this will be automatically added by its auto discovery.
-  ```php
-  Darryldecode\Cart\CartServiceProvider::class
-  ```
+1. Open config/app.php and add this line to your Service Providers Array.
+   NOTE: If you are using laravel 5.5 or above, this will be automatically added by its auto discovery.
+
+```php
+Darryldecode\Cart\CartServiceProvider::class
+```
 
 2. Open config/app.php and add this line to your Aliases
 
 ```php
   'Cart' => Darryldecode\Cart\Facades\CartFacade::class
-  ```
+```
 
 3. Optional configuration file (useful if you plan to have full control)
+
 ```php
 php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"
 ```
 
 ## HOW TO USE
-* [Usage](#usage)
-* [Conditions](#conditions)
-* [Items](#items)
-* [Instances](#instances)
-* [Exceptions](#exceptions)
-* [Events](#events)
-* [Format Response](#format)
-* [Examples](#examples)
-* [Using Different Storage](#storage)
-* [License](#license)
+
+-   [Usage](#usage)
+-   [Conditions](#conditions)
+-   [Items](#items)
+-   [Instances](#instances)
+-   [Exceptions](#exceptions)
+-   [Events](#events)
+-   [Format Response](#format)
+-   [Examples](#examples)
+-   [Using Different Storage](#storage)
+-   [License](#license)
 
 ## Usage
 
 ### IMPORTANT NOTE!
+
 By default, the cart has a default sessionKey that holds the cart data. This
 also serves as a cart unique identifier which you can use to bind a cart to a specific user.
-To override this default session Key, you will just simply call the ```\Cart::session($sessionKey)``` method
+To override this default session Key, you will just simply call the `\Cart::session($sessionKey)` method
 BEFORE ANY OTHER METHODS!!.
 
 Example:
@@ -101,7 +106,7 @@ There are several ways you can add items on your cart, see below:
  * @return $this
  * @throws InvalidItemException
  */
- 
+
  # ALWAYS REMEMBER TO BIND THE CART TO A USER BEFORE CALLING ANY CART FUNCTION
  # SO CART WILL KNOW WHO'S CART DATA YOU WANT TO MANIPULATE. SEE IMPORTANT NOTICE ABOVE.
  # EXAMPLE: \Cart::session($userId); then followed by cart normal usage.
@@ -412,7 +417,7 @@ $condition = new \Darryldecode\Cart\CartCondition(array(
 Cart::condition($condition);
 
 // The property 'order' lets you control the sequence of conditions when calculated. Also it lets you add different conditions through for example a shopping process with multiple
-// pages and still be able to set an order to apply the conditions. If no order is defined defaults to 0 
+// pages and still be able to set an order to apply the conditions. If no order is defined defaults to 0
 
 // NOTE!! On current version, 'order' parameter is only applicable for conditions for cart bases. It does not support on per item conditions.
 
@@ -446,8 +451,8 @@ $conditionCalculatedValue = $condition->getCalculatedValue($subTotal);
 ```
 
 > NOTE: All cart based conditions should be added to cart's conditions before calling **Cart::getTotal()**
-and if there are also conditions that are targeted to be applied to subtotal, it should be added to cart's conditions
-before calling **Cart::getSubTotal()**
+> and if there are also conditions that are targeted to be applied to subtotal, it should be added to cart's conditions
+> before calling **Cart::getSubTotal()**
 
 ```php
 $cartTotal = Cart::getSubTotal(); // the subtotal with the conditions targeted to "subtotal" applied
@@ -461,7 +466,7 @@ Next is the Condition on Per-Item Bases.
 This is very useful if you have coupons to be applied specifically on an item and not on the whole cart value.
 
 > NOTE: When adding a condition on a per-item bases, the 'target' parameter is not needed or can be omitted.
-unlike when adding conditions or per cart bases.
+> unlike when adding conditions or per cart bases.
 
 Now let's add condition on an item.
 
@@ -519,6 +524,7 @@ Cart::add($item);
 > NOTE: All cart per-item conditions should be added before calling **Cart::getSubTotal()**
 
 Then Finally you can call **Cart::getSubTotal()** to get the Cart sub total with the applied conditions on each of the items.
+
 ```php
 // the subtotal will be calculated based on the conditions added that has target => "subtotal"
 // and also conditions that are added on per item
@@ -544,6 +550,7 @@ Cart::addItemCondition($productID, $coupon101);
 ```
 
 Clearing Cart Conditions: **Cart::clearCartConditions()**
+
 ```php
 /**
 * clears all conditions on a cart,
@@ -555,7 +562,8 @@ Clearing Cart Conditions: **Cart::clearCartConditions()**
 Cart::clearCartConditions()
 ```
 
-Remove Specific Cart Condition: **Cart::removeCartCondition($conditionName)**
+Remove Specific Cart Condition: **Cart::removeCartCondition(\$conditionName)**
+
 ```php
 /**
 * removes a condition on a cart by condition name,
@@ -572,6 +580,7 @@ Cart::removeCartCondition($conditionName)
 ```
 
 Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionName)**
+
 ```php
 /**
 * remove a condition that has been applied on an item that is already on the cart
@@ -583,7 +592,8 @@ Remove Specific Item Condition: **Cart::removeItemCondition($itemId, $conditionN
 Cart::removeItemCondition($itemId, $conditionName)
 ```
 
-Clear all Item Conditions: **Cart::clearItemConditions($itemId)**
+Clear all Item Conditions: **Cart::clearItemConditions(\$itemId)**
+
 ```php
 /**
 * remove all conditions that has been applied on an item that is already on the cart
@@ -594,7 +604,8 @@ Clear all Item Conditions: **Cart::clearItemConditions($itemId)**
 Cart::clearItemConditions($itemId)
 ```
 
-Get conditions by type: **Cart::getConditionsByType($type)**
+Get conditions by type: **Cart::getConditionsByType(\$type)**
+
 ```php
 /**
 * Get all the condition filtered by Type
@@ -607,7 +618,8 @@ Get conditions by type: **Cart::getConditionsByType($type)**
 public function getConditionsByType($type)
 ```
 
-Remove conditions by type: **Cart::removeConditionsByType($type)**
+Remove conditions by type: **Cart::removeConditionsByType(\$type)**
+
 ```php
 /**
 * Remove all the condition with the $type specified
@@ -622,19 +634,20 @@ public function removeConditionsByType($type)
 
 ## Items
 
-The method **Cart::getContent()** returns a collection of items. 
+The method **Cart::getContent()** returns a collection of items.
 
-To get the id of an item, use the property **$item->id**.
+To get the id of an item, use the property **\$item->id**.
 
-To get the name of an item, use the property **$item->name**.
+To get the name of an item, use the property **\$item->name**.
 
-To get the quantity of an item, use the property **$item->quantity**.
+To get the quantity of an item, use the property **\$item->quantity**.
 
-To get the attributes of an item, use the property **$item->attributes**.
+To get the attributes of an item, use the property **\$item->attributes**.
 
-To get the price of a single item without the conditions applied, use the property **$item->price**.
+To get the price of a single item without the conditions applied, use the property **\$item->price**.
 
-To get the subtotal of an item without the conditions applied, use the method **$item->getPriceSum()**. 
+To get the subtotal of an item without the conditions applied, use the method **\$item->getPriceSum()**.
+
 ```php
 /**
 * get the sum of price
@@ -645,22 +658,24 @@ public function getPriceSum()
 
 ```
 
-To get the price of a single item without the conditions applied, use the method 
+To get the price of a single item without the conditions applied, use the method
 
-**$item->getPriceWithConditions()**.
+**\$item->getPriceWithConditions()**.
+
 ```php
 /**
 * get the single price in which conditions are already applied
 *
 * @return mixed|null
 */
-public function getPriceWithConditions() 
+public function getPriceWithConditions()
 
 ```
 
-To get the subtotal of an item with the conditions applied, use the method 
+To get the subtotal of an item with the conditions applied, use the method
 
-**$item->getPriceSumWithConditions()**
+**\$item->getPriceSumWithConditions()**
+
 ```php
 /**
 * get the sum of price in which conditions are already applied
@@ -671,8 +686,27 @@ public function getPriceSumWithConditions()
 
 ```
 
-**NOTE**: When you get price with conditions applied, only the conditions assigned to the current item will be calculated. 
+**NOTE**: When you get price with conditions applied, only the conditions assigned to the current item will be calculated.
 Cart conditions won't be applied to price.
+
+## Associating Models
+
+One can associate a cart item to a model. Let's say you have a `Product` model in your application. With the `associate()` method, you can tell the cart that an item in the cart, is associated to the `Product` model.
+
+That way you can access your model using the property **\$item->model**.
+
+Here is an example:
+
+```php
+
+// add the item to the cart.
+$cartItem = Cart::add(455, 'Sample Item', 100.99, 2, array())->associate('Product');
+
+// Now, when iterating over the content of the cart, you can access the model.
+foreach(Cart::getContent() as $row) {
+	echo 'You have ' . $row->qty . ' items of ' . $row->model->name . ' with description: "' . $row->model->description . '" in your cart.';
+}
+```
 
 ## Instances
 
@@ -680,6 +714,7 @@ You may also want multiple cart instances on the same page without conflicts.
 To do that,
 
 Create a new Service Provider and then on register() method, you can put this like so:
+
 ```php
 $this->app['wishlist'] = $this->app->share(function($app)
 		{
@@ -695,7 +730,7 @@ $this->app['wishlist'] = $this->app->share(function($app)
 				$session_key
 			);
 		});
-		
+
 // for 5.4 or newer
 use Darryldecode\Cart\Cart;
 use Illuminate\Support\ServiceProvider;
@@ -743,47 +778,47 @@ this demo repo here: [DEMO](https://github.com/darryldecode/laravelshoppingcart-
 
 There are currently only two exceptions.
 
-| Exception                             | Description                                                                           |
-| ------------------------------------- | --------------------------------------------------------------------------------- |
-| *InvalidConditionException*           | When there is an invalid field value during instantiating a new Condition         |
-| *InvalidItemException*                | When a new product has invalid field values (id,name,price,quantity)              |
-
+| Exception                   | Description                                                               |
+| --------------------------- | ------------------------------------------------------------------------- |
+| _InvalidConditionException_ | When there is an invalid field value during instantiating a new Condition |
+| _InvalidItemException_      | When a new product has invalid field values (id,name,price,quantity)      |
+| _UnknownModelException_     | When you try to associate a none existing model to a cart item.           |
 
 ## Events
 
 The cart has currently 9 events you can listen and hook some actons.
 
-| Event                            | Fired                                   |
-| -------------------------------- | --------------------------------------- |
-| cart.created($cart)              | When a cart is instantiated             |
-| cart.adding($items, $cart)       | When an item is attempted to be added   |
-| cart.added($items, $cart)        | When an item is added on cart           |
-| cart.updating($items, $cart)     | When an item is being updated           |
-| cart.updated($items, $cart)      | When an item is updated                 |
-| cart.removing($id, $cart)        | When an item is being remove            |
-| cart.removed($id, $cart)         | When an item is removed                 |
-| cart.clearing($cart)             | When a cart is attempted to be cleared  |
-| cart.cleared($cart)              | When a cart is cleared                  |
+| Event                        | Fired                                  |
+| ---------------------------- | -------------------------------------- |
+| cart.created(\$cart)         | When a cart is instantiated            |
+| cart.adding($items, $cart)   | When an item is attempted to be added  |
+| cart.added($items, $cart)    | When an item is added on cart          |
+| cart.updating($items, $cart) | When an item is being updated          |
+| cart.updated($items, $cart)  | When an item is updated                |
+| cart.removing($id, $cart)    | When an item is being remove           |
+| cart.removed($id, $cart)     | When an item is removed                |
+| cart.clearing(\$cart)        | When a cart is attempted to be cleared |
+| cart.cleared(\$cart)         | When a cart is cleared                 |
 
 **NOTE**: For different cart instance, dealing events is simple. For example you have created another cart instance which
 you have given an instance name of "wishlist". The Events will be something like: {$instanceName}.created($cart)
 
 So for you wishlist cart instance, events will look like this:
 
-* wishlist.created($cart)
-* wishlist.adding($items, $cart)
-* wishlist.added($items, $cart) and so on..
+-   wishlist.created(\$cart)
+-   wishlist.adding($items, $cart)
+-   wishlist.added($items, $cart) and so on..
 
 ## Format Response
 
 Now you can format all the responses. You can publish the config file from the package or use env vars to set the configuration.
 The options you have are:
 
-* format_numbers or env('SHOPPING_FORMAT_VALUES', false) => Activate or deactivate this feature. Default to false,
-* decimals or env('SHOPPING_DECIMALS', 0) => Number of decimals you want to show. Defaults to 0.
-* dec_point or env('SHOPPING_DEC_POINT', '.') => Decimal point type. Defaults to a '.'.
-* thousands_sep or env('SHOPPING_THOUSANDS_SEP', ',') => Thousands separator for value. Defaults to ','.
- 
+-   format_numbers or env('SHOPPING_FORMAT_VALUES', false) => Activate or deactivate this feature. Default to false,
+-   decimals or env('SHOPPING_DECIMALS', 0) => Number of decimals you want to show. Defaults to 0.
+-   dec_point or env('SHOPPING_DEC_POINT', '.') => Decimal point type. Defaults to a '.'.
+-   thousands_sep or env('SHOPPING_THOUSANDS_SEP', ',') => Thousands separator for value. Defaults to ','.
+
 ## Examples
 
 ```php
@@ -862,14 +897,14 @@ $items->each(function($item)
 
 ## Storage
 
-Using different storage for the carts items is pretty straight forward. The storage 
+Using different storage for the carts items is pretty straight forward. The storage
 class that is injected to the Cart's instance will only need methods.
 
 Example we will need a wishlist, and we want to store its key value pair in database instead
 of the default session.
 
 To do this, we will need first a database table that will hold our cart data.
-Let's create it by issuing ```php artisan make:migration create_cart_storage_table```
+Let's create it by issuing `php artisan make:migration create_cart_storage_table`
 
 Example Code:
 
@@ -912,6 +947,7 @@ Next, lets create an eloquent Model on this table so we can easily deal with the
 to store this model. For this example, lets just assume to store it in our App namespace.
 
 Code:
+
 ```php
 namespace App;
 
@@ -946,6 +982,7 @@ class DatabaseStorageModel extends Model
 Next, Create a new class for your storage to be injected to our cart instance:
 
 Eg.
+
 ```
 class DBStorage {
 
@@ -953,7 +990,7 @@ class DBStorage {
     {
         return DatabaseStorageModel::find($key);
     }
-    
+
     public function get($key)
     {
         if($this->has($key))
@@ -965,7 +1002,7 @@ class DBStorage {
             return [];
         }
     }
-    
+
     public function put($key, $value)
     {
         if($row = DatabaseStorageModel::find($key))
@@ -987,13 +1024,13 @@ class DBStorage {
 
 To make this the cart's default storage, let's update the cart's configuration file.
 First, let us publish first the cart config file for us to enable to override it.
-```php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"```
+`php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"`
 
-after running that command, there should be a new file on your config folder name ```shopping_cart.php```
+after running that command, there should be a new file on your config folder name `shopping_cart.php`
 
-Open this file and let's update the storage use. Find the key which says ```'storage' => null,```
+Open this file and let's update the storage use. Find the key which says `'storage' => null,`
 And update it to your newly created DBStorage Class, which on our example,
-```'storage' => \App\DBStorage::class,```
+`'storage' => \App\DBStorage::class,`
 
 OR If you have multiple cart instance (example WishList), you can inject the custom database storage
 to your cart instance by injecting it to the service provider of your wishlist cart, you replace the storage
@@ -1048,7 +1085,6 @@ as a guide & reference. See links below:
 OR
 
 [See Demo App Repo Here](https://github.com/darryldecode/laravelshoppingcart-demo)
-
 
 ## License
 
