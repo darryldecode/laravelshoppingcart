@@ -708,6 +708,8 @@ foreach(Cart::getContent() as $row) {
 }
 ```
 
+**NOTE**: This only works when adding an item to cart.
+
 ## Instances
 
 You may also want multiple cart instances on the same page without conflicts.
