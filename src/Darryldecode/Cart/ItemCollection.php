@@ -45,7 +45,7 @@ class ItemCollection extends Collection
     public function __get($name)
     {
         if ($this->has($name) || $name == 'model') {
-            return $this->get($name) ?? $this->getAssociatedModel();
+            return !is_null($this->get($name)) ? $this->get($name) : $this->getAssociatedModel();
         }
         return null;
     }
