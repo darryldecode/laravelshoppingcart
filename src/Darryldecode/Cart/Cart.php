@@ -863,7 +863,9 @@ class Cart
 
         $item['associatedModel'] = $model;
 
-        $cart->put($this->currentItemId, $item);
+        $cart->put($this->currentItemId, new ItemCollection($item, $this->config));
+
+        $this->save($cart);
 
         return $this;
     }
