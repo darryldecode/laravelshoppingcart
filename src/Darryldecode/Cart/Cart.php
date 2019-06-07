@@ -181,23 +181,28 @@ class Cart
                     $id['quantity'],
                     Helpers::issetAndHasValueOrAssignDefault($id['attributes'], array()),
                     Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array()),
-                    Helpers::issetAndHasValueOrAssignDefault($item['associatedModel'], null)
+                    Helpers::issetAndHasValueOrAssignDefault($id['associatedModel'], null)
                 );
             }
 
             return $this;
         }
 
-        // validate data
-        $item = $this->validate(array(
+        $data = array(
             'id' => $id,
             'name' => $name,
             'price' => Helpers::normalizePrice($price),
             'quantity' => $quantity,
             'attributes' => new ItemAttributeCollection($attributes),
-            'conditions' => $conditions,
-            'associatedModel' => $associatedModel,
-        ));
+            'conditions' => $conditions
+        );
+
+        if (isset($associatedModel) && $associatedModel != '') {
+            $data['associatedModel'] = $associatedModel;
+        }
+
+        // validate data
+        $item = $this->validate($data);
 
         // get the cart
         $cart = $this->getContent();

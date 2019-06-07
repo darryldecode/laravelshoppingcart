@@ -8,10 +8,12 @@
 
 use Darryldecode\Cart\Cart;
 use Mockery as m;
+use Darryldecode\Tests\helpers\MockProduct;
 
-require_once __DIR__.'/helpers/SessionMock.php';
+require_once __DIR__ . '/helpers/SessionMock.php';
 
-class CartTest extends PHPUnit\Framework\TestCase  {
+class CartTest extends PHPUnit\Framework\TestCase
+{
 
     /**
      * @var Darryldecode\Cart\Cart
@@ -28,8 +30,8 @@ class CartTest extends PHPUnit\Framework\TestCase  {
             $events,
             'shopping',
             'SAMPLESESSIONKEY',
-            require(__DIR__.'/helpers/configMock.php')
-    );
+            require(__DIR__ . '/helpers/configMock.php')
+        );
     }
 
     public function tearDown()
@@ -42,7 +44,7 @@ class CartTest extends PHPUnit\Framework\TestCase  {
         $this->cart->add(455, 'Sample Item', 100.99, 2, array());
 
         $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
-        $this->assertEquals(1, $this->cart->getContent()->count(),'Cart content should be 1');
+        $this->assertEquals(1, $this->cart->getContent()->count(), 'Cart content should be 1');
         $this->assertEquals(455, $this->cart->getContent()->first()['id'], 'Item added has ID of 455 so first content ID should be 455');
         $this->assertEquals(100.99, $this->cart->getContent()->first()['price'], 'Item added has price of 100.99 so first content price should be 100.99');
     }
@@ -139,7 +141,7 @@ class CartTest extends PHPUnit\Framework\TestCase  {
                 'color' => 'red'
             )
         );
-        $this->cart->update(456,$updatedItem);
+        $this->cart->update(456, $updatedItem);
 
         $this->assertInstanceOf('Darryldecode\Cart\ItemAttributeCollection', $item->attributes);
     }
@@ -231,7 +233,7 @@ class CartTest extends PHPUnit\Framework\TestCase  {
         // should be incremented or decremented, we should also allow the quantity
         // value to be in array format and provide a field if the quantity should not be
         // treated as relative to Item quantity current value
-        $this->cart->update($itemIdToEvaluate,array('quantity' => array('relative' => false, 'value' => 5)));
+        $this->cart->update($itemIdToEvaluate, array('quantity' => array('relative' => false, 'value' => 5)));
 
         $item = $this->cart->get($itemIdToEvaluate);
         $this->assertEquals(5, $item['quantity'], 'Item quantity should be 5');
@@ -242,7 +244,7 @@ class CartTest extends PHPUnit\Framework\TestCase  {
         // add a price in a string format should be converted to float
         $this->cart->add(455, 'Sample Item', '100.99', 2, array());
 
-        $this->assertInternalType('float',$this->cart->getContent()->first()['price'], 'Cart price should be a float');
+        $this->assertInternalType('float', $this->cart->getContent()->first()['price'], 'Cart price should be a float');
     }
 
     public function test_it_removes_an_item_on_cart_by_item_id()
@@ -458,12 +460,12 @@ class CartTest extends PHPUnit\Framework\TestCase  {
 
         $this->cart->add($items);
 
-        $this->assertFalse($this->cart->isEmpty(),'prove first cart is not empty');
+        $this->assertFalse($this->cart->isEmpty(), 'prove first cart is not empty');
 
         // now let's clear cart
         $this->cart->clear();
 
-        $this->assertTrue($this->cart->isEmpty(),'cart should now be empty');
+        $this->assertTrue($this->cart->isEmpty(), 'cart should now be empty');
     }
 
     public function test_cart_get_total_quantity()
@@ -487,10 +489,72 @@ class CartTest extends PHPUnit\Framework\TestCase  {
 
         $this->cart->add($items);
 
-        $this->assertFalse($this->cart->isEmpty(),'prove first cart is not empty');
+        $this->assertFalse($this->cart->isEmpty(), 'prove first cart is not empty');
 
         // now let's count the cart's quantity
         $this->assertInternalType("int", $this->cart->getTotalQuantity(), 'Return type should be INT');
-        $this->assertEquals(4, $this->cart->getTotalQuantity(),'Cart\'s quantity should be 4.');
+        $this->assertEquals(4, $this->cart->getTotalQuantity(), 'Cart\'s quantity should be 4.');
+    }
+
+    public function test_cart_can_add_items_as_array_with_associated_model()
+    {
+        $item = array(
+            'id' => 456,
+            'name' => 'Sample Item',
+            'price' => 67.99,
+            'quantity' => 4,
+            'attributes' => array(),
+            'associatedModel' => MockProduct::class
+        );
+
+        $this->cart->add($item);
+
+        $addedItem = $this->cart->get($item['id']);
+
+        $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
+        $this->assertEquals(1, $this->cart->getContent()->count(), 'Cart should have 1 item on it');
+        $this->assertEquals(456, $this->cart->getContent()->first()['id'], 'The first content must have ID of 456');
+        $this->assertEquals('Sample Item', $this->cart->getContent()->first()['name'], 'The first content must have name of "Sample Item"');
+        $this->assertInstanceOf('Darryldecode\Tests\helpers\MockProduct', $addedItem->model);
+    }
+
+    public function test_cart_can_add_items_with_multidimensional_array_with_associated_model()
+    {
+        $items = array(
+            array(
+                'id' => 456,
+                'name' => 'Sample Item 1',
+                'price' => 67.99,
+                'quantity' => 4,
+                'attributes' => array(),
+                'associatedModel' => MockProduct::class
+            ),
+            array(
+                'id' => 568,
+                'name' => 'Sample Item 2',
+                'price' => 69.25,
+                'quantity' => 4,
+                'attributes' => array(),
+                'associatedModel' => MockProduct::class
+            ),
+            array(
+                'id' => 856,
+                'name' => 'Sample Item 3',
+                'price' => 50.25,
+                'quantity' => 4,
+                'attributes' => array(),
+                'associatedModel' => MockProduct::class
+            ),
+        );
+
+        $this->cart->add($items);
+
+        $content = $this->cart->getContent();
+        foreach ($content as $item) {
+            $this->assertInstanceOf('Darryldecode\Tests\helpers\MockProduct', $item->model);
+        }
+
+        $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
+        $this->assertCount(3, $this->cart->getContent()->toArray(), 'Cart should have 3 items');
     }
 }
