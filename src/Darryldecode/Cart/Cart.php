@@ -150,10 +150,11 @@ class Cart
      * @param int $quantity
      * @param array $attributes
      * @param CartCondition|array $conditions
+     * @param string $associatedModel
      * @return $this
      * @throws InvalidItemException
      */
-    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array())
+    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array(), $associatedModel = null)
     {
         // if the first argument is an array,
         // we will need to call add again
@@ -168,7 +169,8 @@ class Cart
                         $item['price'],
                         $item['quantity'],
                         Helpers::issetAndHasValueOrAssignDefault($item['attributes'], array()),
-                        Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array())
+                        Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array()),
+                        Helpers::issetAndHasValueOrAssignDefault($item['associatedModel'], null)
                     );
                 }
             } else {
@@ -178,7 +180,8 @@ class Cart
                     $id['price'],
                     $id['quantity'],
                     Helpers::issetAndHasValueOrAssignDefault($id['attributes'], array()),
-                    Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array())
+                    Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array()),
+                    Helpers::issetAndHasValueOrAssignDefault($item['associatedModel'], null)
                 );
             }
 
@@ -193,6 +196,7 @@ class Cart
             'quantity' => $quantity,
             'attributes' => new ItemAttributeCollection($attributes),
             'conditions' => $conditions,
+            'associatedModel' => $associatedModel,
         ));
 
         // get the cart

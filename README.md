@@ -702,6 +702,39 @@ Here is an example:
 // add the item to the cart.
 $cartItem = Cart::add(455, 'Sample Item', 100.99, 2, array())->associate('Product');
 
+// array format
+Cart::add(array(
+    'id' => 456,
+    'name' => 'Sample Item',
+    'price' => 67.99,
+    'quantity' => 4,
+    'attributes' => array(),
+    'associatedModel' => 'Product'
+));
+
+// add multiple items at one time
+Cart::add(array(
+  array(
+      'id' => 456,
+      'name' => 'Sample Item 1',
+      'price' => 67.99,
+      'quantity' => 4,
+      'attributes' => array(),
+      'associatedModel' => 'Product'
+  ),
+  array(
+      'id' => 568,
+      'name' => 'Sample Item 2',
+      'price' => 69.25,
+      'quantity' => 4,
+      'attributes' => array(
+        'size' => 'L',
+        'color' => 'blue'
+      ),
+      'associatedModel' => 'Product'
+  ),
+));
+
 // Now, when iterating over the content of the cart, you can access the model.
 foreach(Cart::getContent() as $row) {
 	echo 'You have ' . $row->qty . ' items of ' . $row->model->name . ' with description: "' . $row->model->description . '" in your cart.';
