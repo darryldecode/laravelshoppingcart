@@ -544,7 +544,7 @@ class Cart
         $cart = $this->getContent();
 
         $sum = $cart->sum(function ($item) {
-            return $item->getPriceSum();
+            return $item->getPriceSum(false);
         });
 
         return Helpers::formatValue(floatval($sum), $formatted, $this->config);

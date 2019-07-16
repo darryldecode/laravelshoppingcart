@@ -36,9 +36,9 @@ class ItemCollection extends Collection {
      *
      * @return mixed|null
      */
-    public function getPriceSum()
+    public function getPriceSum($formatted = true)
     {
-        return Helpers::formatValue($this->price * $this->quantity, $this->config['format_numbers'], $this->config);
+        return Helpers::formatValue($this->price * $this->quantity, $formatted, $this->config);
 
     }
 
@@ -117,5 +117,36 @@ class ItemCollection extends Collection {
     public function getPriceSumWithConditions($formatted = true)
     {
         return Helpers::formatValue($this->getPriceWithConditions(false) * $this->quantity, $formatted, $this->config);
+    }
+
+    /**
+     * get the sum of condition type
+     * @param string $type
+     * @param bool $multiple
+     * @param bool $formatted
+     * @return mixed|null
+     */
+    public function getPriceOfCondition($type, $multiple = true, $formatted = true)
+    {
+        $originalPrice = $this->price;
+        $newPrice = 0.00;
+        $processed = 0;
+        $quantity = ($multiple == true) ? $this->quantity : 1;
+
+        if ($this->hasConditions()) {
+            if (is_array($this->conditions)) {
+                foreach ($this->conditions as $condition) {
+                    if ($condition->getType() == $type) {
+                        $conditionValue = $condition->getValue() * $quantity;
+                    }
+                }
+            } else {
+                $conditionValue = $this['conditions']->getValue() * $quantity;
+            }
+
+            return Helpers::formatValue($conditionValue, $formatted, $this->config);
+        }
+
+        return Helpers::formatValue($originalPrice, $formatted, $this->config);
     }
 }
