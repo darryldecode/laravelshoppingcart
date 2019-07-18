@@ -648,6 +648,18 @@ class Cart
     }
 
     /**
+     * get total quantity of items individual in the cart
+     *
+     * @return int
+     */
+    public function getTotalQuantityIndividual()
+    {
+        $items = $this->getContent();
+
+        return $items->count();
+    }
+
+    /**
      * get the cart
      *
      * @return CartCollection
