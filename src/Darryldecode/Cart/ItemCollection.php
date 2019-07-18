@@ -128,9 +128,7 @@ class ItemCollection extends Collection {
      */
     public function getPriceOfCondition($type, $multiple = true, $formatted = true)
     {
-        $originalPrice = $this->price;
-        $newPrice = 0.00;
-        $processed = 0;
+        $zero = 0.00;
         $quantity = ($multiple == true) ? $this->quantity : 1;
 
         if ($this->hasConditions()) {
@@ -147,6 +145,6 @@ class ItemCollection extends Collection {
             return Helpers::formatValue($conditionValue, $formatted, $this->config);
         }
 
-        return Helpers::formatValue($originalPrice, $formatted, $this->config);
+        return Helpers::formatValue($zero, $formatted, $this->config);
     }
 }
