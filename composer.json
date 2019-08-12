@@ -1,5 +1,5 @@
 {
-    "name": "darryldecode/cart",
+    "name": "jrmessias/cart",
     "description": "Laravel 5 Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
@@ -7,6 +7,10 @@
         {
             "name": "Darryl Fernandez",
             "email": "engrdarrylfernandez@gmail.com"
+        },
+        {
+            "name": "Junior Messias",
+            "email": "jrmessias@gmail.com"
         }
     ],
     "require": {
