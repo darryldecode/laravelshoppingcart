@@ -19,7 +19,8 @@ For Laravel 5.1~:
 ```composer require "darryldecode/cart:~2.0"```
     
 For Laravel 5.5, 5.6 or 5.7~:
-```composer require "darryldecode/cart:~4.0"```
+```composer require "darryldecode/cart:~4.0"``` or 
+```composer require "darryldecode/cart"```
 
 ## CONFIGURATION
 
