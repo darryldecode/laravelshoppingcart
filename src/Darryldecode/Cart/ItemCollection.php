@@ -24,7 +24,7 @@ class ItemCollection extends Collection {
      * @param array|mixed $items
      * @param $config
      */
-    public function __construct($items, $config)
+    public function __construct($items, $config = [])
     {
         parent::__construct($items);
 
