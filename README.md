@@ -986,6 +986,46 @@ class DBStorage {
 }
 ```
 
+For example you can also leverage Laravel's Caching (redis, memcached, file, dynamo, etc) using the below example,
+
+```
+use Illuminate\Support\Facades\Cache;
+
+class CacheStorage {
+
+public function has($key)
+{
+    return Cache::get($key);
+}
+
+public function get($key)
+{
+    if($this->has($key))
+    {
+        return new CartCollection(Cache::get($key));
+    }
+    else
+    {
+        return [];
+    }
+}
+
+public function put($key, $value)
+  {
+    if($row = Cache::get($key))
+    {
+        // update
+        $row->cart_data = $value;
+        Cache::put($key, $value, now()->addMinutes(3600));
+    }
+    else
+    {
+        Cache::put($key, $value, now()->addMinutes(3600));
+    }
+  }
+}
+```
+
 To make this the cart's default storage, let's update the cart's configuration file.
 First, let us publish first the cart config file for us to enable to override it.
 ```php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"```
