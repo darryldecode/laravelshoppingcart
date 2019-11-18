@@ -986,43 +986,53 @@ class DBStorage {
 }
 ```
 
-For example you can also leverage Laravel's Caching (redis, memcached, file, dynamo, etc) using the below example,
+For example you can also leverage Laravel's Caching (redis, memcached, file, dynamo, etc) using the example below. Exmaple also includes cookie persistance, so that cart would be still available for 30 days. Sessions by default persists only 20 minutes. 
 
 ```
-use Illuminate\Support\Facades\Cache;
+<?php
 
-class CacheStorage {
+namespace App\Cart;
 
-public function has($key)
+use Carbon\Carbon;
+use Cookie;
+use Darryldecode\Cart\CartCollection;
+
+class CacheStorage
 {
-    return Cache::get($key);
-}
+    private $data = [];
+    private $cart_id;
 
-public function get($key)
-{
-    if($this->has($key))
+    public function __construct()
     {
-        return new CartCollection(Cache::get($key));
+        $this->cart_id = \Cookie::get('cart');
+        if ($this->cart_id) {
+            $this->data = \Cache::get('cart_' . $this->cart_id, []);
+        } else {
+            $this->cart_id = uniqid();
+        }
     }
-    else
-    {
-        return [];
-    }
-}
 
-public function put($key, $value)
-  {
-    if($row = Cache::get($key))
+    public function has($key)
     {
-        // update
-        $row->cart_data = $value;
-        Cache::put($key, $value, now()->addMinutes(3600));
+        return isset($this->data[$key]);
     }
-    else
+
+    public function get($key)
     {
-        Cache::put($key, $value, now()->addMinutes(3600));
+        return new CartCollection($this->data[$key] ?? []);
     }
-  }
+
+    public function put($key, $value)
+    {
+        $this->data[$key] = $value;
+        \Cache::put('cart_' . $this->cart_id, $this->data, Carbon::now()->addDays(30));
+
+        if (!Cookie::hasQueued('cart')) {
+            Cookie::queue(
+                Cookie::make('cart', $this->cart_id, 60 * 24 * 30)
+            );
+        }
+    }
 }
 ```
 
