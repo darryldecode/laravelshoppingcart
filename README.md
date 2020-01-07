@@ -1,5 +1,4 @@
-# Laravel 5 Shopping Cart
-
+# Laravel 5 & 6 Shopping Cart
 [![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
 [![Total Downloads](https://poser.pugx.org/darryldecode/cart/d/total.svg)](https://packagist.org/packages/darryldecode/cart)
 [![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
@@ -20,7 +19,9 @@ For Laravel 5.1~:
 `composer require "darryldecode/cart:~2.0"`
 
 For Laravel 5.5, 5.6 or 5.7~:
-`composer require "darryldecode/cart:~4.0"`
+
+```composer require "darryldecode/cart:~4.0"``` or 
+```composer require "darryldecode/cart"```
 
 ## CONFIGURATION
 
@@ -1052,6 +1053,56 @@ class DBStorage {
                 'id' => $key,
                 'cart_data' => $value
             ]);
+        }
+    }
+}
+```
+
+For example you can also leverage Laravel's Caching (redis, memcached, file, dynamo, etc) using the example below. Exmaple also includes cookie persistance, so that cart would be still available for 30 days. Sessions by default persists only 20 minutes. 
+
+```
+<?php
+
+namespace App\Cart;
+
+use Carbon\Carbon;
+use Cookie;
+use Darryldecode\Cart\CartCollection;
+
+class CacheStorage
+{
+    private $data = [];
+    private $cart_id;
+
+    public function __construct()
+    {
+        $this->cart_id = \Cookie::get('cart');
+        if ($this->cart_id) {
+            $this->data = \Cache::get('cart_' . $this->cart_id, []);
+        } else {
+            $this->cart_id = uniqid();
+        }
+    }
+
+    public function has($key)
+    {
+        return isset($this->data[$key]);
+    }
+
+    public function get($key)
+    {
+        return new CartCollection($this->data[$key] ?? []);
+    }
+
+    public function put($key, $value)
+    {
+        $this->data[$key] = $value;
+        \Cache::put('cart_' . $this->cart_id, $this->data, Carbon::now()->addDays(30));
+
+        if (!Cookie::hasQueued('cart')) {
+            Cookie::queue(
+                Cookie::make('cart', $this->cart_id, 60 * 24 * 30)
+            );
         }
     }
 }

@@ -15,11 +15,11 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
 
     const CART_INSTANCE_NAME = 'shopping';
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }

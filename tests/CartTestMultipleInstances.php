@@ -23,7 +23,7 @@ class CartTestMultipleInstances extends PHPUnit\Framework\TestCase {
      */
     protected $cart2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
         $events->shouldReceive('dispatch');
@@ -45,7 +45,7 @@ class CartTestMultipleInstances extends PHPUnit\Framework\TestCase {
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }

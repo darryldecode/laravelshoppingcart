@@ -19,7 +19,7 @@ class CartConditionTest extends PHPUnit\Framework\TestCase  {
      */
     protected $cart;
 
-    public function setUp()
+    public function setUp(): void
     {
         $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
         $events->shouldReceive('dispatch');
@@ -33,7 +33,7 @@ class CartConditionTest extends PHPUnit\Framework\TestCase  {
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
@@ -770,7 +770,7 @@ class CartConditionTest extends PHPUnit\Framework\TestCase  {
         // when get attribute is called and there is no attributes added,
         // it should return an empty array
         $conditionAttribute = $contition->getAttributes();
-        $this->assertInternalType('array', $conditionAttribute);
+        $this->assertIsArray($conditionAttribute);
     }
 
     public function test_add_cart_condition_with_condition_attributes()
@@ -806,7 +806,7 @@ class CartConditionTest extends PHPUnit\Framework\TestCase  {
         // when get attribute is called and there is no attributes added,
         // it should return an empty array
         $conditionAttributes = $contition->getAttributes();
-        $this->assertInternalType('array', $conditionAttributes);
+        $this->assertIsArray($conditionAttributes);
         $this->assertArrayHasKey('description',$conditionAttributes);
         $this->assertArrayHasKey('sale_start_date',$conditionAttributes);
         $this->assertArrayHasKey('sale_end_date',$conditionAttributes);

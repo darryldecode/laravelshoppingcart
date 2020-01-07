@@ -20,7 +20,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     protected $cart;
 
-    public function setUp()
+    public function setUp(): void
     {
         $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
         $events->shouldReceive('dispatch');
@@ -34,7 +34,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
@@ -244,7 +244,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         // add a price in a string format should be converted to float
         $this->cart->add(455, 'Sample Item', '100.99', 2, array());
 
-        $this->assertInternalType('float', $this->cart->getContent()->first()['price'], 'Cart price should be a float');
+        $this->assertIsFloat($this->cart->getContent()->first()['price'], 'Cart price should be a float');
     }
 
     public function test_it_removes_an_item_on_cart_by_item_id()
@@ -415,27 +415,21 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(3, $item['quantity'], 'Item quantity of with item ID of 456 should now be reduced to 2');
     }
 
-    /**
-     * @expectedException Darryldecode\Cart\Exceptions\InvalidItemException
-     */
     public function test_should_throw_exception_when_provided_invalid_values_scenario_one()
     {
+        $this->expectException('Darryldecode\Cart\Exceptions\InvalidItemException');
         $this->cart->add(455, 'Sample Item', 100.99, 0, array());
     }
 
-    /**
-     * @expectedException Darryldecode\Cart\Exceptions\InvalidItemException
-     */
     public function test_should_throw_exception_when_provided_invalid_values_scenario_two()
     {
+        $this->expectException('Darryldecode\Cart\Exceptions\InvalidItemException');
         $this->cart->add('', 'Sample Item', 100.99, 2, array());
     }
 
-    /**
-     * @expectedException Darryldecode\Cart\Exceptions\InvalidItemException
-     */
     public function test_should_throw_exception_when_provided_invalid_values_scenario_three()
     {
+        $this->expectException('Darryldecode\Cart\Exceptions\InvalidItemException');
         $this->cart->add(523, '', 100.99, 2, array());
     }
 
@@ -556,5 +550,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
         $this->assertCount(3, $this->cart->getContent()->toArray(), 'Cart should have 3 items');
+        $this->assertIsInt($this->cart->getTotalQuantity(), 'Return type should be INT');
+        $this->assertEquals(4, $this->cart->getTotalQuantity(),'Cart\'s quantity should be 4.');
     }
 }
