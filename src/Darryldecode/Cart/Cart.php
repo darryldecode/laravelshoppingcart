@@ -544,7 +544,7 @@ class Cart
         $cart = $this->getContent();
 
         $sum = $cart->sum(function ($item) {
-            return $item->getPriceSum();
+            return $item->getPriceSum(false);
         });
 
         return Helpers::formatValue(floatval($sum), $formatted, $this->config);
@@ -645,6 +645,18 @@ class Cart
         });
 
         return $count;
+    }
+
+    /**
+     * get total quantity of items individual in the cart
+     *
+     * @return int
+     */
+    public function getTotalQuantityIndividual()
+    {
+        $items = $this->getContent();
+
+        return $items->count();
     }
 
     /**
