@@ -49,6 +49,7 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 -   [Usage](#usage)
 -   [Conditions](#conditions)
 -   [Items](#items)
+-   [Associating Models](#associating-models)
 -   [Instances](#instances)
 -   [Exceptions](#exceptions)
 -   [Events](#events)
