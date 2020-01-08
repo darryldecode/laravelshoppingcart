@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: darryl
@@ -486,7 +487,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->cart->isEmpty(), 'prove first cart is not empty');
 
         // now let's count the cart's quantity
-        $this->assertInternalType("int", $this->cart->getTotalQuantity(), 'Return type should be INT');
+        $this->assertIsInt($this->cart->getTotalQuantity(), 'Return type should be INT');
         $this->assertEquals(4, $this->cart->getTotalQuantity(), 'Cart\'s quantity should be 4.');
     }
 
@@ -551,6 +552,6 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->cart->isEmpty(), 'Cart should not be empty');
         $this->assertCount(3, $this->cart->getContent()->toArray(), 'Cart should have 3 items');
         $this->assertIsInt($this->cart->getTotalQuantity(), 'Return type should be INT');
-        $this->assertEquals(4, $this->cart->getTotalQuantity(),'Cart\'s quantity should be 4.');
+        $this->assertEquals(12, $this->cart->getTotalQuantity(),  'Cart\'s quantity should be 4.');
     }
 }
