@@ -10,7 +10,8 @@
 use Darryldecode\Cart\Helpers\Helpers;
 use Illuminate\Support\Collection;
 
-class ItemCollection extends Collection {
+class ItemCollection extends Collection
+{
 
     /**
      * Sets the config parameters.
@@ -39,13 +40,30 @@ class ItemCollection extends Collection {
     public function getPriceSum()
     {
         return Helpers::formatValue($this->price * $this->quantity, $this->config['format_numbers'], $this->config);
-
     }
 
     public function __get($name)
     {
-        if( $this->has($name) ) return $this->get($name);
+        if ($this->has($name) || $name == 'model') {
+            return !is_null($this->get($name)) ? $this->get($name) : $this->getAssociatedModel();
+        }
         return null;
+    }
+
+    /**
+     * return the associated model of an item
+     *
+     * @return bool
+     */
+    protected function getAssociatedModel()
+    {
+        if (!$this->has('associatedModel')) {
+            return null;
+        }
+
+        $associatedModel = $this->get('associatedModel');
+
+        return with(new $associatedModel())->find($this->get('id'));
     }
 
     /**
@@ -55,13 +73,12 @@ class ItemCollection extends Collection {
      */
     public function hasConditions()
     {
-        if( ! isset($this['conditions']) ) return false;
-        if( is_array($this['conditions']) )
-        {
+        if (!isset($this['conditions'])) return false;
+        if (is_array($this['conditions'])) {
             return count($this['conditions']) > 0;
         }
         $conditionInstance = "Darryldecode\\Cart\\CartCondition";
-        if( $this['conditions'] instanceof $conditionInstance ) return true;
+        if ($this['conditions'] instanceof $conditionInstance) return true;
 
         return false;
     }
@@ -73,7 +90,7 @@ class ItemCollection extends Collection {
      */
     public function getConditions()
     {
-        if(! $this->hasConditions() ) return [];
+        if (!$this->hasConditions()) return [];
         return $this['conditions'];
     }
 
@@ -88,19 +105,14 @@ class ItemCollection extends Collection {
         $newPrice = 0.00;
         $processed = 0;
 
-        if( $this->hasConditions() )
-        {
-            if( is_array($this->conditions) )
-            {
-                foreach($this->conditions as $condition)
-                {
-                    ( $processed > 0 ) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
+        if ($this->hasConditions()) {
+            if (is_array($this->conditions)) {
+                foreach ($this->conditions as $condition) {
+                    ($processed > 0) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
                     $newPrice = $condition->applyCondition($toBeCalculated);
                     $processed++;
                 }
-            }
-            else
-            {
+            } else {
                 $newPrice = $this['conditions']->applyCondition($originalPrice);
             }
 

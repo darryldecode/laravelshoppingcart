@@ -4,6 +4,7 @@ use Darryldecode\Cart\Exceptions\InvalidConditionException;
 use Darryldecode\Cart\Exceptions\InvalidItemException;
 use Darryldecode\Cart\Helpers\Helpers;
 use Darryldecode\Cart\Validators\CartItemValidator;
+use Darryldecode\Cart\Exceptions\UnknownModelException;
 
 /**
  * Class Cart
@@ -62,6 +63,13 @@ class Cart
     protected $config;
 
     /**
+     * This holds the currently added item id in cart for association
+     * 
+     * @var
+     */
+    protected $currentItemId;
+
+    /**
      * our object constructor
      *
      * @param $session
@@ -79,6 +87,7 @@ class Cart
         $this->sessionKeyCartItems = $this->sessionKey . '_cart_items';
         $this->sessionKeyCartConditions = $this->sessionKey . '_cart_conditions';
         $this->config = $config;
+        $this->currentItem = null;
         $this->fireEvent('created');
     }
 
@@ -91,7 +100,7 @@ class Cart
      */
     public function session($sessionKey)
     {
-        if(!$sessionKey) throw new \Exception("Session key is required.");
+        if (!$sessionKey) throw new \Exception("Session key is required.");
 
         $this->sessionKey = $sessionKey;
         $this->sessionKeyCartItems = $this->sessionKey . '_cart_items';
@@ -141,10 +150,11 @@ class Cart
      * @param int $quantity
      * @param array $attributes
      * @param CartCondition|array $conditions
+     * @param string $associatedModel
      * @return $this
      * @throws InvalidItemException
      */
-    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array())
+    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array(), $associatedModel = null)
     {
         // if the first argument is an array,
         // we will need to call add again
@@ -159,7 +169,8 @@ class Cart
                         $item['price'],
                         $item['quantity'],
                         Helpers::issetAndHasValueOrAssignDefault($item['attributes'], array()),
-                        Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array())
+                        Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array()),
+                        Helpers::issetAndHasValueOrAssignDefault($item['associatedModel'], null)
                     );
                 }
             } else {
@@ -169,22 +180,29 @@ class Cart
                     $id['price'],
                     $id['quantity'],
                     Helpers::issetAndHasValueOrAssignDefault($id['attributes'], array()),
-                    Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array())
+                    Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array()),
+                    Helpers::issetAndHasValueOrAssignDefault($id['associatedModel'], null)
                 );
             }
 
             return $this;
         }
 
-        // validate data
-        $item = $this->validate(array(
+        $data = array(
             'id' => $id,
             'name' => $name,
             'price' => Helpers::normalizePrice($price),
             'quantity' => $quantity,
             'attributes' => new ItemAttributeCollection($attributes),
-            'conditions' => $conditions,
-        ));
+            'conditions' => $conditions
+        );
+
+        if (isset($associatedModel) && $associatedModel != '') {
+            $data['associatedModel'] = $associatedModel;
+        }
+
+        // validate data
+        $item = $this->validate($data);
 
         // get the cart
         $cart = $this->getContent();
@@ -196,8 +214,9 @@ class Cart
         } else {
 
             $this->addRow($id, $item);
-
         }
+
+        $this->currentItemId = $id;
 
         return $this;
     }
@@ -214,7 +233,7 @@ class Cart
      */
     public function update($id, $data)
     {
-        if($this->fireEvent('updating', $data) === false) {
+        if ($this->fireEvent('updating', $data) === false) {
             return false;
         }
 
@@ -302,7 +321,7 @@ class Cart
     {
         $cart = $this->getContent();
 
-        if($this->fireEvent('removing', $id) === false) {
+        if ($this->fireEvent('removing', $id) === false) {
             return false;
         }
 
@@ -320,7 +339,7 @@ class Cart
      */
     public function clear()
     {
-        if($this->fireEvent('clearing') === false) {
+        if ($this->fireEvent('clearing') === false) {
             return false;
         }
 
@@ -548,8 +567,8 @@ class Cart
         });
 
         return Helpers::formatValue(floatval($sum), $formatted, $this->config);
-    }    
-    
+    }
+
     /**
      * get cart sub total
      * @param bool $formatted
@@ -572,7 +591,7 @@ class Cart
             });
 
         // if there is no conditions, lets just return the sum
-        if(!$conditions->count()) return Helpers::formatValue(floatval($sum), $formatted, $this->config);
+        if (!$conditions->count()) return Helpers::formatValue(floatval($sum), $formatted, $this->config);
 
         // there are conditions, lets apply it
         $newTotal = 0.00;
@@ -623,7 +642,6 @@ class Cart
                 $newTotal = $cond->applyCondition($toBeCalculated);
 
                 $process++;
-
             });
 
         return Helpers::formatValue($newTotal, $this->config['format_numbers'], $this->config);
@@ -703,7 +721,7 @@ class Cart
      */
     protected function addRow($id, $item)
     {
-        if($this->fireEvent('adding', $item) === false) {
+        if ($this->fireEvent('adding', $item) === false) {
             return false;
         }
 
@@ -832,5 +850,32 @@ class Cart
     protected function fireEvent($name, $value = [])
     {
         return $this->events->dispatch($this->getInstanceName() . '.' . $name, array_values([$value, $this]));
+    }
+
+    /**
+     * Associate the cart item with the given id with the given model.
+     *
+     * @param string $id
+     * @param mixed  $model
+     *
+     * @return void
+     */
+    public function associate($model)
+    {
+        if (is_string($model) && !class_exists($model)) {
+            throw new UnknownModelException("The supplied model {$model} does not exist.");
+        }
+
+        $cart = $this->getContent();
+
+        $item = $cart->pull($this->currentItemId);
+
+        $item['associatedModel'] = $model;
+
+        $cart->put($this->currentItemId, new ItemCollection($item, $this->config));
+
+        $this->save($cart);
+
+        return $this;
     }
 }
