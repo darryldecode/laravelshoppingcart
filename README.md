@@ -112,6 +112,15 @@ There are several ways you can add items on your cart, see below:
  # ALWAYS REMEMBER TO BIND THE CART TO A USER BEFORE CALLING ANY CART FUNCTION
  # SO CART WILL KNOW WHO'S CART DATA YOU WANT TO MANIPULATE. SEE IMPORTANT NOTICE ABOVE.
  # EXAMPLE: \Cart::session($userId); then followed by cart normal usage.
+ 
+ # NOTE:
+ # the 'id' field in adding a new item on cart is not intended for the Model ID (example Product ID)
+ # instead make sure to put a unique ID for every unique product or product that has it's own unique prirce, 
+ # because it is used for updating cart and how each item on cart are segregated during calculation and quantities. 
+ # You can put the model_id instead as an attribute for full flexibility.
+ # Example is that if you want to add same products on the cart but with totally different attribute and price.
+ # If you use the Product's ID as the 'id' field in cart, it will result to increase in quanity instead
+ # of adding it as a unique product with unique attribute and price.
 
 // Simplest form to add item on your cart
 Cart::add(455, 'Sample Item', 100.99, 2, array());
