@@ -27,7 +27,7 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
     public function test_event_cart_created()
     {
         $events = m::mock('Illuminate\Contracts\Events\Dispatcher');
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'), true);
 
         $cart = new Cart(
             new SessionMock(),
@@ -43,9 +43,9 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
     public function test_event_cart_adding()
     {
         $events = m::mock('Illuminate\Events\Dispatcher');
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'));
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.added', m::type('array'));
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'), true);
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'), true);
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.added', m::type('array'), true);
 
         $cart = new Cart(
             new SessionMock(),
@@ -63,9 +63,9 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
     public function test_event_cart_adding_multiple_times()
     {
         $events = m::mock('Illuminate\Events\Dispatcher');
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
-        $events->shouldReceive('dispatch')->times(2)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'));
-        $events->shouldReceive('dispatch')->times(2)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'));
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(2)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(2)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'), true);
 
         $cart = new Cart(
             new SessionMock(),
@@ -84,9 +84,9 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
     public function test_event_cart_adding_multiple_times_scenario_two()
     {
         $events = m::mock('Illuminate\Events\Dispatcher');
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
-        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'));
-        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'));
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'), true);
 
         $items = array(
             array(
@@ -128,11 +128,11 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
     public function test_event_cart_remove_item()
     {
         $events = m::mock('Illuminate\Events\Dispatcher');
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
-        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'));
-        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'));
-        $events->shouldReceive('dispatch')->times(1)->with(self::CART_INSTANCE_NAME.'.removing', m::type('array'));
-        $events->shouldReceive('dispatch')->times(1)->with(self::CART_INSTANCE_NAME.'.removed', m::type('array'));
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(1)->with(self::CART_INSTANCE_NAME.'.removing', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(1)->with(self::CART_INSTANCE_NAME.'.removed', m::type('array'), true);
 
         $items = array(
             array(
@@ -176,11 +176,11 @@ class CartTestEvents extends PHPUnit\Framework\TestCase {
     public function test_event_cart_clear()
     {
         $events = m::mock('Illuminate\Events\Dispatcher');
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'));
-        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'));
-        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'));
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.clearing', m::type('array'));
-        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.cleared', m::type('array'));
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.created', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.adding', m::type('array'), true);
+        $events->shouldReceive('dispatch')->times(3)->with(self::CART_INSTANCE_NAME.'.added', m::type('array'), true);
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.clearing', m::type('array'), true);
+        $events->shouldReceive('dispatch')->once()->with(self::CART_INSTANCE_NAME.'.cleared', m::type('array'), true);
 
         $items = array(
             array(
