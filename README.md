@@ -1082,7 +1082,7 @@ Next, Create a new class for your storage to be injected to our cart instance:
 
 Eg.
 
-```
+```php
 class DBStorage {
 
     public function has($key)
@@ -1121,11 +1121,9 @@ class DBStorage {
 }
 ```
 
-For example you can also leverage Laravel's Caching (redis, memcached, file, dynamo, etc) using the example below. Exmaple also includes cookie persistance, so that cart would be still available for 30 days. Sessions by default persists only 20 minutes. 
+For example you can also leverage Laravel's Caching (redis, memcached, file, dynamo, etc) using the example below. Example also includes cookie persistance, so that cart would be still available for 30 days. Sessions by default persists only 20 minutes. 
 
-```
-<?php
-
+```php
 namespace App\Cart;
 
 use Carbon\Carbon;
@@ -1185,7 +1183,7 @@ OR If you have multiple cart instance (example WishList), you can inject the cus
 to your cart instance by injecting it to the service provider of your wishlist cart, you replace the storage
 to use your custom storage. See below:
 
-```
+```php
 use Darryldecode\Cart\Cart;
 use Illuminate\Support\ServiceProvider;
 
