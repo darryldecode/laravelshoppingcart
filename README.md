@@ -26,7 +26,6 @@ For Laravel 5.5, 5.6, or 5.7~:
 ## CONFIGURATION
 
 1. Open config/app.php and add this line to your Service Providers Array.
-   NOTE: If you are using laravel 5.5 or above, this will be automatically added by its auto discovery.
 
 ```php
 Darryldecode\Cart\CartServiceProvider::class
@@ -69,7 +68,7 @@ $rowId = 456; // generate a unique() row ID
 $userID = 2; // the user ID to bind the cart contents
 
 // add the product to cart
-Cart::session($userID)->add(array(
+\Cart::session($userID)->add(array(
     'id' => $rowId,
     'name' => $Product->name,
     'price' => $Product->price,
@@ -79,16 +78,16 @@ Cart::session($userID)->add(array(
 ));
 
 // update the item on cart
-Cart::session($userID)->update($rowId,[
+\Cart::session($userID)->update($rowId,[
 	'quantity' => 2,
 	'price' => 98.67
 ]);
 
 // delete an item on cart
-Cart::session($userID)->remove($rowId);
+\Cart::session($userID)->remove($rowId);
 
 // view the cart items
-$items = Cart::getContent();
+$items = \Cart::getContent();
 foreach($items as $row) {
 
 	echo $row->id; // row ID
@@ -96,9 +95,9 @@ foreach($items as $row) {
 	echo $row->qty;
 	echo $row->price;
 	
-	echo $row->model->id; // whatever properties your model have
-	echo $row->model->name; // whatever properties your model have
-	echo $row->model->description; // whatever properties your model have
+	echo $item->associatedModel->id; // whatever properties your model have
+        echo $item->associatedModel->name; // whatever properties your model have
+        echo $item->associatedModel->description; // whatever properties your model have
 }
 
 // FOR FULL USAGE, SEE BELOW..
