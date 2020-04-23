@@ -225,7 +225,7 @@ class Cart
      * update a cart
      *
      * @param $id
-     * @param $data
+     * @param array $data
      *
      * the $data will be an associative array, you don't need to pass all the data, only the key value
      * of the item you want to update on it
