@@ -672,7 +672,9 @@ class Cart
      */
     public function getContent()
     {
-        return (new CartCollection($this->session->get($this->sessionKeyCartItems)));
+        return (new CartCollection($this->session->get($this->sessionKeyCartItems)))->reject(function($item) {
+            return ! ($item instanceof ItemCollection);
+        });
     }
 
     /**
@@ -682,9 +684,7 @@ class Cart
      */
     public function isEmpty()
     {
-        $cart = new CartCollection($this->session->get($this->sessionKeyCartItems));
-
-        return $cart->isEmpty();
+        return $this->getContent()->isEmpty();
     }
 
     /**
