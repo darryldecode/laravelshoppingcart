@@ -788,7 +788,7 @@ class Cart
     protected function updateQuantityRelative($item, $key, $value)
     {
         if (preg_match('/\-/', $value) == 1) {
-            $value = (int)str_replace('-', '', $value);
+            $value = ($this->config['dec_quantity']) ? (float)str_replace('-', '', $value) : (int)str_replace('-', '', $value);
 
             // we will not allowed to reduced quantity to 0, so if the given value
             // would result to item quantity of 0, we will not do it.
@@ -796,9 +796,9 @@ class Cart
                 $item[$key] -= $value;
             }
         } elseif (preg_match('/\+/', $value) == 1) {
-            $item[$key] += (int)str_replace('+', '', $value);
+            $item[$key] += ($this->config['dec_quantity']) ? (float)str_replace('+', '', $value) : (int)str_replace('+', '', $value);
         } else {
-            $item[$key] += (int)$value;
+            $item[$key] += ($this->config['dec_quantity']) ? (float)$value : (int)$value;
         }
 
         return $item;
@@ -814,8 +814,7 @@ class Cart
      */
     protected function updateQuantityNotRelative($item, $key, $value)
     {
-        $item[$key] = (int)$value;
-
+        $item[$key] = ($this->config['dec_quantity']) ? (float)$value : (int)$value;
         return $item;
     }
 
