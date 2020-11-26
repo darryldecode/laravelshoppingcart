@@ -123,6 +123,7 @@ class ItemCollection extends Collection
 
     /**
      * get the sum of price in which conditions are already applied
+     * If "unitary" condition, price of unitary added for product without multiplying ProductQuantity
      * @param bool $formatted
      * @return mixed|null
      */
