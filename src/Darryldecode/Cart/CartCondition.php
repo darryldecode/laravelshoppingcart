@@ -167,7 +167,7 @@ class CartCondition {
         if( $this->getType() == 'multiply' ){
             $result = $totalOrSubTotalOrPrice + ( $this->getValue() * $this->getQuantity() );
         }
-        if( $this->valueIsPercentage($conditionValue) )
+        else if( $this->valueIsPercentage($conditionValue) )
         {
             if( $this->valueIsToBeSubtracted($conditionValue) )
             {
