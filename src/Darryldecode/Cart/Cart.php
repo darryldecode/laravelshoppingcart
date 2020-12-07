@@ -688,6 +688,27 @@ class Cart
     }
 
     /**
+     * count all items included inner multiple items
+     *
+     * @return int
+     */
+    public function countVsMultiply()
+    {
+        $quantity = 0;
+        foreach($this->getContent() as $item){
+            // vd( $item->attributes->quantityAllItems );
+            if( $item->attributes->quantityAllItems > 0 ){
+                $quantity += $item->attributes->quantityAllItems;
+                // vd($item->attributes->quantityAllItems);
+            }
+            else{
+                $quantity += $item->quantity;
+            }
+        }
+        return $quantity;
+    }
+
+    /**
      * validate Item data
      *
      * @param $item
