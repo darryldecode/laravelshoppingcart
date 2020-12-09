@@ -702,7 +702,7 @@ class Cart
                 // vd($item->attributes->quantityAllItems);
             }
             else{
-                $quantity += $item->quantity;
+                $quantity++;
             }
         }
         return $quantity;
