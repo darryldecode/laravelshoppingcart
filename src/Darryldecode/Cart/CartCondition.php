@@ -94,6 +94,16 @@ class CartCondition {
     }
 
     /**
+     * the quantity of this the condition
+     *
+     * @return mixed
+     */
+    public function getQuantity()
+    {
+        return $this->args['quantity'];
+    }
+
+    /**
      * Set the order to apply this condition. If no argument order is applied we return 0 as
      * indicator that no assignment has been made
      * @param int $order
@@ -148,12 +158,16 @@ class CartCondition {
      */
     protected function apply($totalOrSubTotalOrPrice, $conditionValue)
     {
+        // if type of condition is multiply we make count it or
         // if value has a percentage sign on it, we will get first
         // its percentage then we will evaluate again if the value
         // has a minus or plus sign so we can decide what to do with the
         // percentage, whether to add or subtract it to the total/subtotal/price
         // if we can't find any plus/minus sign, we will assume it as plus sign
-        if( $this->valueIsPercentage($conditionValue) )
+        if( $this->getType() == 'multiply' ){
+            $result = $totalOrSubTotalOrPrice + ( $this->getValue() * $this->getQuantity() );
+        }
+        else if( $this->valueIsPercentage($conditionValue) )
         {
             if( $this->valueIsToBeSubtracted($conditionValue) )
             {
