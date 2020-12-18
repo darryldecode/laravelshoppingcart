@@ -16,6 +16,8 @@ return [
 
     'thousands_sep' => env('SHOPPING_THOUSANDS_SEP', ','),
 
+    'dec_quantity' => env('SHOPPING_ALLOW_DECIMAL_QUANTITY', false),
+
     /*
      * ---------------------------------------------------------------
      * persistence
