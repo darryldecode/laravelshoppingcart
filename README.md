@@ -92,7 +92,7 @@ foreach($items as $row) {
 
 	echo $row->id; // row ID
 	echo $row->name;
-	echo $row->qty;
+	echo $row->quantity;
 	echo $row->price;
 	
 	echo $item->associatedModel->id; // whatever properties your model have
@@ -800,7 +800,7 @@ Cart::add(array(
 
 // Now, when iterating over the content of the cart, you can access the model.
 foreach(Cart::getContent() as $row) {
-	echo 'You have ' . $row->qty . ' items of ' . $row->model->name . ' with description: "' . $row->model->description . '" in your cart.';
+	echo 'You have ' . $row->quantity . ' items of ' . $row->model->name . ' with description: "' . $row->model->description . '" in your cart.';
 }
 ```
 
