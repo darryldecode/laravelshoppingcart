@@ -45,7 +45,7 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 
 ## HOW TO USE
 
--   [Quick Usage](#usage-usage-example)
+-   [Quick Usage](#quick-usage-example)
 -   [Usage](#usage)
 -   [Conditions](#conditions)
 -   [Items](#items)
@@ -53,7 +53,7 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 -   [Instances](#instances)
 -   [Exceptions](#exceptions)
 -   [Events](#events)
--   [Format Response](#format)
+-   [Format Response](#format-response)
 -   [Examples](#examples)
 -   [Using Different Storage](#storage)
 -   [License](#license)
