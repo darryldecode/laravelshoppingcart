@@ -1,4 +1,4 @@
-# Laravel 5 & 6 & 7 Shopping Cart
+# Laravel 5, 6, 7, 8 & 9 Shopping Cart
 [![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
 [![Total Downloads](https://poser.pugx.org/darryldecode/cart/d/total.svg)](https://packagist.org/packages/darryldecode/cart)
 [![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
@@ -15,13 +15,17 @@ Git repo of the demo: https://github.com/darryldecode/laravelshoppingcart-demo
 
 Install the package through [Composer](http://getcomposer.org/).
 
-For Laravel 5.1~:
-`composer require "darryldecode/cart:~2.0"`
+### For Laravel 5.5+
 
-For Laravel 5.5, 5.6, or 5.7~:
+```zsh
+composer require "darryldecode/cart"
+```
 
-```composer require "darryldecode/cart:~4.0"``` or 
-```composer require "darryldecode/cart"```
+### For Older versions (5.1)
+
+```zsh
+composer require "darryldecode/cart:~2.0"
+```
 
 ## CONFIGURATION
 
@@ -63,24 +67,24 @@ php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --
 ```php
 // Quick Usage with the Product Model Association & User session binding
 
-$Product = Product::find($productId); // assuming you have a Product model with id, name, description & price
+$product = Product::find($productId); // assuming you have a Product model with id, name, description & price
 $rowId = 456; // generate a unique() row ID
 $userID = 2; // the user ID to bind the cart contents
 
 // add the product to cart
 \Cart::session($userID)->add(array(
     'id' => $rowId,
-    'name' => $Product->name,
-    'price' => $Product->price,
+    'name' => $product->name,
+    'price' => $product->price,
     'quantity' => 4,
     'attributes' => array(),
-    'associatedModel' => $Product
+    'associatedModel' => $product
 ));
 
 // update the item on cart
-\Cart::session($userID)->update($rowId,[
-	'quantity' => 2,
-	'price' => 98.67
+\Cart::session($userID)->update($rowId, [
+    'quantity' => 2,
+    'price' => 98.67
 ]);
 
 // delete an item on cart
@@ -90,12 +94,12 @@ $userID = 2; // the user ID to bind the cart contents
 $items = \Cart::getContent();
 foreach($items as $row) {
 
-	echo $row->id; // row ID
-	echo $row->name;
-	echo $row->qty;
-	echo $row->price;
-	
-	echo $item->associatedModel->id; // whatever properties your model have
+    echo $row->id; // row ID
+    echo $row->name;
+    echo $row->qty;
+    echo $row->price;
+    
+    echo $item->associatedModel->id; // whatever properties your model have
         echo $item->associatedModel->name; // whatever properties your model have
         echo $item->associatedModel->description; // whatever properties your model have
 }
@@ -208,7 +212,7 @@ Cart::session($userId)->add(array(
     'price' => 67.99,
     'quantity' => 4,
     'attributes' => array(),
-    'associatedModel' => $Product
+    'associatedModel' => $product
 ));
 
 // NOTE:
@@ -440,8 +444,8 @@ $condition = new \Darryldecode\Cart\CartCondition(array(
     'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
     'value' => '12.5%',
     'attributes' => array( // attributes field is optional
-    	'description' => 'Value added tax',
-    	'more_data' => 'more data here'
+        'description' => 'Value added tax',
+        'more_data' => 'more data here'
     )
 ));
 
@@ -800,7 +804,7 @@ Cart::add(array(
 
 // Now, when iterating over the content of the cart, you can access the model.
 foreach(Cart::getContent() as $row) {
-	echo 'You have ' . $row->qty . ' items of ' . $row->model->name . ' with description: "' . $row->model->description . '" in your cart.';
+    echo 'You have ' . $row->qty . ' items of ' . $row->model->name . ' with description: "' . $row->model->description . '" in your cart.';
 }
 ```
 
@@ -815,19 +819,19 @@ Create a new Service Provider and then on register() method, you can put this li
 
 ```php
 $this->app['wishlist'] = $this->app->share(function($app)
-		{
-			$storage = $app['session']; // laravel session storage
-			$events = $app['events']; // laravel event handler
-			$instanceName = 'wishlist'; // your cart instance name
-			$session_key = 'AsASDMCks0ks1'; // your unique session key to hold cart items
+        {
+            $storage = $app['session']; // laravel session storage
+            $events = $app['events']; // laravel event handler
+            $instanceName = 'wishlist'; // your cart instance name
+            $session_key = 'AsASDMCks0ks1'; // your unique session key to hold cart items
 
-			return new Cart(
-				$storage,
-				$events,
-				$instanceName,
-				$session_key
-			);
-		});
+            return new Cart(
+                $storage,
+                $events,
+                $instanceName,
+                $session_key
+            );
+        });
 
 // for 5.4 or newer
 use Darryldecode\Cart\Cart;
