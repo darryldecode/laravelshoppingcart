@@ -9,6 +9,17 @@
 
 class Helpers {
 
+
+    public static function floatOrInt($value)
+    {
+        if (config('shopping_cart.prices_in_int')) {
+            return intval($value);
+        } else {
+            return floatval($value);
+        }
+    }
+
+
     /**
      * normalize price
      *
@@ -17,7 +28,10 @@ class Helpers {
      */
     public static function normalizePrice($price)
     {
-        return (is_string($price)) ? floatval($price) : $price;
+        if(config('shopping_cart.prices_in_int'))
+        {
+            return $price;
+        } else { return (is_string($price)) ? floatval($price) : $price; }
     }
 
     /**

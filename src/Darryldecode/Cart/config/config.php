@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'prices_in_int' => env('SHOPPING_PRICES_IN_INT', false),
     /*
      * ---------------------------------------------------------------
      * formatting
