@@ -130,6 +130,7 @@ $userId // the current login user id
 \Cart::condition($condition1);
 \Cart::getTotal();
 \Cart::getSubTotal();
+\Cart::getSubTotalWithoutConditions();
 \Cart::addItemCondition($productID, $coupon101);
 // and so on..
 ```
@@ -378,6 +379,21 @@ $subTotal = Cart::getSubTotal();
 
 // for a specific user
 $subTotal = Cart::session($userId)->getSubTotal();
+```
+
+Get cart subtotal with out conditions: **Cart::getSubTotalWithoutConditions()**
+
+```php
+/**
+* get cart sub total with out conditions
+*
+* @param bool $formatted
+* @return float
+*/
+$subTotalWithoutConditions = Cart::getSubTotalWithoutConditions();
+
+// for a specific user
+$subTotalWithoutConditions = Cart::session($userId)->getSubTotalWithoutConditions();
 ```
 
 Get cart total: **Cart::getTotal()**
