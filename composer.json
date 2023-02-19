@@ -19,7 +19,7 @@
         "mockery/mockery": "^1.4.2",
         "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0",
         "phpunit/phpunit": "^9.0|^9.5",
-        "symfony/var-dumper": "5.1.5.*@dev"
+        "symfony/var-dumper": "5.1.5.*@dev|^6.2"
     },
     "autoload": {
         "psr-4": {
