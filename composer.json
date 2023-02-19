@@ -1,12 +1,16 @@
 {
-    "name": "darryldecode/cart",
-    "description": "Laravel 5 Shopping cart",
+    "name": "ultrono/laravelshoppingcart-1",
+    "description": "Laravel 5 and above Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
     "authors": [
         {
             "name": "Darryl Fernandez",
             "email": "engrdarrylfernandez@gmail.com"
+        },
+        {
+            "name": "Rob Allport",
+            "email": "rob@f9web.co.uk"
         }
     ],
     "require": {
