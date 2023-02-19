@@ -1,6 +1,6 @@
 {
     "name": "ultrono/laravelshoppingcart-1",
-    "description": "Laravel 5 Shopping cart",
+    "description": "Laravel 5 and above Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
     "authors": [
