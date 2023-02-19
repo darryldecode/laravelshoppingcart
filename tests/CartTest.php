@@ -12,6 +12,7 @@ use Mockery as m;
 use Darryldecode\Tests\helpers\MockProduct;
 
 require_once __DIR__ . '/helpers/SessionMock.php';
+require_once __DIR__ . '/helpers/MockProduct.php';
 
 class CartTest extends PHPUnit\Framework\TestCase
 {
