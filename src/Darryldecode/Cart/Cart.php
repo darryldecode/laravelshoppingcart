@@ -69,6 +69,10 @@ class Cart
      */
     protected $currentItemId;
 
+    protected $cachedContent;
+
+    protected $cachedConditions;
+
     /**
      * our object constructor
      *
@@ -88,6 +92,8 @@ class Cart
         $this->sessionKeyCartConditions = $this->sessionKey . '_cart_conditions';
         $this->config = $config;
         $this->currentItem = null;
+        $this->cachedContent = null;
+        $this->cachedConditions = null;
         $this->fireEvent('created');
     }
 
@@ -397,7 +403,11 @@ class Cart
      */
     public function getConditions()
     {
-        return new CartConditionCollection($this->session->get($this->sessionKeyCartConditions));
+        if(!$this->cachedConditions) {
+            $this->cachedConditions = new CartConditionCollection($this->session->get($this->sessionKeyCartConditions));
+        }
+
+        return $this->cachedConditions;
     }
 
     /**
@@ -672,9 +682,12 @@ class Cart
      */
     public function getContent()
     {
-        return (new CartCollection($this->session->get($this->sessionKeyCartItems)))->reject(function($item) {
-            return ! ($item instanceof ItemCollection);
-        });
+        if(!$this->cachedContent){
+            $this->cachedContent = (new CartCollection($this->session->get($this->sessionKeyCartItems)))->reject(function ($item) {
+                return ! ($item instanceof ItemCollection);
+            });
+        }
+        return $this->cachedContent;
     }
 
     /**
