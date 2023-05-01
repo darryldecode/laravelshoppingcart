@@ -69,9 +69,9 @@ class Cart
      */
     protected $currentItemId;
 
-    protected $cachedContent = null;
+    protected $cachedContent;
 
-    protected $cachedConditions = null;
+    protected $cachedConditions;
 
     /**
      * our object constructor
@@ -92,6 +92,8 @@ class Cart
         $this->sessionKeyCartConditions = $this->sessionKey . '_cart_conditions';
         $this->config = $config;
         $this->currentItem = null;
+        $this->cachedContent = null;
+        $this->cachedConditions = null;
         $this->fireEvent('created');
     }
 
