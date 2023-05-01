@@ -69,6 +69,10 @@ class Cart
      */
     protected $currentItemId;
 
+    protected $cachedContent = null;
+
+    protected $cachedConditions = null;
+
     /**
      * our object constructor
      *
@@ -397,7 +401,11 @@ class Cart
      */
     public function getConditions()
     {
-        return new CartConditionCollection($this->session->get($this->sessionKeyCartConditions));
+        if(!$this->cachedConditions) {
+            $this->cachedConditions = new CartConditionCollection($this->session->get($this->sessionKeyCartConditions));
+        }
+
+        return $this->cachedConditions;
     }
 
     /**
@@ -672,9 +680,12 @@ class Cart
      */
     public function getContent()
     {
-        return (new CartCollection($this->session->get($this->sessionKeyCartItems)))->reject(function($item) {
-            return ! ($item instanceof ItemCollection);
-        });
+        if(!$this->cachedContent){
+            $this->cachedContent = (new CartCollection($this->session->get($this->sessionKeyCartItems)))->reject(function ($item) {
+                return ! ($item instanceof ItemCollection);
+            });
+        }
+        return $this->cachedContent;
     }
 
     /**
