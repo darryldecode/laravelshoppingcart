@@ -123,11 +123,47 @@ class ItemCollection extends Collection
 
     /**
      * get the sum of price in which conditions are already applied
+     * If "unitary" condition, price of unitary added for product without multiplying ProductQuantity
      * @param bool $formatted
      * @return mixed|null
      */
     public function getPriceSumWithConditions($formatted = true)
     {
-        return Helpers::formatValue($this->getPriceWithConditions(false) * $this->quantity, $formatted, $this->config);
+        $originalPrice = $this->price;
+        $newPrice = 0.00;
+        $price_summ = 0.00;
+        $unitary_summ = 0.00;
+        $processed = 0;
+
+        if ($this->hasConditions()) {
+            if (is_array($this->conditions)) {
+                foreach ($this->conditions as $condition) {
+                    ($processed > 0) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
+                    if($condition->getType() == 'unitary'){
+                        $unitary_summ += $condition->applyCondition(0);
+                        $newPrice = ($processed > 0) ? $newPrice : $originalPrice;
+                    }
+                    else{
+                        $newPrice = $condition->applyCondition($toBeCalculated);
+                    }
+                    $processed++;
+                }
+                $price_summ = Helpers::formatValue( ($newPrice * $this->quantity) + $unitary_summ, $formatted, $this->config);
+            } else {
+                if($this['conditions']->getType() == 'unitary'){
+                    $unitary_summ = $this['conditions']->applyCondition(0);
+                    $newPrice = ($originalPrice * $this->quantity) + $unitary_summ;
+                }
+                else{
+                    $newPrice = $this['conditions']->applyCondition($originalPrice);
+                    $newPrice = $newPrice * $this->quantity;
+                }
+                $price_summ = Helpers::formatValue($newPrice, $formatted, $this->config);
+            }
+        }
+        else{
+            $price_summ = Helpers::formatValue($originalPrice * $this->quantity, $formatted, $this->config);
+        }
+        return Helpers::formatValue($price_summ, $formatted, $this->config);
     }
 }
