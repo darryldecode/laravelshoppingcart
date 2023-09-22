@@ -591,10 +591,12 @@ class Cart
             });
 
         // if there is no conditions, lets just return the sum
-        if (!$conditions->count()) return Helpers::formatValue(floatval($sum), $formatted, $this->config);
+        if (!$conditions->count()){
+            return Helpers::formatValue(Helpers::floatOrInt($sum), $formatted, $this->config);
+        }
 
         // there are conditions, lets apply it
-        $newTotal = 0.00;
+        $newTotal = Helpers::floatOrInt(0.00);
         $process = 0;
 
         $conditions->each(function (CartCondition $cond) use ($sum, &$newTotal, &$process) {
@@ -608,7 +610,7 @@ class Cart
             $process++;
         });
 
-        return Helpers::formatValue(floatval($newTotal), $formatted, $this->config);
+        return Helpers::formatValue(Helpers::floatOrInt($newTotal), $formatted, $this->config);
     }
 
     /**
@@ -620,7 +622,7 @@ class Cart
     {
         $subTotal = $this->getSubTotal(false);
 
-        $newTotal = 0.00;
+        $newTotal = Helpers::floatOrInt(0.00);
 
         $process = 0;
 
