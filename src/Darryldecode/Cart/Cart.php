@@ -154,7 +154,7 @@ class Cart
      * @return $this
      * @throws InvalidItemException
      */
-    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array(), $associatedModel = null)
+    public function add($id, $name = null, $price = null, $quantity = null, $attributes = [], $conditions = [], $associatedModel = null)
     {
         // if the first argument is an array,
         // we will need to call add again
@@ -168,8 +168,8 @@ class Cart
                         $item['name'],
                         $item['price'],
                         $item['quantity'],
-                        Helpers::issetAndHasValueOrAssignDefault($item['attributes'], array()),
-                        Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array()),
+                        Helpers::issetAndHasValueOrAssignDefault($item['attributes'], []),
+                        Helpers::issetAndHasValueOrAssignDefault($item['conditions'], []),
                         Helpers::issetAndHasValueOrAssignDefault($item['associatedModel'], null)
                     );
                 }
@@ -179,8 +179,8 @@ class Cart
                     $id['name'],
                     $id['price'],
                     $id['quantity'],
-                    Helpers::issetAndHasValueOrAssignDefault($id['attributes'], array()),
-                    Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array()),
+                    Helpers::issetAndHasValueOrAssignDefault($id['attributes'], []),
+                    Helpers::issetAndHasValueOrAssignDefault($id['conditions'], []),
                     Helpers::issetAndHasValueOrAssignDefault($id['associatedModel'], null)
                 );
             }
@@ -345,7 +345,7 @@ class Cart
 
         $this->session->put(
             $this->sessionKeyCartItems,
-            array()
+            []
         );
 
         $this->fireEvent('cleared');
@@ -506,7 +506,7 @@ class Cart
 
                 if ($item['conditions'] instanceof $conditionInstance) {
                     if ($tempConditionsHolder->getName() == $conditionName) {
-                        $item['conditions'] = array();
+                        $item['conditions'] = [];
                     }
                 }
             }
@@ -532,7 +532,7 @@ class Cart
         }
 
         $this->update($itemId, array(
-            'conditions' => array()
+            'conditions' => []
         ));
 
         return true;
@@ -549,7 +549,7 @@ class Cart
     {
         $this->session->put(
             $this->sessionKeyCartConditions,
-            array()
+            []
         );
     }
 
