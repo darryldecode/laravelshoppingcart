@@ -64,7 +64,7 @@ class Cart
 
     /**
      * This holds the currently added item id in cart for association
-     * 
+     *
      * @var
      */
     protected $currentItemId;
@@ -297,9 +297,9 @@ class Cart
                 $itemConditionTempHolder = $product['conditions'];
 
                 if (is_array($itemConditionTempHolder)) {
-                    array_push($itemConditionTempHolder, $itemCondition);
+                    array_push($itemConditionTempHolder, $itemCondition->toArray());
                 } else {
-                    $itemConditionTempHolder = $itemCondition;
+                    $itemConditionTempHolder = $itemCondition->toArray();
                 }
 
                 $this->update($productId, array(
