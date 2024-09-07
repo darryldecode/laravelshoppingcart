@@ -108,8 +108,9 @@ class ItemCollection extends Collection
         if ($this->hasConditions()) {
             if (is_array($this->conditions)) {
                 foreach ($this->conditions as $condition) {
+                    $conditionObj = CartCondition::fromArray($condition);
                     ($processed > 0) ? $toBeCalculated = $newPrice : $toBeCalculated = $originalPrice;
-                    $newPrice = $condition->applyCondition($toBeCalculated);
+                    $newPrice = $conditionObj->applyCondition($toBeCalculated);
                     $processed++;
                 }
             } else {
