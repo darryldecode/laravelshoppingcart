@@ -1,6 +1,7 @@
 {
     "name": "darryldecode/cart",
-    "description": "Laravel 5 Shopping cart",
+    "version": "1.2.0",
+    "description": "Laravel Shopping cart",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
     "authors": [
@@ -10,15 +11,18 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
-        "illuminate/support": "^11.0",
-        "illuminate/validation": "^11.0",
-        "illuminate/translation": "^11.0"
+        "php": ">=8.2",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/auth": "^10.0|^11.0|^12.0",
+        "illuminate/container": "^10.0|^11.0|^12.0",
+        "illuminate/database": "^10.0|^11.0|^12.0",
+        "illuminate/validation": "^10.0|^11.0|^12.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.2",
-        "phpunit/phpunit": "^9.0",
-        "symfony/var-dumper": "5.1.5.*@dev"
+        "mockery/mockery": "^1.6",
+        "laravel/pint": "^1.21",
+        "pestphp/pest": "^3.0",
+        "larapack/dd": "dev-master"
     },
     "autoload": {
         "psr-4": {
