@@ -1,24 +1,24 @@
 {
-    "name": "saleem189/cart",
-    "description": "Laravel 5 Shopping cart",
+    "name": "noobtrader/laravelshoppingcart",
+    "description": "Laravel 12 compatible shopping cart (forked from darryldecode/cart)",
     "keywords": ["laravel", "shopping cart", "cart"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Darryl Fernandez",
-            "email": "engrdarrylfernandez@gmail.com"
+            "name": "Md. Anik Rahman",
+            "email": "a7604366@gmail.com"
         }
     ],
     "require": {
-        "php": ">=7.3",
-        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0"
+        "php": "^8.1",
+        "illuminate/support": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+        "illuminate/validation": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+        "illuminate/translation": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.2",
+        "mockery/mockery": "^1.4",
         "phpunit/phpunit": "^9.0",
-        "symfony/var-dumper": "5.1.5.*@dev"
+        "symfony/var-dumper": "^5.1"
     },
     "autoload": {
         "psr-4": {
@@ -26,6 +26,7 @@
         }
     },
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "laravel": {
             "providers": [
@@ -37,3 +38,4 @@
         }
     }
 }
+
