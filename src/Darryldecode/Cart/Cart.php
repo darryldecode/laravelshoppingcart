@@ -563,7 +563,7 @@ class Cart
         $cart = $this->getContent();
 
         $sum = $cart->sum(function ($item) {
-            return $item->getPriceSum();
+            return filter_var($item->getPriceSum(), FILTER_SANITIZE_NUMBER_FLOAT);
         });
 
         return Helpers::formatValue(floatval($sum), $formatted, $this->config);
