@@ -5,13 +5,6 @@ use Illuminate\Support\ServiceProvider;
 class CartServiceProvider extends ServiceProvider {
 
 	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
-
-	/**
 	 * Boot the service provider.
 	 */
 	public function boot()

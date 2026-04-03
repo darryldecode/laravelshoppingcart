@@ -1,7 +1,11 @@
 {
     "name": "saleem189/cart",
-    "description": "Laravel 5 Shopping cart",
-    "keywords": ["laravel", "shopping cart", "cart"],
+    "description": "Laravel Cart",
+    "keywords": [
+        "laravel",
+        "shopping cart",
+        "cart"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -10,22 +14,26 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
-        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0"
+        "php": ">=8.3",
+        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.2",
-        "phpunit/phpunit": "^9.0",
-        "symfony/var-dumper": "5.1.5.*@dev"
+        "mockery/mockery": "^1.6",
+        "phpunit/phpunit": "^12.0",
+        "symfony/var-dumper": "^6.0|^7.0"
     },
     "autoload": {
         "psr-4": {
             "Darryldecode\\": "src/Darryldecode"
         }
     },
-    "minimum-stability": "dev",
+    "autoload-dev": {
+        "psr-4": {
+            "Darryldecode\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [

@@ -64,10 +64,31 @@ class Cart
 
     /**
      * This holds the currently added item id in cart for association
-     * 
+     *
      * @var
      */
     protected $currentItemId;
+
+    /**
+     * Number of decimal places for price formatting
+     *
+     * @var int|null
+     */
+    protected $decimals = null;
+
+    /**
+     * Decimal point character for price formatting
+     *
+     * @var string|null
+     */
+    protected $dec_point = null;
+
+    /**
+     * Thousands separator character for price formatting
+     *
+     * @var string|null
+     */
+    protected $thousands_sep = null;
 
     /**
      * our object constructor
