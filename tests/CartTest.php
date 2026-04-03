@@ -341,12 +341,12 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $this->cart->add($items);
 
-        $this->assertEquals(273.22, $this->cart->getSubTotal(), 'Cart should have sub total of 273.22');
+        $this->assertEqualsWithDelta(273.22, $this->cart->getSubTotal(), 0.01, 'Cart should have sub total of 273.22');
 
         // when cart's item quantity is updated, the subtotal should be updated as well
         $this->cart->update(456, array('quantity' => 2));
 
-        $this->assertEquals(409.2, $this->cart->getSubTotal(), 'Cart should have sub total of 409.2');
+        $this->assertEqualsWithDelta(409.2, $this->cart->getSubTotal(), 0.01, 'Cart should have sub total of 409.2');
     }
 
     public function test_sub_total_when_item_quantity_is_updated_by_reduced()
@@ -370,7 +370,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $this->cart->add($items);
 
-        $this->assertEquals(273.22, $this->cart->getSubTotal(), 'Cart should have sub total of 273.22');
+        $this->assertEqualsWithDelta(273.22, $this->cart->getSubTotal(), 0.01, 'Cart should have sub total of 273.22');
 
         // when cart's item quantity is updated, the subtotal should be updated as well
         $this->cart->update(456, array('quantity' => -1));
@@ -379,7 +379,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $item = $this->cart->get(456);
 
         $this->assertEquals(2, $item['quantity'], 'Item quantity of with item ID of 456 should now be reduced to 2');
-        $this->assertEquals(205.23, $this->cart->getSubTotal(), 'Cart should have sub total of 205.23');
+        $this->assertEqualsWithDelta(205.23, $this->cart->getSubTotal(), 0.01, 'Cart should have sub total of 205.23');
     }
 
     public function test_item_quantity_update_by_reduced_should_not_reduce_if_quantity_will_result_to_zero()

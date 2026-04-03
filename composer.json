@@ -1,39 +1,52 @@
 {
-    "name": "saleem189/cart",
-    "description": "Laravel 5 Shopping cart",
-    "keywords": ["laravel", "shopping cart", "cart"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Darryl Fernandez",
-            "email": "engrdarrylfernandez@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=7.3",
-        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-        "illuminate/validation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
-        "illuminate/translation": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0"
-    },
-    "require-dev": {
-        "mockery/mockery": "^1.4.2",
-        "phpunit/phpunit": "^9.0",
-        "symfony/var-dumper": "5.1.5.*@dev"
-    },
-    "autoload": {
-        "psr-4": {
-            "Darryldecode\\": "src/Darryldecode"
-        }
-    },
-    "minimum-stability": "dev",
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Darryldecode\\Cart\\CartServiceProvider"
-            ],
-            "aliases": {
-                "Cart": "Darryldecode\\Cart\\Facades\\CartFacade"
-            }
-        }
+  "name": "dev-ibizinfo/laravelshoppingcart",
+  "description": "Laravel 13 Shopping cart",
+  "keywords": [
+    "laravel",
+    "shopping cart",
+    "cart"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "dev-ibizinfo",
+      "email": "dev.ibizinfo@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^8.3",
+    "illuminate/support": "^13.0",
+    "illuminate/validation": "^13.0",
+    "illuminate/translation": "^13.0",
+    "illuminate/filesystem": "^13.0"
+  },
+  "require-dev": {
+    "mockery/mockery": "^1.6",
+    "phpunit/phpunit": "^12.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Darryldecode\\": "src/Darryldecode"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Darryldecode\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "scripts": {
+    "test": "phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Darryldecode\\Cart\\CartServiceProvider"
+      ],
+      "aliases": {
+        "Cart": "Darryldecode\\Cart\\Facades\\CartFacade"
+      }
+    }
+  }
 }

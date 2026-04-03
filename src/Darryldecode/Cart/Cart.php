@@ -70,6 +70,21 @@ class Cart
     protected $currentItemId;
 
     /**
+     * @var int|string
+     */
+    protected $decimals;
+
+    /**
+     * @var string
+     */
+    protected $dec_point;
+
+    /**
+     * @var string
+     */
+    protected $thousands_sep;
+
+    /**
      * our object constructor
      *
      * @param $session
@@ -88,6 +103,9 @@ class Cart
         $this->sessionKeyCartConditions = $this->sessionKey . '_cart_conditions';
         $this->config = $config;
         $this->currentItemId = null;
+        $this->decimals = $config['decimals'] ?? 0;
+        $this->dec_point = $config['dec_point'] ?? '.';
+        $this->thousands_sep = $config['thousands_sep'] ?? ',';
         $this->fireEvent('created');
     }
 

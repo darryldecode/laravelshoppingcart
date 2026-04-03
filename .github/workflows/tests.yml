@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, master, Dev]
+  pull_request:
+    branches: [main, master, Dev]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, xml, curl
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run PHPUnit
+        run: composer test
+
+  lowest:
+    runs-on: ubuntu-latest
+    name: Lowest dependencies (PHP 8.3)
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, curl
+          coverage: none
+
+      - name: Install lowest dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress --prefer-lowest
+
+      - name: Run PHPUnit
+        run: composer test
