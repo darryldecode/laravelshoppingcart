@@ -175,7 +175,7 @@ class Cart
      * @return $this
      * @throws InvalidItemException
      */
-    public function add($id, $name = null, $price = null, $quantity = null, $attributes = array(), $conditions = array(), $associatedModel = null)
+    public function add($id, $name = null, $price = null, $quantity = 1, $attributes = array(), $conditions = array(), $associatedModel = null)
     {
         // if the first argument is an array,
         // we will need to call add again
@@ -188,7 +188,7 @@ class Cart
                         $item['id'],
                         $item['name'],
                         $item['price'],
-                        $item['quantity'],
+                        $item['quantity'] ?? 1,
                         Helpers::issetAndHasValueOrAssignDefault($item['attributes'], array()),
                         Helpers::issetAndHasValueOrAssignDefault($item['conditions'], array()),
                         Helpers::issetAndHasValueOrAssignDefault($item['associatedModel'], null)
@@ -199,7 +199,7 @@ class Cart
                     $id['id'],
                     $id['name'],
                     $id['price'],
-                    $id['quantity'],
+                    $id['quantity'] ?? 1,
                     Helpers::issetAndHasValueOrAssignDefault($id['attributes'], array()),
                     Helpers::issetAndHasValueOrAssignDefault($id['conditions'], array()),
                     Helpers::issetAndHasValueOrAssignDefault($id['associatedModel'], null)
