@@ -1,62 +1,103 @@
-# Laravel 5 & 6 , 7 & 9 Shopping Cart
-[![Build Status](https://travis-ci.org/darryldecode/laravelshoppingcart.svg?branch=master)](https://travis-ci.org/darryldecode/laravelshoppingcart)
-[![Total Downloads](https://poser.pugx.org/darryldecode/cart/d/total.svg)](https://packagist.org/packages/darryldecode/cart)
-[![License](https://poser.pugx.org/darryldecode/cart/license.svg)](https://packagist.org/packages/darryldecode/cart)
+# Laravel Shopping Cart (Laravel 13)
 
-A Shopping Cart Implementation for Laravel Framework
+[![Tests](https://github.com/dev-ibizinfo/laravelshoppingcart/actions/workflows/tests.yml/badge.svg)](https://github.com/dev-ibizinfo/laravelshoppingcart/actions/workflows/tests.yml)
+[![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
+[![Laravel](https://img.shields.io/badge/Laravel-13.x-FF2D20?logo=laravel&logoColor=white)](https://laravel.com/docs/13.x)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Packagist Version](https://poser.pugx.org/dev-ibizinfo/laravelshoppingcart/v)](https://packagist.org/packages/dev-ibizinfo/laravelshoppingcart)
+[![Packagist Downloads](https://poser.pugx.org/dev-ibizinfo/laravelshoppingcart/d/total)](https://packagist.org/packages/dev-ibizinfo/laravelshoppingcart)
 
-## QUICK PARTIAL DEMO
+Session-based shopping cart for **Laravel 13** on **PHP 8.3+** (8.3–8.5 supported). The package targets **`illuminate/*` ^13.0** only (no Laravel 12 or older frameworks in the same release line).
 
-Demo: https://shoppingcart-demo.darrylfernandez.com/cart
+> **Lineage:** API and behavior follow the original [darryldecode/laravelshoppingcart](https://github.com/darryldecode/laravelshoppingcart) / Packagist `darryldecode/cart`. For **Laravel 5–12**, use that package at the version constraint that matches your app. This fork is for **Laravel 13** and modern PHP only.
 
-Git repo of the demo: https://github.com/darryldecode/laravelshoppingcart-demo
+## Requirements
 
-## INSTALLATION
+| Requirement | Notes |
+|-------------|--------|
+| **PHP** | `^8.3` (tested on 8.3, 8.4, 8.5) |
+| **Laravel** | 13.x — `illuminate/support`, `illuminate/validation`, `illuminate/translation`, `illuminate/filesystem` at **^13.0** |
 
-Install the package through [Composer](http://getcomposer.org/).
+## Features
 
-For Laravel 5.1~:
-`composer require "darryldecode/cart:~2.0"`
+- Session-backed cart with **session keys** and **multiple named instances**
+- **Conditions** (fees, discounts, tax) at cart or line level
+- **Eloquent / model** association on line items
+- **Events** fired on cart lifecycle
+- Optional **custom storage** (session, database, etc.)
+- **Number formatting** via `config/shopping_cart.php`
 
-For Laravel 5.5, 5.6, or 5.7~, 9:
+## Quick demo (upstream project)
 
-```composer require "darryldecode/cart:~4.0"``` or 
-```composer require "darryldecode/cart"```
+Live demo: https://shoppingcart-demo.darrylfernandez.com/cart  
 
-## CONFIGURATION
+Demo source: https://github.com/darryldecode/laravelshoppingcart-demo  
 
-1. Open config/app.php and add this line to your Service Providers Array.
+(The demo may target an older Laravel version; use this package’s install steps below for Laravel 13 apps.)
 
-```php
-Darryldecode\Cart\CartServiceProvider::class
+## Installation
+
+Install with [Composer](https://getcomposer.org/):
+
+```bash
+composer require dev-ibizinfo/laravelshoppingcart
 ```
 
-2. Open config/app.php and add this line to your Aliases
+Laravel will **auto-discover** the service provider and the `Cart` facade alias from `composer.json` → `extra.laravel`. You normally do **not** need to register anything by hand.
 
-```php
-  'Cart' => Darryldecode\Cart\Facades\CartFacade::class
-```
+## Configuration
 
-3. Optional configuration file (useful if you plan to have full control)
+### 1. Publish config (optional)
 
-```php
+Use this when you want to change formatting, storage, or event classes:
+
+```bash
 php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"
 ```
 
-## HOW TO USE
+This publishes `config/shopping_cart.php`.
 
--   [Quick Usage](#usage-usage-example)
--   [Usage](#usage)
--   [Conditions](#conditions)
--   [Items](#items)
--   [Associating Models](#associating-models)
--   [Instances](#instances)
--   [Exceptions](#exceptions)
--   [Events](#events)
--   [Format Response](#format)
--   [Examples](#examples)
--   [Using Different Storage](#storage)
--   [License](#license)
+### 2. Manual registration (only if package discovery is disabled)
+
+**Service provider**
+
+```php
+Darryldecode\Cart\CartServiceProvider::class,
+```
+
+Register it in the place your Laravel 13 app lists providers (for example `bootstrap/providers.php`, or inside `AppServiceProvider`, depending on your skeleton).
+
+**Facade alias**
+
+```php
+'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
+```
+
+Add to your aliases map if your app still uses a central aliases array; otherwise reference `Darryldecode\Cart\Facades\CartFacade` or the configured alias `Cart` as usual.
+
+## Development
+
+| Task | Command |
+|------|---------|
+| Run tests | `composer test` |
+| Validate `composer.json` | `composer validate --strict` |
+
+**CI:** [GitHub Actions](.github/workflows/tests.yml) runs PHPUnit on PHP **8.3**, **8.4**, and **8.5**, runs `composer validate --strict`, and includes a **lowest dependency** install on PHP 8.3.
+
+## Table of contents
+
+- [Quick usage example](#quick-usage-example)
+- [Usage](#usage)
+- [Conditions](#conditions)
+- [Items](#items)
+- [Associating models](#associating-models)
+- [Instances](#instances)
+- [Exceptions](#exceptions)
+- [Events](#events)
+- [Format response](#format-response)
+- [Examples](#examples)
+- [Using different storage](#storage)
+- [License](#license)
 
 ## Quick Usage Example
 
@@ -95,9 +136,9 @@ foreach($items as $row) {
 	echo $row->qty;
 	echo $row->price;
 	
-	echo $item->associatedModel->id; // whatever properties your model have
-        echo $item->associatedModel->name; // whatever properties your model have
-        echo $item->associatedModel->description; // whatever properties your model have
+	echo $row->associatedModel->id; // whatever properties your model have
+        echo $row->associatedModel->name; // whatever properties your model have
+        echo $row->associatedModel->description; // whatever properties your model have
 }
 
 // FOR FULL USAGE, SEE BELOW..
@@ -1250,7 +1291,9 @@ OR
 
 ## License
 
-The Laravel Shopping Cart is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+This package is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+It builds on the ideas and API of the community **Laravel Shopping Cart** projects above; this **Laravel 13** line is maintained separately with updated `composer.json`, tests, and CI.
 
 ### Disclaimer
 
